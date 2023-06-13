@@ -85,7 +85,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
           },
         }
         return fetch(
-          `https://odoo.ezcontacts.com/cl/order/payment/v1/create-authorization`,
+          `https://preprod.ezcontacts.com/cl/order/payment/v1/create-authorization`,
           {
             headers: {
               Accept: "application/json",
