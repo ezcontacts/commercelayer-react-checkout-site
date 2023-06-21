@@ -14,6 +14,7 @@ export const Badge: React.FC<Props> = ({ status, stepNumber }) => (
     active={status === "edit"}
     done={status === "done"}
     skip={status === "skip"}
+    className={status === "edit" ? "badge-background-color" : ""}
   >
     {status === "done" || status === "skip" ? <CheckmarkIcon /> : stepNumber}
   </StepBadge>
