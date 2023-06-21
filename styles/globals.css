@@ -250,6 +250,10 @@ input[type="button"] {
   border-radius: 6px !important;
 }
 
+.badge-background-color {
+  background: #e2242d !important;
+}
+
 .order-btn-text {
   font-style: normal;
   font-weight: 400;
