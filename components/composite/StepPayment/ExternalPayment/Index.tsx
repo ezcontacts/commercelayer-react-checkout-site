@@ -50,7 +50,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
         })
 
         fetch(
-          `https://ez-contacts.commercelayer.io/api/orders/${ctx.orderId}`,
+          `${process.env.NEXT_PUBLIC_CL_URL_PATH}/api/orders/${ctx.orderId}`,
           {
             method: "PATCH",
             headers: {
@@ -99,7 +99,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
           },
         }
         return fetch(
-          `https://odoo.ezcontacts.com/cl/order/payment/v1/create-authorization`,
+          `${process.env.NEXT_PUBLIC_STAGE_ODO_URL_PATH}/cl/order/payment/v1/create-authorization`,
           {
             headers: {
               Accept: "application/json",
