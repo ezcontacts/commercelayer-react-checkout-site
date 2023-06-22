@@ -125,7 +125,7 @@ const StepPlaceOrder: React.FC<Props> = ({
             </Label>
           </FlexContainer>
         )}
-        <PlaceOrderButtonWrapper className="btn-background">
+        <PlaceOrderButtonWrapper>
           <StyledPlaceOrderButton
             data-testid="save-payment-button"
             isActive={isActive}

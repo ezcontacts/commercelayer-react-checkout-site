@@ -313,7 +313,7 @@ export const CheckoutCustomerAddresses: React.FC<Props> = ({
           </>
         )}
         <AddressSectionSaveForm>
-          <ButtonWrapper className="btn-background-address order-btn-text">
+          <ButtonWrapper>
             <StyledSaveAddressesButton
               disabled={isLocalLoader}
               label={

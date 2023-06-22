@@ -217,8 +217,7 @@
 }
 
 .btn-background {
-  background: #e2242d !important;
-  border-radius: 4px !important;
+  background: #e2242d;
 }
 
 .input-border {
@@ -228,37 +227,4 @@
 .cotact-us-container {
   width: 85%;
   margin: 0 auto;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-input[type="button"] {
-  border-radius: none;
-}
-
-.btn-background-address {
-  background: #e2242d !important;
-  border-radius: 6px !important;
-}
-
-.badge-background-color {
-  background: #e2242d !important;
-}
-
-.order-btn-text {
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
-  color: #ffffff;
 }
