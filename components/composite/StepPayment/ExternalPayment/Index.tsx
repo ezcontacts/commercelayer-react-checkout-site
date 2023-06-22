@@ -5,6 +5,8 @@ import { Order } from "@commercelayer/sdk"
 import { Button } from "components/ui/Button"
 
 export const ExternalPaymentCard = ({ paymentToken }: any) => {
+  console.log(process.env.NEXT_PUBLIC_PROD_ODO_URL_PATH)
+  console.log(process.env.NEXT_PUBLIC_STAGE_ODO_URL_PATH)
   const ctx = useContext(AppContext)
   const [cardErrorMessage, setCardErrorMessage] = useState({
     isSuccess: true,
