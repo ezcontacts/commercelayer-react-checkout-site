@@ -99,7 +99,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
           },
         }
         return fetch(
-          `https://preprod.ezcontacts.com/cl/order/payment/v1/create-authorization`,
+          `${process.env.NEXT_PUBLIC_PROD_ODO_URL_PATH}/cl/order/payment/v1/create-authorization`,
           {
             headers: {
               Accept: "application/json",
