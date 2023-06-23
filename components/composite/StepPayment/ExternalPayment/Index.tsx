@@ -99,8 +99,8 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
           },
         }
         return fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/cl/order/payment/v1/create-authorization`,
-          {
+ `${process.env.NEXT_PUBLIC_API_URL}/cl/order/payment/v1/create-authorization`,
+ {
             headers: {
               Accept: "application/json",
             },
