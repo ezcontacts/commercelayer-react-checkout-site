@@ -11,6 +11,7 @@ const Invalid: NextPage = () => {
     <ErrorContainer>
       <ErrorCode>404</ErrorCode>
       <Text data-testid="invalid-checkout">{t("general.invalid")}</Text>
+      <span> Environment Variable: { process.env.NEXT_PUBLIC_PROD_ODO_URL_PATH } </span>
     </ErrorContainer>
   )
 }
