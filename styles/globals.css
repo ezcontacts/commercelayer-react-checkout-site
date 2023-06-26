@@ -217,7 +217,8 @@
 }
 
 .btn-background {
-  background: #e2242d;
+  background: #e2242d !important;
+  border-radius: 6px !important;
 }
 
 .input-border {
