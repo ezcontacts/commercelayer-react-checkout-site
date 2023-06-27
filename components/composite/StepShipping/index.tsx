@@ -262,7 +262,7 @@ export const StepShipping: React.FC<Props> = () => {
                                                   {props.label}
                                                 </ShippingLineItemTitle>
                                               </div>
-                                              <div>
+                                              {/* <div>
                                                 {deliveryLeadTime?.min_days &&
                                                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                                   // @ts-ignore
@@ -281,7 +281,7 @@ export const StepShipping: React.FC<Props> = () => {
                                                       </Trans>
                                                     </ShippingSummaryItemDescription>
                                                   )}
-                                              </div>
+                                              </div> */}
                                               <div>
                                                 <ShippingSummaryValue>
                                                   <ShippingMethodPrice

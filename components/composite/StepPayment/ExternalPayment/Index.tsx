@@ -132,6 +132,9 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
   }
 
   const onChangeCreditCardNumber = (event: any) => {
+    var ASCIICode = event.which ? event.which : event.keyCode
+    if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57)) return
+
     const valArray = event.target.value.split(" ").join("").split("")
     if (valArray.length === 17) return
 

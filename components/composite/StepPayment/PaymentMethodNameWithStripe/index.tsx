@@ -11,7 +11,12 @@ export const PaymentMethodNameWithStripe: React.FC = () => {
   return (
     <PaymentMethodName>
       {({ htmlFor, labelName }) => (
-        <label htmlFor={htmlFor}>{getTranslations(labelName, t)}</label>
+        <label htmlFor={htmlFor}>
+          {getTranslations(
+            labelName === "External Payment" ? "Credit Card" : labelName,
+            t
+          )}
+        </label>
       )}
     </PaymentMethodName>
   )
