@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 import Page404 from "./404"
 import Order from "./Order"
+import Products from "./product"
 
 const Home: NextPage = () => {
   return (
@@ -11,6 +12,7 @@ const Home: NextPage = () => {
         <Route path="404" element={<Page404 />} />
         <Route path=":orderId" element={<Order />} />
         <Route path="*" element={<Page404 />} />
+        <Route path="/product" element={<Products />} />
       </Routes>
     </BrowserRouter>
   )
