@@ -86,7 +86,7 @@ export const ProductsList = () => {
   const goToCart = () => {
     // navigate("/Cart/" + orderId + "?accessToken=" + accessToken)
     window.open(
-      `http://localhost:3001/${orderId}?accessToken=${accessToken} &islogged=0`
+      `${process.env.NEXT_PUBLIC_CART_APP_URL}/${orderId}?accessToken=${accessToken} &islogged=0`
     )
   }
 
