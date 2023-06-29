@@ -19,13 +19,14 @@
 }
 .card-image-container {
   height: 110px;
-  width: 90px;
+  width: 150px;
   background: #ffffff;
   border: 1px solid #ebebeb;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 10px;
 }
 .cart-item-label {
   font-style: normal;
