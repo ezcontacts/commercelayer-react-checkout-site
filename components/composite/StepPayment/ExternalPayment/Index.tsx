@@ -23,6 +23,11 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     message: "",
   })
 
+  const [CardNumberonBlurShowError, setCardNumberonBlurShowError] =
+    useState(false)
+
+  const [cvvOnBlurShowError, setcvvOnBlurShowError] = useState(false)
+
   if (!ctx) return null
   const { getOrderFromRef } = ctx
   const [card, setCardDetails] = useState({
@@ -35,6 +40,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     if ([69, 187, 188, 189, 190].includes(e.keyCode)) {
       e.preventDefault()
     }
+    console.log(e.keyCode)
   }
 
   const handlePlaceOrder = async (event: any) => {
@@ -132,22 +138,70 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
   }
 
   const onChangeCreditCardNumber = (event: any) => {
-    var ASCIICode = event.which ? event.which : event.keyCode
-    if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57)) return
-
     const valArray = event.target.value.split(" ").join("").split("")
     if (valArray.length === 17) return
+
+    const input = event.target.value
+    // should accept only numeric values
+    const formattedInput = input.replace(/\s/g, "")
+    if (!/^\d*$/.test(formattedInput)) {
+      return
+    }
 
     const formattedNumber = event.target.value
       .replace(/\s/g, "") // Remove existing spaces
       .replace(/(\d{4})(?=\d)/g, "$1 ") // Add space after every 4 digits
+
     setCardDetails({
       ...card,
       cardNumber: formattedNumber,
     })
 
     const validationResult = validate(formattedNumber)
+
+    if (CardNumberonBlurShowError) {
+      if (event.target.value) {
+        let message = "Please enter a valid card number"
+        if (valArray.length < 15) {
+          message = "Please enter at least 15 characters."
+        }
+        setErrorMessage({
+          message: message,
+          isValid: validationResult.isValid,
+        })
+      } else {
+        setErrorMessage({
+          message: "",
+          isValid: true,
+        })
+      }
+    }
+  }
+
+  const onBlurCreditCardNumber = (event: any) => {
+    const valArray = event.target.value.split(" ").join("").split("")
+    if (valArray.length === 17) return
+
+    const input = event.target.value
+    // should accept only numeric values
+    const formattedInput = input.replace(/\s/g, "")
+    if (!/^\d*$/.test(formattedInput)) {
+      return
+    }
+
+    const formattedNumber = event.target.value
+      .replace(/\s/g, "") // Remove existing spaces
+      .replace(/(\d{4})(?=\d)/g, "$1 ") // Add space after every 4 digits
+
+    setCardDetails({
+      ...card,
+      cardNumber: formattedNumber,
+    })
+
+    const validationResult = validate(formattedNumber)
+
     if (event.target.value) {
+      setCardNumberonBlurShowError(true)
       let message = "Please enter a valid card number"
       if (valArray.length < 15) {
         message = "Please enter at least 15 characters."
@@ -164,17 +218,36 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     }
   }
 
-  const onSelectExporeDateCardDetails = (event: any) => {
+  const onSelectCVVCardDetails = (event: any) => {
     const valArray = event.target.value.split(" ").join("").split("")
-    if (valArray.length === 5) return
+    if (valArray.length === 6) return
     const { name, value } = event.target
     setCardDetails({
       ...card,
       [name]: value,
     })
+    const validationResult = cvvNumber(event.target.value)
+    if (cvvOnBlurShowError) {
+      if (event.target.value) {
+        let message = "Please enter a valid cvc"
+        if (valArray.length < 3 || valArray.length > 4) {
+          message =
+            "Please enter the 3 or 4 digit security code from your card."
+        }
+        setcvverrorMessage({
+          message: message,
+          isValid: validationResult.isValid,
+        })
+      } else {
+        setcvverrorMessage({
+          message: "",
+          isValid: true,
+        })
+      }
+    }
   }
 
-  const onSelectCVVCardDetails = (event: any) => {
+  const onBlurCVVCardDetails = (event: any) => {
     const valArray = event.target.value.split(" ").join("").split("")
     if (valArray.length === 6) return
     const { name, value } = event.target
@@ -188,6 +261,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       if (valArray.length < 3 || valArray.length > 4) {
         message = "Please enter the 3 or 4 digit security code from your card."
       }
+      setcvvOnBlurShowError(true)
       setcvverrorMessage({
         message: message,
         isValid: validationResult.isValid,
@@ -198,6 +272,38 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
         isValid: true,
       })
     }
+  }
+
+  const onSelectExporeDateCardDetails = (event: any) => {
+    let { name, value } = event.target
+
+    // Remove any non-numeric characters
+    value = value.replace(/[^0-9]/g, "")
+
+    // Add leading zero if necessary
+    if (value.length === 1 && parseInt(value) > 1) {
+      value = "0" + value
+    }
+
+    // Insert a forward slash after the first two characters
+    if (value.length > 2) {
+      value = value.slice(0, 2) + "/" + value.slice(2)
+    }
+
+    setCardDetails({
+      ...card,
+      [name]: value,
+    })
+  }
+
+  const formatExpirationDate = (date: any) => {
+    let formattedDate = date.replace(/[^0-9]/g, "") // Remove any non-numeric characters
+
+    if (formattedDate.length > 2) {
+      formattedDate = formattedDate.slice(0, 2) + "/" + formattedDate.slice(2) // Insert a forward slash after the first two characters
+    }
+
+    return formattedDate
   }
 
   return (
@@ -221,7 +327,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
               placeholder="xxxx-xxxx-xxxx-xxxx"
               value={card?.cardNumber}
               onChange={(event) => onChangeCreditCardNumber(event)}
-              onKeyDown={(event) => onKeyCardKeyDown(event)}
+              onBlur={(event) => onBlurCreditCardNumber(event)}
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -254,13 +360,13 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   Expiry date
                 </span>
                 <input
-                  className="rounded-md peer pl-12 pr-2 py-2 input-border placeholder-gray-300"
-                  type="number"
+                  type="text"
                   name="expireDate"
-                  value={card?.expireDate}
+                  className="rounded-md peer pl-12 pr-2 py-2 input-border placeholder-gray-300"
+                  value={formatExpirationDate(card?.expireDate)}
+                  onChange={onSelectExporeDateCardDetails}
+                  maxLength={5}
                   placeholder="MM/YY"
-                  onKeyDown={(event) => onKeyCardKeyDown(event)}
-                  onChange={(event) => onSelectExporeDateCardDetails(event)}
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -285,10 +391,6 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                 <span className="flex items-center gap-3 mb-3 font-semibold text-sm leading-5 text-gray-700">
                   CVC/CVV
                   <span className="relative group">
-                    {/* <span className="hidden group-hover:flex justify-center items-center px-2 py-1 text-xs absolute -right-2 transform translate-x-full -translate-y-1/2 w-max top-1/2 bg-black text-white">
-              {" "}
-              Hey ceci est une infobulle !
-            </span> */}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-4 w-4"
@@ -313,6 +415,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   placeholder="&bull;&bull;&bull;"
                   onChange={(event) => onSelectCVVCardDetails(event)}
                   onKeyDown={(event) => onKeyCardKeyDown(event)}
+                  onBlur={(event) => onBlurCVVCardDetails(event)}
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
