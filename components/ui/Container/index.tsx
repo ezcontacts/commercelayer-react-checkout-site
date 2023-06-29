@@ -6,5 +6,5 @@ export const Container = ({ children }: { children?: ChildrenType }) => (
 )
 
 const Fluid = styled.div`
-  ${tw`container 2xl:max-w-screen-2xl 2xl:mx-auto`}
+  ${tw`container `}
 `
