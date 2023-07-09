@@ -3,7 +3,7 @@ import GiftCardOrCouponCode from "@commercelayer/react-components/gift_cards/Gif
 import GiftCardOrCouponForm from "@commercelayer/react-components/gift_cards/GiftCardOrCouponForm"
 import GiftCardOrCouponSubmit from "@commercelayer/react-components/gift_cards/GiftCardOrCouponSubmit"
 import type { Order } from "@commercelayer/sdk"
-
+import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -29,17 +29,73 @@ export const CouponOrGiftCard: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation()
 
-  const [codeError, setCodeError] = useState(false)
+  const { orderId } = useParams()
+  const [searchParams] = useSearchParams()
+  const accessToken = searchParams.get("accessToken")
 
-  const handleSubmit = async (response: {
-    success: boolean
-    value?: string
-    order?: Order
-  }) => {
+  const [codeError, setCodeError] = useState(false)
+  const [discountAmountcents, setDiscountAmountcents] = useState(0)
+  const [isApplyClicked, setisApplyClicked] = useState(false)
+
+  const removeCoupnCode = () => {
+    const headers = {
+      Accept: "application/vnd.api+json",
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/vnd.api+json",
+    }
+    const body = JSON.stringify({
+      data: {
+        type: "orders",
+        id: orderId,
+        attributes: {
+          coupon_code: "",
+        },
+      },
+    })
+    const url = `${process.env.REACT_APP_PUBLIC_CL_URL_PATH}/api/orders/${orderId}`
+
+    return fetch(url, {
+      method: "PATCH",
+      headers: headers,
+      body: body,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        return data
+      })
+      .catch((error) => {
+        return error
+      })
+  }
+
+  const handleSubmit = async (
+    response: {
+      success: boolean
+      value?: string
+      order?: Order
+    },
+    type?: any
+  ) => {
     if (!response.success) {
       return setCodeError(response.value?.length !== 0)
     }
     await setCouponOrGiftCard(response.order)
+    if (response.order?.discount_amount_cents === 0) {
+      if (!isApplyClicked) {
+        setisApplyClicked(true)
+        setDiscountAmountcents(response.order?.discount_amount_cents || 0)
+      } else {
+        setisApplyClicked(false)
+        setDiscountAmountcents(response.order?.discount_amount_cents || 0)
+      }
+    } else {
+      setisApplyClicked(false)
+      setDiscountAmountcents(response.order?.discount_amount_cents || 0)
+    }
+    if (type === "remove") {
+      setisApplyClicked(false)
+    }
+
     return setCodeError(false)
   }
 
@@ -98,7 +154,9 @@ export const CouponOrGiftCard: React.FC<Props> = ({
         </div>
         <div>
           {!readonly && (
-            <GiftCardOrCouponForm onSubmit={handleSubmit}>
+            <GiftCardOrCouponForm
+              onSubmit={(response) => handleSubmit(response, "apply")}
+            >
               <CouponFormWrapper>
                 <div className="w-full flex space-x-2 items-center">
                   <div>
@@ -155,40 +213,60 @@ export const CouponOrGiftCard: React.FC<Props> = ({
                     />
                   </div>
                 </div>
-                <StyledErrors
-                  data-test-id="discount-error"
-                  resource="orders"
-                  messages={messages}
-                />
+                {isApplyClicked && discountAmountcents === 0 ? (
+                  <div>
+                    <span className="text-xs text-red-400">
+                      {"Invalid Voucher/Promo Code!"}
+                    </span>
+                  </div>
+                ) : (
+                  <StyledErrors
+                    data-test-id="discount-error"
+                    resource="orders"
+                    messages={messages}
+                  />
+                )}
               </CouponFormWrapper>
             </GiftCardOrCouponForm>
           )}
 
-          <GiftCardOrCouponCode
-            type="coupon"
-            className="inline-flex items-center"
-          >
-            {(props) => {
-              const { hide, code, ...p } = props
-              return hide ? null : (
-                <CouponRecap>
-                  <span data-testid="code-coupon" {...p}>
-                    <CouponName>{code}</CouponName>
-                    {!readonly && (
-                      <StyledGiftCardOrCouponRemoveButton
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        onClick={handleSubmit}
-                        data-testid="remove_coupon"
-                        type="coupon"
-                        label="Remove"
-                      />
-                    )}
-                  </span>
-                </CouponRecap>
-              )
-            }}
-          </GiftCardOrCouponCode>
+          {isApplyClicked && discountAmountcents === 0 ? (
+            <div></div>
+          ) : (
+            <GiftCardOrCouponCode
+              type="coupon"
+              className="inline-flex items-center"
+            >
+              {(props) => {
+                const { hide, code, ...p } = props
+
+                if (isApplyClicked && discountAmountcents === 0) {
+                  removeCoupnCode()
+                }
+
+                return hide ? null : (
+                  <CouponRecap>
+                    <span data-testid="code-coupon" {...p}>
+                      <CouponName>{code}</CouponName>
+                      {!readonly && (
+                        <StyledGiftCardOrCouponRemoveButton
+                          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                          // @ts-ignore
+                          onClick={(response) =>
+                            handleSubmit(response, "remove")
+                          }
+                          data-testid="remove_coupon"
+                          type="coupon"
+                          label="Remove"
+                        />
+                      )}
+                    </span>
+                  </CouponRecap>
+                )
+              }}
+            </GiftCardOrCouponCode>
+          )}
+
           <GiftCardOrCouponCode
             type="gift_card"
             className="inline-flex items-center text-sm font-medium"
