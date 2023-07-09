@@ -3,6 +3,7 @@
     flex-direction: column;
     align-items: center;
     padding-top: 40px;
+    padding: 0 12rem ;
 }
 .review-banner-title{
     color: #4D4D4D;
@@ -24,6 +25,16 @@
     background-color: #000; */
     margin: 3px -10px;
     border: 1px solid #E0E0E0;
+}
+@media screen and (max-width: 1299px) {
+    .review-banner{
+        padding: 0 5rem ;
+    }
+}
+@media screen and (max-width: 1024px) {
+    .review-banner{
+        padding: 0;
+    }
 }
 @media screen and (max-width: 768px) {
     .review-banner-title{
