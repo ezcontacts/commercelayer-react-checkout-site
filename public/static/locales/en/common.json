@@ -25,7 +25,7 @@
         "cantBlank": "Can't be blank",
         "mustBeValidFormat": "Must be valid format",
         "mustBeValidEmail": "Please enter a valid email",
-        "mustBeValidCouponOrGiftCard": "Please enter a valid gift card or coupon",
+        "mustBeValidCouponOrGiftCard": "Invalid Voucher/Promo Code!",
         "mustBeValidCoupon": "Please enter a valid coupon.",
         "mustBeValidGiftCard": "Please enter a valid gift card"
     },
