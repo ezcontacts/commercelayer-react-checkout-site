@@ -34,6 +34,8 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     cardNumber: "",
     expireDate: "",
     cvv: "",
+    firstname: "",
+    lastname: "",
   })
 
   const onKeyCardKeyDown = (e: any) => {
@@ -95,6 +97,8 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
               number: Number(cardNumber),
               expiration: card.expireDate,
               cvv: Number(card.cvv),
+              firstname: card.firstname,
+              lastname: card.lastname,
             },
             order: {
               id: ctx?.orderId,
@@ -124,10 +128,20 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
               const res = result?.data?.payment_source_token
               return res
             } else {
-              setCardErrorMessage({
-                isSuccess: false,
-                message: result?.data?.error?.message,
-              })
+              if (Number(card.cvv) == 0) {
+                setCardErrorMessage({
+                  isSuccess: false,
+                  message: "Please enter a valid cvc.",
+                })
+              } else {
+                setCardErrorMessage({
+                  isSuccess: false,
+                  message: result?.data?.error?.message?.replace(
+                    /\d|\(|\)/g,
+                    ""
+                  ),
+                })
+              }
             }
           })
           .catch((error) => {
@@ -138,32 +152,33 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
   }
 
   const onChangeCreditCardNumber = (event: any) => {
-    const valArray = event.target.value.split(" ").join("").split("")
-    if (valArray.length === 17) return
-
     const input = event.target.value
-    // should accept only numeric values
     const formattedInput = input.replace(/\s/g, "")
+
+    // Validate input length
+    if (formattedInput.length > 16) {
+      return
+    }
+
+    // Validate numeric input
     if (!/^\d*$/.test(formattedInput)) {
       return
     }
 
-    const formattedNumber = event.target.value
-      .replace(/\s/g, "") // Remove existing spaces
-      .replace(/(\d{4})(?=\d)/g, "$1 ") // Add space after every 4 digits
+    const formattedNumber = formattedInput.replace(/(\d{4})(?=\d)/g, "$1 ") // Add space after every 4 digits
 
     setCardDetails({
       ...card,
       cardNumber: formattedNumber,
     })
 
-    const validationResult = validate(formattedNumber)
+    const validationResult = validate(formattedInput)
 
     if (CardNumberonBlurShowError) {
-      if (event.target.value) {
+      if (formattedInput) {
         let message = "Please enter a valid card number"
-        if (valArray.length < 15) {
-          message = "Please enter at least 15 characters."
+        if (formattedInput.length < 15) {
+          message = "Please enter at least 15 digits."
         }
         setErrorMessage({
           message: message,
@@ -226,17 +241,17 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       ...card,
       [name]: value,
     })
-    const validationResult = cvvNumber(event.target.value)
+    const validationResult = cvvNumber(event.target.value, 4)
     if (cvvOnBlurShowError) {
       if (event.target.value) {
         let message = "Please enter a valid cvc"
-        if (valArray.length < 3 || valArray.length > 4) {
+        if (valArray.length < 4 || valArray.length > 4) {
           message =
             "Please enter the 3 or 4 digit security code from your card."
         }
         setcvverrorMessage({
           message: message,
-          isValid: validationResult.isValid,
+          isValid: validationResult.isPotentiallyValid,
         })
       } else {
         setcvverrorMessage({
@@ -255,16 +270,16 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       ...card,
       [name]: value,
     })
-    const validationResult = cvvNumber(event.target.value)
+    const validationResult = cvvNumber(event.target.value, 4)
     if (event.target.value) {
       let message = "Please enter a valid cvc"
-      if (valArray.length < 3 || valArray.length > 4) {
+      if (valArray.length < 4 || valArray.length > 4) {
         message = "Please enter the 3 or 4 digit security code from your card."
       }
       setcvvOnBlurShowError(true)
       setcvverrorMessage({
         message: message,
-        isValid: validationResult.isValid,
+        isValid: validationResult.isPotentiallyValid,
       })
     } else {
       setcvverrorMessage({
@@ -304,6 +319,14 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     }
 
     return formattedDate
+  }
+
+  const onSelectCardNames = (event: any) => {
+    const { name, value } = event.target
+    setCardDetails({
+      ...card,
+      [name]: value,
+    })
   }
 
   return (
@@ -431,6 +454,47 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                     d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                   />
                 </svg>
+              </label>
+            </div>
+            {!cvverrorMessage.isValid && (
+              <div className="pt-2 pb-2 text-red-400">
+                {(cvverrorMessage.message as any) || ""}
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="flex gap-5 pt-5 pb-5 w-full">
+          <div className="w-1/2">
+            <div>
+              <label className="relative flex-1 flex flex-col">
+                <span className="font-semibold text-sm leading-5 text-gray-700 mb-3">
+                  First name
+                </span>
+                <input
+                  type="text"
+                  name="firstname"
+                  className="rounded-md peer pl-5 pr-2 py-2 input-border placeholder-gray-300"
+                  value={card?.firstname}
+                  onChange={(event) => onSelectCardNames(event)}
+                  placeholder="First name"
+                />
+              </label>
+            </div>
+          </div>
+          <div className="w-1/2">
+            <div>
+              <label className="relative flex-1 flex flex-col">
+                <span className="flex items-center gap-3 mb-3 font-semibold text-sm leading-5 text-gray-700">
+                  Last name
+                </span>
+                <input
+                  className="rounded-md peer pl-5 pr-2 py-2 border-2 input-border  placeholder-gray-200"
+                  type="text"
+                  value={card?.lastname}
+                  name="lastname"
+                  placeholder="Last name"
+                  onChange={(event) => onSelectCardNames(event)}
+                />
               </label>
             </div>
             {!cvverrorMessage.isValid && (
