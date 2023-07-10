@@ -128,7 +128,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
               const res = result?.data?.payment_source_token
               return res
             } else {
-              if (Number(card.cvv) == 0) {
+              if (Number(card.cvv) === 0) {
                 setCardErrorMessage({
                   isSuccess: false,
                   message: "Please enter a valid cvc.",
