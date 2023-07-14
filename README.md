@@ -1,4 +1,4 @@
-# Commerce Layer React Checkout
+# Commerce Layer React Checkout 
 
 The Commerce Layer Checkout application (React) provides you with a PCI-compliant, PSD2-compliant, and production-ready checkout flow powered by Commerce Layer APIs. You can fork this repository and deploy it to any hosting service or use it as a reference application to build your own.
 
