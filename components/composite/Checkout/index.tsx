@@ -32,6 +32,7 @@ import { LayoutDefault } from "components/layouts/LayoutDefault"
 import { Accordion, AccordionItem } from "components/ui/Accordion"
 import { Footer } from "components/ui/Footer"
 import { Logo } from "components/ui/Logo"
+import ReviewBanner from "../ReviewBanner"
 
 interface Props {
   logoUrl?: string
@@ -225,6 +226,7 @@ const Checkout: React.FC<Props> = ({
   return (
     <OrderContainer orderId={ctx.orderId} fetchOrder={ctx.getOrder as any}>
       {ctx.isComplete ? renderComplete() : renderSteps()}
+      <ReviewBanner/>
     </OrderContainer>
   )
 }
