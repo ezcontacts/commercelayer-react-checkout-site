@@ -66,7 +66,6 @@ specifiers:
   tailwindcss: ^3.2.7
   twin.macro: 2.8.2
   typescript: ^5.1
-  react-icons: ^4.10.1
 
 dependencies:
   '@commercelayer/react-components': 4.3.6_biqbaboplfbrettd7655fr4n2y
@@ -105,7 +104,7 @@ dependencies:
   tailwindcss: 3.3.2
   twin.macro: 2.8.2
   typescript: 5.1.3
-  react-icons: 4.10.1
+
 
 devDependencies:
   '@semantic-release/changelog': 6.0.3_semantic-release@21.0.5
@@ -6586,14 +6585,6 @@ packages:
       i18next: 21.10.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-    dev: false
-
-  /react-icons/4.10.1:
-    resolution: {integrity: sha512-/ngzDP/77tlCfqthiiGNZeYFACw85fUjZtLbedmJ5DTlNDIwETxhwBzdOJ21zj4iJdvc0J3y7yOsX3PpxAJzrw==}
-    peerDependencies:
-      react: '*'
-    dependencies:
-      react: 18.2.0
     dev: false
 
   /react-is/16.13.1:
