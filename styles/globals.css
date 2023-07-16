@@ -260,3 +260,22 @@ input[type="button"] {
   text-align: center;
   color: #ffffff;
 }
+.four-zero-four-img{
+  width: 440px;
+  margin-bottom: 30px;
+}
+.four-zero-four-main-text{
+  font-size: 36px;
+  font-weight: 700;
+}
+.four-zero-four-sub-text{
+  font-size: 14px;
+}
+.four-zero-four-btn {
+  margin-top: 30px;
+  padding: 7.5px 20px;
+  width: 280px;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  color: #fff;
+}
