@@ -70,12 +70,14 @@ export const CouponOrGiftCard: React.FC<Props> = ({
         await setCouponOrGiftCard(order)
         setTimeout(() => {
           window.location.reload()
-        }, 2000)
+        }, 3000)
 
         return data
       })
       .catch((error) => {
-        // Handle any errors here
+        setTimeout(() => {
+          window.location.reload()
+        }, 3000)
         console.error(error)
       })
   }
@@ -88,9 +90,10 @@ export const CouponOrGiftCard: React.FC<Props> = ({
     },
     type?: any
   ) => {
-    console.log(response)
-
     if (!response.success) {
+      setTimeout(() => {
+        window.location.reload()
+      }, 3000)
       return setCodeError(response.value?.length !== 0)
     }
     await setCouponOrGiftCard(response.order)
