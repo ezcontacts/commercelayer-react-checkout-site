@@ -90,7 +90,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
             if (error)
               setCardErrorMessage({
                 isSuccess: false,
-                message: "Internal server error",
+                message: "Unable to process the payment, please try again",
               })
           })
       }
@@ -159,7 +159,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
             if (error)
               setCardErrorMessage({
                 isSuccess: false,
-                message: "Internal server error",
+                message: "Unable to process the payment, please try again",
               })
           })
       }
