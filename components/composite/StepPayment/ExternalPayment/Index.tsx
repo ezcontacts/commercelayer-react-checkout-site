@@ -18,6 +18,11 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     isValid: true,
   }) as any
 
+  const [expireDateerrorMessage, setexpireDateerrorMessage] = useState({
+    message: "",
+    isValid: true,
+  }) as any
+
   const [apiCardErrorMessage, setCardErrorMessage] = useState({
     isSuccess: true,
     message: "",
@@ -27,6 +32,8 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     useState(false)
 
   const [cvvOnBlurShowError, setcvvOnBlurShowError] = useState(false)
+
+  const [expiredateBlurShowError, setExpiredateBlurShowError] = useState(false)
 
   if (!ctx) return null
   const { getOrderFromRef } = ctx
@@ -80,7 +87,11 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
             }
           })
           .catch((error) => {
-            console.error("Error:", error)
+            if (error)
+              setCardErrorMessage({
+                isSuccess: false,
+                message: "Internal server error",
+              })
           })
       }
     }
@@ -145,7 +156,11 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
             }
           })
           .catch((error) => {
-            console.error("Error:", error)
+            if (error)
+              setCardErrorMessage({
+                isSuccess: false,
+                message: "Internal server error",
+              })
           })
       }
     }
@@ -219,7 +234,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       setCardNumberonBlurShowError(true)
       let message = "Please enter a valid card number"
       if (valArray.length < 15) {
-        message = "Please enter at least 15 characters."
+        message = "Please enter at least 15 digits."
       }
       setErrorMessage({
         message: message,
@@ -264,22 +279,23 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
 
   const onBlurCVVCardDetails = (event: any) => {
     const valArray = event.target.value.split(" ").join("").split("")
-    if (valArray.length === 6) return
+    if (valArray.length === 5) return // Exit if CVV length is 4
     const { name, value } = event.target
     setCardDetails({
       ...card,
       [name]: value,
     })
-    const validationResult = cvvNumber(event.target.value, 4)
+    let isValid = true
     if (event.target.value) {
-      let message = "Please enter a valid cvc"
-      if (valArray.length < 4 || valArray.length > 4) {
+      let message = "Please enter a valid CVC"
+      if (valArray.length !== 3 && valArray.length !== 4) {
         message = "Please enter the 3 or 4 digit security code from your card."
+        isValid = false
       }
       setcvvOnBlurShowError(true)
       setcvverrorMessage({
         message: message,
-        isValid: validationResult.isPotentiallyValid,
+        isValid: isValid,
       })
     } else {
       setcvverrorMessage({
@@ -308,6 +324,73 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     setCardDetails({
       ...card,
       [name]: value,
+    })
+
+    let isValid = true
+    if (expiredateBlurShowError) {
+      if (value) {
+        let message = "Please enter a valid expiry date"
+        if (
+          value === "0" ||
+          value === "00" ||
+          value === "00/0" ||
+          value === "00/00"
+        ) {
+          message = "Please enter a valid expiry date"
+          isValid = false
+        }
+        setcvvOnBlurShowError(true)
+        setexpireDateerrorMessage({
+          message: message,
+          isValid: isValid,
+        })
+      } else {
+        setexpireDateerrorMessage({
+          message: "",
+          isValid: true,
+        })
+      }
+    }
+  }
+
+  const onBlurSelectExporeDateCardDetails = (event: any) => {
+    let { name, value } = event.target
+
+    // Remove any non-numeric characters
+    value = value.replace(/[^0-9]/g, "")
+
+    // Add leading zero if necessary
+    if (value.length === 1 && parseInt(value) > 1) {
+      value = "0" + value
+    }
+
+    // Insert a forward slash after the first two characters
+    if (value.length > 2) {
+      value = value.slice(0, 2) + "/" + value.slice(2)
+    }
+
+    setCardDetails({
+      ...card,
+      [name]: value,
+    })
+
+    let isValid = true
+
+    let message = "Please enter a valid expiry date"
+    if (
+      value === "0" ||
+      value === "00" ||
+      value === "00/0" ||
+      value === "00/00"
+    ) {
+      message = "Please enter a valid expiry date"
+      isValid = false
+    }
+
+    setExpiredateBlurShowError(true)
+    setexpireDateerrorMessage({
+      message: message,
+      isValid: isValid,
     })
   }
 
@@ -388,6 +471,9 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   className="rounded-md peer pl-12 pr-2 py-2 input-border placeholder-gray-300"
                   value={formatExpirationDate(card?.expireDate)}
                   onChange={onSelectExporeDateCardDetails}
+                  onKeyDown={(event) =>
+                    onBlurSelectExporeDateCardDetails(event)
+                  }
                   maxLength={5}
                   placeholder="MM/YY"
                 />
@@ -407,6 +493,11 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                 </svg>
               </label>
             </div>
+            {!expireDateerrorMessage.isValid && (
+              <div className="pt-2 pb-2 text-red-400">
+                {(expireDateerrorMessage.message as any) || ""}
+              </div>
+            )}
           </div>
           <div>
             <div>
@@ -497,11 +588,6 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                 />
               </label>
             </div>
-            {!cvverrorMessage.isValid && (
-              <div className="pt-2 pb-2 text-red-400">
-                {(cvverrorMessage.message as any) || ""}
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -509,6 +595,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       <Button
         className="btn-background"
         disabled={
+          !expireDateerrorMessage.isValid ||
           !cardNumberErrorMessage.isValid ||
           !cvverrorMessage.isValid ||
           card?.cardNumber === "" ||
