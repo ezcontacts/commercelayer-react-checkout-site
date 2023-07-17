@@ -87,7 +87,11 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
             }
           })
           .catch((error) => {
-            console.error("Error:", error)
+            if (error)
+              setCardErrorMessage({
+                isSuccess: false,
+                message: "Internal server error",
+              })
           })
       }
     }
@@ -152,7 +156,11 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
             }
           })
           .catch((error) => {
-            console.error("Error:", error)
+            if (error)
+              setCardErrorMessage({
+                isSuccess: false,
+                message: "Internal server error",
+              })
           })
       }
     }
@@ -322,7 +330,12 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     if (expiredateBlurShowError) {
       if (value) {
         let message = "Please enter a valid expiry date"
-        if (value === "00") {
+        if (
+          value === "0" ||
+          value === "00" ||
+          value === "00/0" ||
+          value === "00/00"
+        ) {
           message = "Please enter a valid expiry date"
           isValid = false
         }
@@ -362,17 +375,19 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     })
 
     let isValid = true
-    let message = ""
 
-    if (value === "") {
-      message = "Please enter an expiry date"
-      isValid = false
-    } else if (value === "00") {
+    let message = "Please enter a valid expiry date"
+    if (
+      value === "0" ||
+      value === "00" ||
+      value === "00/0" ||
+      value === "00/00"
+    ) {
       message = "Please enter a valid expiry date"
       isValid = false
     }
 
-    setcvvOnBlurShowError(true)
+    setExpiredateBlurShowError(true)
     setexpireDateerrorMessage({
       message: message,
       isValid: isValid,
@@ -580,6 +595,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       <Button
         className="btn-background"
         disabled={
+          !expireDateerrorMessage.isValid ||
           !cardNumberErrorMessage.isValid ||
           !cvverrorMessage.isValid ||
           card?.cardNumber === "" ||
