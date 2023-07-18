@@ -265,7 +265,10 @@ export const CouponOrGiftCard: React.FC<Props> = ({
 
                 return hide ? null : (
                   <CouponRecap>
-                    <span data-testid="code-coupon" {...p}>
+                    <div
+                      data-testid="code-coupon"
+                      className="w-full flex justify-between"
+                    >
                       <CouponName>{code}</CouponName>
                       {!readonly && (
                         <StyledGiftCardOrCouponRemoveButton
@@ -277,9 +280,10 @@ export const CouponOrGiftCard: React.FC<Props> = ({
                           data-testid="remove_coupon"
                           type="coupon"
                           label="Remove"
+                          className="text-color"
                         />
                       )}
-                    </span>
+                    </div>
                   </CouponRecap>
                 )
               }}
