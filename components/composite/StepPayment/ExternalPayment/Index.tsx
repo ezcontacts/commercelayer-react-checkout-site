@@ -4,10 +4,12 @@ import { AppContext } from "components/data/AppProvider"
 import { Order } from "@commercelayer/sdk"
 import { Button } from "components/ui/Button"
 import { number as validate, cvv as cvvNumber } from "card-validator"
+import Loader from "components/ui/Loader"
 
 export const ExternalPaymentCard = ({ paymentToken }: any) => {
   const ctx = useContext(AppContext)
 
+  const [isLoading, setIsLoading] = useState(false)
   const [cardNumberErrorMessage, setErrorMessage] = useState({
     message: "",
     isValid: true,
@@ -55,6 +57,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
   const handlePlaceOrder = async (event: any) => {
     const order = await getOrderFromRef()
     if (order) {
+      setIsLoading(true)
       event.preventDefault()
       const response = await getData(order)
       if (response) {
@@ -82,11 +85,13 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
         )
           .then((response) => response.json())
           .then((result) => {
+            setIsLoading(false)
             if (result) {
               window.location.reload()
             }
           })
           .catch((error) => {
+            setIsLoading(false)
             if (error)
               setCardErrorMessage({
                 isSuccess: false,
@@ -135,6 +140,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
         )
           .then((response) => response.json())
           .then((result) => {
+            setIsLoading(false)
             if (result?.success) {
               const res = result?.data?.payment_source_token
               return res
@@ -156,6 +162,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
             }
           })
           .catch((error) => {
+            setIsLoading(false)
             if (error)
               setCardErrorMessage({
                 isSuccess: false,
@@ -256,17 +263,18 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       ...card,
       [name]: value,
     })
-    const validationResult = cvvNumber(event.target.value, 4)
+    let isValid = true
     if (cvvOnBlurShowError) {
       if (event.target.value) {
-        let message = "Please enter a valid cvc"
-        if (valArray.length < 4 || valArray.length > 4) {
+        let message = "Please enter a valid CVC"
+        if (valArray.length !== 3 && valArray.length !== 4) {
           message =
             "Please enter the 3 or 4 digit security code from your card."
+          isValid = false
         }
         setcvverrorMessage({
           message: message,
-          isValid: validationResult.isPotentiallyValid,
+          isValid: isValid,
         })
       } else {
         setcvverrorMessage({
@@ -305,7 +313,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     }
   }
 
-  const onSelectExporeDateCardDetails = (event: any) => {
+  const onSelectExpireDateCardDetails = (event: any) => {
     let { name, value } = event.target
 
     // Remove any non-numeric characters
@@ -339,7 +347,6 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
           message = "Please enter a valid expiry date"
           isValid = false
         }
-        setcvvOnBlurShowError(true)
         setexpireDateerrorMessage({
           message: message,
           isValid: isValid,
@@ -353,7 +360,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     }
   }
 
-  const onBlurSelectExporeDateCardDetails = (event: any) => {
+  const onBlurSelectExpireDateCardDetails = (event: any) => {
     let { name, value } = event.target
 
     // Remove any non-numeric characters
@@ -414,6 +421,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
 
   return (
     <>
+      <Loader isLoading={isLoading} />
       <div className="flex flex-wrap w-full p-5">
         {!apiCardErrorMessage.isSuccess && (
           <div className="w-full pb-2 text-red-400">
@@ -470,10 +478,8 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   name="expireDate"
                   className="rounded-md peer pl-12 pr-2 py-2 input-border placeholder-gray-300"
                   value={formatExpirationDate(card?.expireDate)}
-                  onChange={onSelectExporeDateCardDetails}
-                  onKeyDown={(event) =>
-                    onBlurSelectExporeDateCardDetails(event)
-                  }
+                  onChange={onSelectExpireDateCardDetails}
+                  onBlur={(event) => onBlurSelectExpireDateCardDetails(event)}
                   maxLength={5}
                   placeholder="MM/YY"
                 />
