@@ -26,7 +26,7 @@ export const CheckoutPayment = ({
     <PaymentMethod
       autoSelectSinglePaymentMethod={autoSelectCallback}
       activeClass="active"
-      className="payment group"
+      className="payment group pb-4"
       loader={<PaymentSkeleton />}
       clickableContainer
       // hide={["external_payments"]}

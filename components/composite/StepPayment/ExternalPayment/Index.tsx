@@ -4,16 +4,23 @@ import { AppContext } from "components/data/AppProvider"
 import { Order } from "@commercelayer/sdk"
 import { Button } from "components/ui/Button"
 import { number as validate, cvv as cvvNumber } from "card-validator"
+import Loader from "components/ui/Loader"
 
 export const ExternalPaymentCard = ({ paymentToken }: any) => {
   const ctx = useContext(AppContext)
 
+  const [isLoading, setIsLoading] = useState(false)
   const [cardNumberErrorMessage, setErrorMessage] = useState({
     message: "",
     isValid: true,
   }) as any
 
   const [cvverrorMessage, setcvverrorMessage] = useState({
+    message: "",
+    isValid: true,
+  }) as any
+
+  const [expireDateerrorMessage, setexpireDateerrorMessage] = useState({
     message: "",
     isValid: true,
   }) as any
@@ -28,12 +35,16 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
 
   const [cvvOnBlurShowError, setcvvOnBlurShowError] = useState(false)
 
+  const [expiredateBlurShowError, setExpiredateBlurShowError] = useState(false)
+
   if (!ctx) return null
   const { getOrderFromRef } = ctx
   const [card, setCardDetails] = useState({
     cardNumber: "",
     expireDate: "",
     cvv: "",
+    firstname: "",
+    lastname: "",
   })
 
   const onKeyCardKeyDown = (e: any) => {
@@ -44,8 +55,11 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
   }
 
   const handlePlaceOrder = async (event: any) => {
+    clearServerMessage()
+    setIsLoading(true)
     const order = await getOrderFromRef()
     if (order) {
+      setIsLoading(true)
       event.preventDefault()
       const response = await getData(order)
       if (response) {
@@ -73,15 +87,29 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
         )
           .then((response) => response.json())
           .then((result) => {
+            setIsLoading(false)
             if (result) {
               window.location.reload()
+              setIsLoading(false)
             }
           })
           .catch((error) => {
-            console.error("Error:", error)
+            setIsLoading(false)
+            if (error)
+              setCardErrorMessage({
+                isSuccess: false,
+                message: "Unable to process the payment, please try again",
+              })
           })
       }
     }
+  }
+
+  const clearServerMessage = () => {
+    setCardErrorMessage({
+      isSuccess: true,
+      message: "",
+    })
   }
 
   const getData = (order: Order) => {
@@ -95,6 +123,8 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
               number: Number(cardNumber),
               expiration: card.expireDate,
               cvv: Number(card.cvv),
+              firstname: card.firstname,
+              lastname: card.lastname,
             },
             order: {
               id: ctx?.orderId,
@@ -120,50 +150,68 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
         )
           .then((response) => response.json())
           .then((result) => {
+            setIsLoading(false)
             if (result?.success) {
               const res = result?.data?.payment_source_token
               return res
             } else {
-              setCardErrorMessage({
-                isSuccess: false,
-                message: result?.data?.error?.message,
-              })
+              if (Number(card.cvv) === 0) {
+                setCardErrorMessage({
+                  isSuccess: false,
+                  message: "Please enter a valid cvc.",
+                })
+              } else {
+                setCardErrorMessage({
+                  isSuccess: false,
+                  message: result?.data?.error?.message?.replace(
+                    /\d|\(|\)/g,
+                    ""
+                  ),
+                })
+              }
             }
           })
           .catch((error) => {
-            console.error("Error:", error)
+            setIsLoading(false)
+            if (error)
+              setCardErrorMessage({
+                isSuccess: false,
+                message: "Unable to process the payment, please try again",
+              })
           })
       }
     }
   }
 
   const onChangeCreditCardNumber = (event: any) => {
-    const valArray = event.target.value.split(" ").join("").split("")
-    if (valArray.length === 17) return
-
     const input = event.target.value
-    // should accept only numeric values
     const formattedInput = input.replace(/\s/g, "")
+
+    // Validate input length
+    if (formattedInput.length > 16) {
+      return
+    }
+
+    // Validate numeric input
     if (!/^\d*$/.test(formattedInput)) {
       return
     }
 
-    const formattedNumber = event.target.value
-      .replace(/\s/g, "") // Remove existing spaces
-      .replace(/(\d{4})(?=\d)/g, "$1 ") // Add space after every 4 digits
+    const formattedNumber = formattedInput.replace(/(\d{4})(?=\d)/g, "$1 ") // Add space after every 4 digits
 
     setCardDetails({
       ...card,
       cardNumber: formattedNumber,
     })
+    clearServerMessage()
 
-    const validationResult = validate(formattedNumber)
+    const validationResult = validate(formattedInput)
 
     if (CardNumberonBlurShowError) {
-      if (event.target.value) {
+      if (formattedInput) {
         let message = "Please enter a valid card number"
-        if (valArray.length < 15) {
-          message = "Please enter at least 15 characters."
+        if (formattedInput.length < 15) {
+          message = "Please enter at least 15 digits."
         }
         setErrorMessage({
           message: message,
@@ -204,7 +252,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       setCardNumberonBlurShowError(true)
       let message = "Please enter a valid card number"
       if (valArray.length < 15) {
-        message = "Please enter at least 15 characters."
+        message = "Please enter at least 15 digits."
       }
       setErrorMessage({
         message: message,
@@ -226,17 +274,21 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       ...card,
       [name]: value,
     })
-    const validationResult = cvvNumber(event.target.value)
+
+    clearServerMessage()
+
+    let isValid = true
     if (cvvOnBlurShowError) {
       if (event.target.value) {
-        let message = "Please enter a valid cvc"
-        if (valArray.length < 3 || valArray.length > 4) {
+        let message = "Please enter a valid CVC"
+        if (valArray.length !== 3 && valArray.length !== 4) {
           message =
             "Please enter the 3 or 4 digit security code from your card."
+          isValid = false
         }
         setcvverrorMessage({
           message: message,
-          isValid: validationResult.isValid,
+          isValid: isValid,
         })
       } else {
         setcvverrorMessage({
@@ -249,22 +301,23 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
 
   const onBlurCVVCardDetails = (event: any) => {
     const valArray = event.target.value.split(" ").join("").split("")
-    if (valArray.length === 6) return
+    if (valArray.length === 5) return // Exit if CVV length is 4
     const { name, value } = event.target
     setCardDetails({
       ...card,
       [name]: value,
     })
-    const validationResult = cvvNumber(event.target.value)
+    let isValid = true
     if (event.target.value) {
-      let message = "Please enter a valid cvc"
-      if (valArray.length < 3 || valArray.length > 4) {
+      let message = "Please enter a valid CVC"
+      if (valArray.length !== 3 && valArray.length !== 4) {
         message = "Please enter the 3 or 4 digit security code from your card."
+        isValid = false
       }
       setcvvOnBlurShowError(true)
       setcvverrorMessage({
         message: message,
-        isValid: validationResult.isValid,
+        isValid: isValid,
       })
     } else {
       setcvverrorMessage({
@@ -274,7 +327,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     }
   }
 
-  const onSelectExporeDateCardDetails = (event: any) => {
+  const onSelectExpireDateCardDetails = (event: any) => {
     let { name, value } = event.target
 
     // Remove any non-numeric characters
@@ -294,6 +347,73 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       ...card,
       [name]: value,
     })
+    clearServerMessage()
+
+    let isValid = true
+    if (expiredateBlurShowError) {
+      if (value) {
+        let message = "Please enter a valid expiry date"
+        if (
+          value === "0" ||
+          value === "00" ||
+          value === "00/0" ||
+          value === "00/00"
+        ) {
+          message = "Please enter a valid expiry date"
+          isValid = false
+        }
+        setexpireDateerrorMessage({
+          message: message,
+          isValid: isValid,
+        })
+      } else {
+        setexpireDateerrorMessage({
+          message: "",
+          isValid: true,
+        })
+      }
+    }
+  }
+
+  const onBlurSelectExpireDateCardDetails = (event: any) => {
+    let { name, value } = event.target
+
+    // Remove any non-numeric characters
+    value = value.replace(/[^0-9]/g, "")
+
+    // Add leading zero if necessary
+    if (value.length === 1 && parseInt(value) > 1) {
+      value = "0" + value
+    }
+
+    // Insert a forward slash after the first two characters
+    if (value.length > 2) {
+      value = value.slice(0, 2) + "/" + value.slice(2)
+    }
+
+    setCardDetails({
+      ...card,
+      [name]: value,
+    })
+
+    let isValid = true
+
+    let message = "Please enter a valid expiry date"
+    if (
+      value === "0" ||
+      value === "00" ||
+      value === "00/0" ||
+      value === "00/00"
+    ) {
+      message = "Please enter a valid expiry date"
+      isValid = false
+    }
+
+    setExpiredateBlurShowError(true)
+    setexpireDateerrorMessage({
+      message: message,
+      isValid: isValid,
+    })
   }
 
   const formatExpirationDate = (date: any) => {
@@ -306,8 +426,17 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     return formattedDate
   }
 
+  const onSelectCardNames = (event: any) => {
+    const { name, value } = event.target
+    setCardDetails({
+      ...card,
+      [name]: value,
+    })
+  }
+
   return (
     <>
+      <Loader isLoading={isLoading} />
       <div className="flex flex-wrap w-full p-5">
         {!apiCardErrorMessage.isSuccess && (
           <div className="w-full pb-2 text-red-400">
@@ -364,7 +493,8 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   name="expireDate"
                   className="rounded-md peer pl-12 pr-2 py-2 input-border placeholder-gray-300"
                   value={formatExpirationDate(card?.expireDate)}
-                  onChange={onSelectExporeDateCardDetails}
+                  onChange={onSelectExpireDateCardDetails}
+                  onBlur={(event) => onBlurSelectExpireDateCardDetails(event)}
                   maxLength={5}
                   placeholder="MM/YY"
                 />
@@ -384,6 +514,11 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                 </svg>
               </label>
             </div>
+            {!expireDateerrorMessage.isValid && (
+              <div className="pt-2 pb-2 text-red-400">
+                {(expireDateerrorMessage.message as any) || ""}
+              </div>
+            )}
           </div>
           <div>
             <div>
@@ -440,11 +575,48 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
             )}
           </div>
         </div>
+        <div className="flex gap-5 pt-5 pb-5 w-full">
+          <div className="w-1/2">
+            <div>
+              <label className="relative flex-1 flex flex-col">
+                <span className="font-semibold text-sm leading-5 text-gray-700 mb-3">
+                  First name
+                </span>
+                <input
+                  type="text"
+                  name="firstname"
+                  className="rounded-md peer pl-5 pr-2 py-2 input-border placeholder-gray-300"
+                  value={card?.firstname}
+                  onChange={(event) => onSelectCardNames(event)}
+                  placeholder="First name"
+                />
+              </label>
+            </div>
+          </div>
+          <div className="w-1/2">
+            <div>
+              <label className="relative flex-1 flex flex-col">
+                <span className="flex items-center gap-3 mb-3 font-semibold text-sm leading-5 text-gray-700">
+                  Last name
+                </span>
+                <input
+                  className="rounded-md peer pl-5 pr-2 py-2 border-2 input-border  placeholder-gray-200"
+                  type="text"
+                  value={card?.lastname}
+                  name="lastname"
+                  placeholder="Last name"
+                  onChange={(event) => onSelectCardNames(event)}
+                />
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
 
       <Button
         className="btn-background"
         disabled={
+          !expireDateerrorMessage.isValid ||
           !cardNumberErrorMessage.isValid ||
           !cvverrorMessage.isValid ||
           card?.cardNumber === "" ||

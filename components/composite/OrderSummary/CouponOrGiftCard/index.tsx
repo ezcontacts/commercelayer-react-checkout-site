@@ -4,7 +4,7 @@ import GiftCardOrCouponForm from "@commercelayer/react-components/gift_cards/Gif
 import GiftCardOrCouponSubmit from "@commercelayer/react-components/gift_cards/GiftCardOrCouponSubmit"
 import type { Order } from "@commercelayer/sdk"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 import {
@@ -17,6 +17,7 @@ import {
   StyledErrors,
 } from "./styled"
 import { CartCouponCodeParagrap } from "styles/Cart.styles"
+import { AppContext } from "components/data/AppProvider"
 
 interface Props {
   readonly?: boolean
@@ -28,7 +29,10 @@ export const CouponOrGiftCard: React.FC<Props> = ({
   setCouponOrGiftCard,
 }) => {
   const { t } = useTranslation()
+  const ctx = useContext(AppContext)
 
+  if (!ctx) return null
+  const { getOrderFromRef } = ctx
   const { orderId } = useParams()
   const [searchParams] = useSearchParams()
   const accessToken = searchParams.get("accessToken")
@@ -38,33 +42,43 @@ export const CouponOrGiftCard: React.FC<Props> = ({
   const [isApplyClicked, setisApplyClicked] = useState(false)
 
   const removeCoupnCode = () => {
-    const headers = {
-      Accept: "application/vnd.api+json",
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/vnd.api+json",
-    }
-    const body = JSON.stringify({
+    const url = `https://ez-contacts.commercelayer.io/api/orders/${orderId}?include=available_payment_methods,payment_source,payment_method,line_items.line_item_options.sku_option,line_items.item,billing_address,shipments.available_shipping_methods,shipments.stock_line_items.line_item,shipments.shipping_method,shipments.stock_transfers.line_item,shipments.stock_location,shipments.parcels.parcel_line_items,shipping_address`
+
+    const payload = {
       data: {
         type: "orders",
-        id: orderId,
         attributes: {
           coupon_code: "",
         },
+        relationships: {},
+        id: orderId,
       },
-    })
-    const url = `${process.env.REACT_APP_PUBLIC_CL_URL_PATH}/api/orders/${orderId}`
+    }
 
-    return fetch(url, {
+    fetch(url, {
       method: "PATCH",
-      headers: headers,
-      body: body,
+      headers: {
+        Accept: "application/vnd.api+json",
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/vnd.api+json",
+      },
+      body: JSON.stringify(payload),
     })
       .then((response) => response.json())
-      .then((data) => {
+      .then(async (data) => {
+        const order = await getOrderFromRef()
+        await setCouponOrGiftCard(order)
+        setTimeout(() => {
+          window.location.reload()
+        }, 3000)
+
         return data
       })
       .catch((error) => {
-        return error
+        setTimeout(() => {
+          window.location.reload()
+        }, 3000)
+        console.error(error)
       })
   }
 
@@ -77,12 +91,17 @@ export const CouponOrGiftCard: React.FC<Props> = ({
     type?: any
   ) => {
     if (!response.success) {
+      setTimeout(() => {
+        window.location.reload()
+      }, 3000)
       return setCodeError(response.value?.length !== 0)
     }
     await setCouponOrGiftCard(response.order)
+
     if (response.order?.discount_amount_cents === 0) {
       if (!isApplyClicked) {
         setisApplyClicked(true)
+        removeCoupnCode()
         setDiscountAmountcents(response.order?.discount_amount_cents || 0)
       } else {
         setisApplyClicked(false)
@@ -246,7 +265,10 @@ export const CouponOrGiftCard: React.FC<Props> = ({
 
                 return hide ? null : (
                   <CouponRecap>
-                    <span data-testid="code-coupon" {...p}>
+                    <div
+                      data-testid="code-coupon"
+                      className="w-full flex justify-between"
+                    >
                       <CouponName>{code}</CouponName>
                       {!readonly && (
                         <StyledGiftCardOrCouponRemoveButton
@@ -258,9 +280,10 @@ export const CouponOrGiftCard: React.FC<Props> = ({
                           data-testid="remove_coupon"
                           type="coupon"
                           label="Remove"
+                          className="text-color"
                         />
                       )}
-                    </span>
+                    </div>
                   </CouponRecap>
                 )
               }}
