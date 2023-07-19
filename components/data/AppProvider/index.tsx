@@ -39,6 +39,7 @@ export interface AppProviderData extends FetchOrderByIdResponse {
     order?: Order
   }) => Promise<void>
   autoSelectShippingMethod: (order?: Order) => Promise<void>
+  setOrder: (order: Order) => void
 }
 
 export interface AppStateData extends FetchOrderByIdResponse {
@@ -271,6 +272,16 @@ export const AppProvider: React.FC<AppProviderProps> = ({
     })
   }
 
+  const setOrder = async (order?: Order) => {
+    dispatch({ type: ActionType.START_LOADING })
+    const currentOrder = order ?? (await getOrderFromRef())
+
+    dispatch({
+      type: ActionType.SET_ORDER,
+      payload: { order: currentOrder, others: {} },
+    })
+  }
+
   const placeOrder = async (order?: Order) => {
     dispatch({ type: ActionType.START_LOADING })
     const currentOrder = order ?? (await getOrderFromRef())
@@ -300,6 +311,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({
         accessToken,
         slug,
         domain,
+        setOrder,
         getOrderFromRef,
         setAddresses,
         selectShipment,

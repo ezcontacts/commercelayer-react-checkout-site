@@ -260,6 +260,9 @@ input[type="button"] {
   text-align: center;
   color: #ffffff;
 }
+.text-color {
+  color: #e2242d;
+}
 .four-zero-four-img{
   width: 440px;
   margin-bottom: 30px;
@@ -280,3 +283,4 @@ input[type="button"] {
   color: #fff;
   border-radius: 4px !important;
 }
+
