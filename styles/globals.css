@@ -321,3 +321,24 @@ input[type="button"] {
     border-color: #e4b1b1 transparent #e4b1b1 transparent;
   }
 }
+.four-zero-four-img{
+  width: 440px;
+  margin-bottom: 30px;
+}
+.four-zero-four-main-text{
+  font-size: 36px;
+  font-weight: 700;
+}
+.four-zero-four-sub-text{
+  font-size: 14px;
+}
+.four-zero-four-btn {
+  margin-top: 30px;
+  padding: 11px 20px;
+  width: 280px;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  color: #fff;
+  border-radius: 4px !important;
+}
+

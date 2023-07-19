@@ -122,6 +122,7 @@ dependencies:
     version: 4.10.1
   
 
+
 devDependencies:
   '@semantic-release/changelog':
     specifier: ^6.0.3
@@ -8324,5 +8325,3 @@ packages:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
     dev: true
-
-  
