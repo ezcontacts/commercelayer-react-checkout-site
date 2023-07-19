@@ -201,8 +201,7 @@ const Checkout: React.FC<Props> = ({
                         <div className="mb-6">
                           <StepPayment onSelectPayment={onSelectPayment} />
                         </div>
-                      </AccordionItem>
-                      {paymentType !== "External Payment" && (
+                        {paymentType !== "External Payment" ? (
                         <StepPlaceOrder
                           isActive={
                             activeStep === "Payment" ||
@@ -211,7 +210,8 @@ const Checkout: React.FC<Props> = ({
                           termsUrl={termsUrl}
                           privacyUrl={privacyUrl}
                         />
-                      )}
+                      ):<div/>}
+                      </AccordionItem>
                     </PlaceOrderContainer>
                   </PaymentContainer>
                 </AccordionProvider>

@@ -3,6 +3,7 @@ import { Container } from "components/ui/Container"
 import { Footer } from "components/ui/Footer"
 
 import { Wrapper, LogoWrapper, FullLogo, Main, Error } from "./styled"
+import { Logo } from "components/ui/Logo"
 
 export const ErrorContainer = ({ children }: { children: ChildrenType }) => {
   return (
@@ -10,12 +11,14 @@ export const ErrorContainer = ({ children }: { children: ChildrenType }) => {
       <Container>
         <Wrapper>
           <LogoWrapper>
-            <FullLogo className="self-center text-black md:pl-4 md:self-auto" />
+            <Logo
+              logoUrl={'/img/logo.svg'}
+              companyName={'EzContacts'}
+            />
           </LogoWrapper>
           <Main>
-            <Error>{children}</Error>
+            {children}
           </Main>
-          <Footer />
         </Wrapper>
       </Container>
     </Base>
