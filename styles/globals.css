@@ -278,4 +278,5 @@ input[type="button"] {
   font-size: 0.9rem;
   letter-spacing: 2px;
   color: #fff;
+  border-radius: 4px !important;
 }
