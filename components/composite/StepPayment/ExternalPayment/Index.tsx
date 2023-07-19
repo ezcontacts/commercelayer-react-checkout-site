@@ -55,6 +55,8 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
   }
 
   const handlePlaceOrder = async (event: any) => {
+    clearServerMessage()
+    setIsLoading(true)
     const order = await getOrderFromRef()
     if (order) {
       setIsLoading(true)
@@ -88,6 +90,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
             setIsLoading(false)
             if (result) {
               window.location.reload()
+              setIsLoading(false)
             }
           })
           .catch((error) => {
@@ -100,6 +103,13 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
           })
       }
     }
+  }
+
+  const clearServerMessage = () => {
+    setCardErrorMessage({
+      isSuccess: true,
+      message: "",
+    })
   }
 
   const getData = (order: Order) => {
@@ -193,6 +203,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       ...card,
       cardNumber: formattedNumber,
     })
+    clearServerMessage()
 
     const validationResult = validate(formattedInput)
 
@@ -263,6 +274,9 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       ...card,
       [name]: value,
     })
+
+    clearServerMessage()
+
     let isValid = true
     if (cvvOnBlurShowError) {
       if (event.target.value) {
@@ -333,6 +347,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       ...card,
       [name]: value,
     })
+    clearServerMessage()
 
     let isValid = true
     if (expiredateBlurShowError) {
