@@ -59,6 +59,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     setIsLoading(true)
     const order = await getOrderFromRef()
     if (order) {
+      setIsLoading(true)
       event.preventDefault()
       const response = await getData(order)
       if (response) {
@@ -86,6 +87,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
         )
           .then((response) => response.json())
           .then((result) => {
+            setIsLoading(false)
             if (result) {
               window.location.reload()
               setIsLoading(false)
@@ -272,7 +274,9 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       ...card,
       [name]: value,
     })
+
     clearServerMessage()
+
     let isValid = true
     if (cvvOnBlurShowError) {
       if (event.target.value) {
