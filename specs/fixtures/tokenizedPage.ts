@@ -315,7 +315,7 @@ const getOrder = async (
           return customerCl.customer_addresses.create({
             customer: customerCl.customers.relationship(id),
             address: customerCl.addresses.relationship(a),
-          })
+          } as any)
         })
         await Promise.all(promises)
       }
