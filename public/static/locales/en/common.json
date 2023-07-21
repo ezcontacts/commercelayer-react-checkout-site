@@ -26,8 +26,8 @@
         "mustBeValidFormat": "Must be valid format",
         "mustBeValidEmail": "Please enter a valid email",
         "mustBeValidCouponOrGiftCard": "Invalid Voucher/Promo Code!",
-        "mustBeValidCoupon": "Please enter a valid coupon.",
-        "mustBeValidGiftCard": "Please enter a valid gift card"
+        "mustBeValidCoupon": "Invalid Voucher/Promo Code!",
+        "mustBeValidGiftCard": "Invalid Voucher/Promo Code!"
     },
 
     "orderRecap": {

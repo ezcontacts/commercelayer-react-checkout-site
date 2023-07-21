@@ -1,0 +1,105 @@
+.review-banner{
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    padding-top: 40px;
+
+    padding: 0 12rem ;
+
+}
+
+.review-banner-title{
+
+    color: #4D4D4D;
+
+    display:flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+}
+
+.review-banner-title-star{
+
+    display: flex;
+
+    align-items: center;
+
+    color: #E0E0E0;
+
+}
+
+.review-banner-title-star.a::before, 
+
+.review-banner-title-star.b::after{
+
+    content: "";
+
+    display: inline-block;
+
+    width: 75px;
+
+    /* height: 1px;
+
+    background-color: #000; */
+
+    margin: 3px -10px;
+
+    border: 1px solid #E0E0E0;
+
+}
+
+@media screen and (max-width: 1299px) {
+
+    .review-banner{
+
+        padding: 0 5rem ;
+
+    }
+
+}
+
+@media screen and (max-width: 1024px) {
+
+    .review-banner{
+
+        padding: 0;
+
+    }
+
+}
+
+@media screen and (max-width: 768px) {
+
+    .review-banner-title{
+
+        font-size: 12px;
+
+    }
+
+}
+
+.review-banner-main{
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    padding-top: 40px;
+
+    margin-bottom: 40px;
+
+    width: 100%;
+
+    justify-content: space-around;
+
+    align-content: space-around;
+
+    gap: 15px;
+
+}

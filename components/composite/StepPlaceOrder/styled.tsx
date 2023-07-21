@@ -53,7 +53,7 @@ export const StyledPrivacyAndTermsCheckbox = styled(PrivacyAndTermsCheckbox)`
   ${CheckCss}
 `
 export const PlaceOrderButtonWrapper = styled(ButtonWrapper)`
-  ${tw`fixed w-full bottom-9 p-5 bg-gray-50 z-20 border-t md:(static flex justify-end z-auto p-0 bg-white border-0)`}
+  ${tw` w-full bottom-9  bg-gray-50 z-20 border-t md:(static flex justify-end z-auto p-0 bg-white border-0)`}
   &::before {
     ${tw`top-0 absolute left-0 w-full z-10 h-2 shadow-top md:hidden`}
 

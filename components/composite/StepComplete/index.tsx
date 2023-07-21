@@ -70,7 +70,7 @@ export const StepComplete: React.FC<Props> = ({
           <Logo
             logoUrl={logoUrl}
             companyName={companyName}
-            className="self-center pt-10 pl-4 mb-10 md:self-auto"
+            className="mb-10 md:self-auto"
           />
           <Main>
             <div className="p-8">

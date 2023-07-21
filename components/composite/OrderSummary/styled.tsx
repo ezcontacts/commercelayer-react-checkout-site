@@ -34,5 +34,5 @@ export const RecapLineTotal = styled(RecapLine)`
   ${tw`border-t border-gray-400 mt-7 pt-6`}
 `
 export const RecapLineItemTotal = styled(RecapLineItem)`
-  ${tw`invisible lg:visible font-semibold text-sm leading-7 text-gray-700`}
+  ${tw` font-semibold text-sm leading-7 text-gray-700`}
 `
