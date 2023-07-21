@@ -38,7 +38,7 @@ export const CouponOrGiftCard: React.FC<Props> = ({
   const accessToken = searchParams.get("accessToken")
 
   const [codeError, setCodeError] = useState(false)
-  const [discountAmountcents, setDiscountAmountcents] = useState(0)
+  const [copounDiscountAmountcents, setDiscountAmountcents] = useState(0)
   const [isApplyClicked, setisApplyClicked] = useState(false)
 
   const removeCoupnCode = () => {
@@ -232,7 +232,7 @@ export const CouponOrGiftCard: React.FC<Props> = ({
                     />
                   </div>
                 </div>
-                {isApplyClicked && discountAmountcents === 0 ? (
+                {isApplyClicked && copounDiscountAmountcents === 0 ? (
                   <div>
                     <span className="text-xs text-red-400">
                       {"Invalid Voucher/Promo Code!"}
@@ -249,7 +249,7 @@ export const CouponOrGiftCard: React.FC<Props> = ({
             </GiftCardOrCouponForm>
           )}
 
-          {isApplyClicked && discountAmountcents === 0 ? (
+          {isApplyClicked && copounDiscountAmountcents === 0 ? (
             <div></div>
           ) : (
             <GiftCardOrCouponCode
@@ -257,12 +257,10 @@ export const CouponOrGiftCard: React.FC<Props> = ({
               className="inline-flex items-center"
             >
               {(props) => {
-                const { hide, code, ...p } = props
-
-                if (isApplyClicked && discountAmountcents === 0) {
+                const { hide, code, discountAmountCents, ...p } = props
+                if (isApplyClicked && discountAmountCents === 0) {
                   removeCoupnCode()
                 }
-
                 return hide ? null : (
                   <CouponRecap>
                     <div
@@ -290,7 +288,7 @@ export const CouponOrGiftCard: React.FC<Props> = ({
             </GiftCardOrCouponCode>
           )}
 
-          <GiftCardOrCouponCode
+          {/* <GiftCardOrCouponCode
             type="gift_card"
             className="inline-flex items-center text-sm font-medium"
           >
@@ -315,7 +313,7 @@ export const CouponOrGiftCard: React.FC<Props> = ({
                 </CouponRecap>
               )
             }}
-          </GiftCardOrCouponCode>
+          </GiftCardOrCouponCode> */}
         </div>
       </div>
     </>
