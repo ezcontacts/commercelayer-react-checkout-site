@@ -138,28 +138,35 @@ export const StepShipping: React.FC<Props> = () => {
     }
   }, [shipments])
 
-  const handleChange = (params: {
+  const handleChange =  async (params: {
     shippingMethod: ShippingMethodCollection
     shipmentId: string
     order?: Order
-  }): void => {
+  }) => {
+    setIsLocalLoader(true)
     selectShipment({
       shippingMethod: params.shippingMethod,
       shipmentId: params.shipmentId,
       order: params.order,
     })
-  }
-
-  const handleSave = async () => {
-    setIsLocalLoader(true)
-
     saveShipments()
 
-    setIsLocalLoader(false)
     if (gtmCtx?.fireAddShippingInfo) {
       await gtmCtx.fireAddShippingInfo()
     }
+    setIsLocalLoader(false)
   }
+
+  // const handleSave = async () => {
+  //   setIsLocalLoader(true)
+
+  //   saveShipments()
+
+  //   setIsLocalLoader(false)
+  //   if (gtmCtx?.fireAddShippingInfo) {
+  //     await gtmCtx.fireAddShippingInfo()
+  //   }
+  // }
 
   const autoSelectCallback = async (order?: Order) => {
     if (gtmCtx?.fireAddShippingInfo) {
@@ -237,13 +244,12 @@ export const StepShipping: React.FC<Props> = () => {
                                 <ShippingMethod
                                   emptyText={t("stepShipping.notAvailable")}
                                 >
-                                  <ShippingSummary data-testid="shipping-methods-container">
+                                  <ShippingSummary data-testid="shipping-methods-container">                         
                                     <StyledShippingMethodRadioButton
                                       data-testid="shipping-method-button"
                                       className="form-radio mt-0.5 md:mt-0"
-                                      onChange={(params) =>
-                                        handleChange(params)
-                                      }
+                                      onChange={(params) => handleChange(params)}
+                                      disabled={isLocalLoader}
                                     />
                                     <ShippingMethodName data-test-id="shipping-method-name">
                                       {(props) => {
@@ -362,7 +368,7 @@ export const StepShipping: React.FC<Props> = () => {
                               </LineItemsContainer> */}
                             </ShippingWrapper>
                           </Shipment>
-                          <ButtonWrapper className="btn-background">
+                          {/* <ButtonWrapper className="btn-background">
                             <Button
                               disabled={!canContinue || isLocalLoader}
                               // disabled={!canContinue || isLocalLoader}
@@ -372,7 +378,7 @@ export const StepShipping: React.FC<Props> = () => {
                               {isLocalLoader && <SpinnerIcon />}
                               {t("stepShipping.continueToPayment")}
                             </Button>
-                          </ButtonWrapper>
+                          </ButtonWrapper> */}
                         </>
                       )}
                     </ShipmentsContainer>
