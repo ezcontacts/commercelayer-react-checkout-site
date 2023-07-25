@@ -345,3 +345,7 @@ input[type="button"] {
 .toggle-background {
   background: #e2242d !important;
 }
+
+select#billing_address_country_code option:not([value="US"]) {
+  display: none;
+}
