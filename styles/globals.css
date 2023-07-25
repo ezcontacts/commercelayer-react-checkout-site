@@ -321,15 +321,15 @@ input[type="button"] {
     border-color: #e4b1b1 transparent #e4b1b1 transparent;
   }
 }
-.four-zero-four-img{
+.four-zero-four-img {
   width: 440px;
   margin-bottom: 30px;
 }
-.four-zero-four-main-text{
+.four-zero-four-main-text {
   font-size: 36px;
   font-weight: 700;
 }
-.four-zero-four-sub-text{
+.four-zero-four-sub-text {
   font-size: 14px;
 }
 .four-zero-four-btn {
@@ -342,3 +342,6 @@ input[type="button"] {
   border-radius: 4px !important;
 }
 
+.toggle-background {
+  background: #e2242d !important;
+}
