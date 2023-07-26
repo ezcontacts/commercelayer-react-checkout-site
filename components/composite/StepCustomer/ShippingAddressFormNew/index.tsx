@@ -16,6 +16,7 @@ export const ShippingAddressFormNew: React.FC<Props> = ({
     <Fragment>
       <Grid>
         <AddressInputGroup
+          required={true}
           fieldName="shipping_address_first_name"
           resource="shipping_address"
           type="text"
@@ -23,6 +24,7 @@ export const ShippingAddressFormNew: React.FC<Props> = ({
         />
 
         <AddressInputGroup
+          required={true}
           fieldName="shipping_address_last_name"
           resource="shipping_address"
           type="text"
@@ -31,6 +33,7 @@ export const ShippingAddressFormNew: React.FC<Props> = ({
       </Grid>
 
       <AddressInputGroup
+        required={true}
         fieldName="shipping_address_line_1"
         resource="shipping_address"
         type="text"
@@ -47,6 +50,7 @@ export const ShippingAddressFormNew: React.FC<Props> = ({
 
       <Grid>
         <AddressInputGroup
+          required={true}
           fieldName="shipping_address_city"
           resource="shipping_address"
           type="text"
@@ -54,6 +58,7 @@ export const ShippingAddressFormNew: React.FC<Props> = ({
         />
 
         <AddressInputGroup
+          required={true}
           fieldName="shipping_address_country_code"
           resource="shipping_address"
           type="text"
@@ -63,6 +68,7 @@ export const ShippingAddressFormNew: React.FC<Props> = ({
 
       <Grid>
         <AddressInputGroup
+          required={true}
           fieldName="shipping_address_state_code"
           resource="shipping_address"
           type="text"
@@ -70,6 +76,7 @@ export const ShippingAddressFormNew: React.FC<Props> = ({
         />
 
         <AddressInputGroup
+          required={true}
           fieldName="shipping_address_zip_code"
           resource="shipping_address"
           type="text"
@@ -78,6 +85,7 @@ export const ShippingAddressFormNew: React.FC<Props> = ({
       </Grid>
 
       <AddressInputGroup
+        required={true}
         fieldName="shipping_address_phone"
         resource="shipping_address"
         type="tel"
