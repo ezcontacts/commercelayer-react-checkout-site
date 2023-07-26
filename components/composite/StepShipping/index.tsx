@@ -138,7 +138,14 @@ export const StepShipping: React.FC<Props> = () => {
     }
   }, [shipments])
 
-  const handleChange =  async (params: {
+  useEffect(() => {
+    console.log('canContinue', canContinue)
+    if(canContinue){
+      handleSave()
+    }
+  }, [canContinue])
+
+  const handleChange =  (params: {
     shippingMethod: ShippingMethodCollection
     shipmentId: string
     order?: Order
@@ -149,12 +156,16 @@ export const StepShipping: React.FC<Props> = () => {
       shipmentId: params.shipmentId,
       order: params.order,
     })
+    setIsLocalLoader(false)
+  }
+
+  const handleSave = async () => {
     saveShipments()
 
+    setIsLocalLoader(false)
     if (gtmCtx?.fireAddShippingInfo) {
       await gtmCtx.fireAddShippingInfo()
     }
-    setIsLocalLoader(false)
   }
 
   // const handleSave = async () => {
@@ -368,17 +379,19 @@ export const StepShipping: React.FC<Props> = () => {
                               </LineItemsContainer> */}
                             </ShippingWrapper>
                           </Shipment>
-                          {/* <ButtonWrapper className="btn-background">
-                            <Button
-                              disabled={!canContinue || isLocalLoader}
-                              // disabled={!canContinue || isLocalLoader}
-                              data-testid="save-shipping-button"
-                              onClick={handleSave}
-                            >
-                              {isLocalLoader && <SpinnerIcon />}
-                              {t("stepShipping.continueToPayment")}
-                            </Button>
-                          </ButtonWrapper> */}
+                          {!isLocalLoader && canContinue  && (
+                            <ButtonWrapper className="btn-background">
+                              <Button
+                                disabled={!canContinue || isLocalLoader}
+                                // disabled={!canContinue || isLocalLoader}
+                                data-testid="save-shipping-button"
+                                onClick={handleSave}
+                              >
+                                {isLocalLoader && <SpinnerIcon />}
+                                {t("stepShipping.continueToPayment")}
+                              </Button>
+                            </ButtonWrapper>
+                          )}
                         </>
                       )}
                     </ShipmentsContainer>
