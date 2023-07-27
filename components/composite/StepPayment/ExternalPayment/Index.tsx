@@ -268,7 +268,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
 
   const onSelectCVVCardDetails = (event: any) => {
     const valArray = event.target.value.split(" ").join("").split("")
-    if (valArray.length === 6) return
+    if (valArray.length === 5) return
     const { name, value } = event.target
     setCardDetails({
       ...card,
@@ -285,7 +285,11 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
           message =
             "Please enter the 3 or 4 digit security code from your card."
           isValid = false
+        } else if (/^0+$/.test(event.target.value)) {
+          message = "Please enter a valid CVC"
+          isValid = false
         }
+
         setcvverrorMessage({
           message: message,
           isValid: isValid,
@@ -313,7 +317,11 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       if (valArray.length !== 3 && valArray.length !== 4) {
         message = "Please enter the 3 or 4 digit security code from your card."
         isValid = false
+      } else if (/^0+$/.test(event.target.value)) {
+        message = "Please enter a valid CVC"
+        isValid = false
       }
+
       setcvvOnBlurShowError(true)
       setcvverrorMessage({
         message: message,
