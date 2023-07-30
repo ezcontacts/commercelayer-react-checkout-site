@@ -139,11 +139,10 @@ export const StepShipping: React.FC<Props> = () => {
   }, [shipments])
 
   useEffect(() => {
-    console.log('canContinue', canContinue)
     if(canContinue){
       handleSave()
     }
-  }, [canContinue])
+  }, [isLocalLoader,canContinue])
 
   const handleChange =  (params: {
     shippingMethod: ShippingMethodCollection
@@ -156,16 +155,14 @@ export const StepShipping: React.FC<Props> = () => {
       shipmentId: params.shipmentId,
       order: params.order,
     })
-    setIsLocalLoader(false)
   }
 
   const handleSave = async () => {
     saveShipments()
-
-    setIsLocalLoader(false)
     if (gtmCtx?.fireAddShippingInfo) {
       await gtmCtx.fireAddShippingInfo()
     }
+    setIsLocalLoader(false)
   }
 
   // const handleSave = async () => {
@@ -379,7 +376,7 @@ export const StepShipping: React.FC<Props> = () => {
                               </LineItemsContainer> */}
                             </ShippingWrapper>
                           </Shipment>
-                          {!isLocalLoader && canContinue  && (
+                          {/* {!isLocalLoader && canContinue  && (
                             <ButtonWrapper className="btn-background">
                               <Button
                                 disabled={!canContinue || isLocalLoader}
@@ -391,7 +388,7 @@ export const StepShipping: React.FC<Props> = () => {
                                 {t("stepShipping.continueToPayment")}
                               </Button>
                             </ButtonWrapper>
-                          )}
+                          )} */}
                         </>
                       )}
                     </ShipmentsContainer>
