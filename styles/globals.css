@@ -352,3 +352,7 @@ select#billing_address_country_code option:not([value=""], [value="US"]) {
 select#shipping_address_country_code option:not([value=""], [value="US"]) {
   display: none;
 }
+
+.input-border:focus {
+  outline-color: #e2242d;
+}
