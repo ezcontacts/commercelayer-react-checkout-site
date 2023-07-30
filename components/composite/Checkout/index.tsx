@@ -202,15 +202,17 @@ const Checkout: React.FC<Props> = ({
                           <StepPayment onSelectPayment={onSelectPayment} />
                         </div>
                         {paymentType !== "External Payment" ? (
-                        <StepPlaceOrder
-                          isActive={
-                            activeStep === "Payment" ||
-                            activeStep === "Complete"
-                          }
-                          termsUrl={termsUrl}
-                          privacyUrl={privacyUrl}
-                        />
-                      ):<div/>}
+                          <StepPlaceOrder
+                            isActive={
+                              activeStep === "Payment" ||
+                              activeStep === "Complete"
+                            }
+                            termsUrl={termsUrl}
+                            privacyUrl={privacyUrl}
+                          />
+                        ) : (
+                          <div />
+                        )}
                       </AccordionItem>
                     </PlaceOrderContainer>
                   </PaymentContainer>
@@ -226,7 +228,7 @@ const Checkout: React.FC<Props> = ({
   return (
     <OrderContainer orderId={ctx.orderId} fetchOrder={ctx.getOrder as any}>
       {ctx.isComplete ? renderComplete() : renderSteps()}
-      <ReviewBanner/>
+      <ReviewBanner />
     </OrderContainer>
   )
 }

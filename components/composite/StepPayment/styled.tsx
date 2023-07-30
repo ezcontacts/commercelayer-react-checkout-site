@@ -13,7 +13,7 @@ export const PaymentWrapper = styled.div`
   }
 
   .payment.active & {
-    ${tw`border-2 border-primary bg-white cursor-default shadow-md`}
+    ${tw`border-2 border-red-600 bg-white cursor-default shadow-md`}
 
     input[type="radio"] + label {
       ${tw`pointer-events-none cursor-default`}
@@ -52,7 +52,7 @@ export const PaymentSourceContainer = styled.div`
   }
   .frame--activated {
     ${tw`h-12 mb-3`}
-    &.expiry-date-frame, 
+    &.expiry-date-frame,
     &.cvv-frame {
       ${tw`inline-block w-1/2 mb-0`}
     }
