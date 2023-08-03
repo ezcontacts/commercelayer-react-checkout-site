@@ -346,10 +346,10 @@ input[type="button"] {
   background: #e2242d !important;
 }
 
-select#billing_address_country_code option:not([value=""], [value="US"]) {
+select#billing_address_country_code option:not([value="US"]) {
   display: none;
 }
-select#shipping_address_country_code option:not([value=""], [value="US"]) {
+select#shipping_address_country_code option:not([value="US"]) {
   display: none;
 }
 
