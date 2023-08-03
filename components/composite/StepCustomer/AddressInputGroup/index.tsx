@@ -122,10 +122,7 @@ export const AddressInputGroup: React.FC<Props> = ({
             }}
             onChange={handleChange}
             value={"US"}
-            disabled={Boolean(
-              shippingCountryCodeLock &&
-                fieldName === "shipping_address_country_code"
-            )}
+            disabled={Boolean(true)}
           />
           <Label htmlFor={fieldName}>{label}</Label>
         </>
