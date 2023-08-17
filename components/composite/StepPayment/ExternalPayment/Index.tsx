@@ -465,6 +465,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
               value={card?.cardNumber}
               onChange={(event) => onChangeCreditCardNumber(event)}
               onBlur={(event) => onBlurCreditCardNumber(event)}
+              style={{ width: "414px" }}
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -505,6 +506,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   onBlur={(event) => onBlurSelectExpireDateCardDetails(event)}
                   maxLength={5}
                   placeholder="MM/YY"
+                  style={{ width: "200px" }}
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -559,6 +561,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   onChange={(event) => onSelectCVVCardDetails(event)}
                   onKeyDown={(event) => onKeyCardKeyDown(event)}
                   onBlur={(event) => onBlurCVVCardDetails(event)}
+                  style={{ width: "200px" }}
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -584,7 +587,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
           </div>
         </div>
         <div className="flex gap-5 pt-5 pb-5 w-full">
-          <div className="w-1/2">
+          <div>
             <div>
               <label className="relative flex-1 flex flex-col">
                 <span className="font-semibold text-sm leading-5 text-gray-700 mb-3">
@@ -597,11 +600,12 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   value={card?.firstname}
                   onChange={(event) => onSelectCardNames(event)}
                   placeholder="First name"
+                  style={{ width: "200px" }}
                 />
               </label>
             </div>
           </div>
-          <div className="w-1/2">
+          <div>
             <div>
               <label className="relative flex-1 flex flex-col">
                 <span className="flex items-center gap-3 mb-3 font-semibold text-sm leading-5 text-gray-700">
@@ -614,6 +618,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   name="lastname"
                   placeholder="Last name"
                   onChange={(event) => onSelectCardNames(event)}
+                  style={{ width: "200px" }}
                 />
               </label>
             </div>
