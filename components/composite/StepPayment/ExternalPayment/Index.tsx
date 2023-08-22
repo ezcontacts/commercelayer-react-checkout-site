@@ -5,10 +5,11 @@ import { Order } from "@commercelayer/sdk"
 import { Button } from "components/ui/Button"
 import { number as validate, cvv as cvvNumber } from "card-validator"
 import Loader from "components/ui/Loader"
+import useAmplitude from "utils/getAmplitude"
 
 export const ExternalPaymentCard = ({ paymentToken }: any) => {
   const ctx = useContext(AppContext)
-
+  const { logEvent } = useAmplitude()
   const [isLoading, setIsLoading] = useState(false)
   const [cardNumberErrorMessage, setErrorMessage] = useState({
     message: "",
@@ -59,6 +60,9 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     setIsLoading(true)
     const order = await getOrderFromRef()
     if (order) {
+      logEvent("Place order", {
+        buttonName: "place order",
+      })
       setIsLoading(true)
       event.preventDefault()
       const response = await getData(order)

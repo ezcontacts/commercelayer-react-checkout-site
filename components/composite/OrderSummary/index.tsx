@@ -235,7 +235,7 @@ export const OrderSummary: React.FC<Props> = ({ appCtx, readonly }) => {
                 className="text-sm font-semibold leading-7 text-gray-700"
               />
             </div>
-            <ReturnToCart cartUrl={appCtx.cartUrl} /> 
+            <ReturnToCart cartUrl={appCtx.cartUrl} />
           </AmountWrapper>
         </TotalWrapper>
       </Wrapper>

@@ -48,6 +48,8 @@ import {
   StyledShippingMethodRadioButton,
 } from "./styled"
 
+import useAmplitude from "utils/getAmplitude"
+
 interface Props {
   className?: string
   step: number
@@ -100,6 +102,7 @@ export const StepHeaderShipping: React.FC<HeaderProps> = ({ step }) => {
 const ShippingLineItems: TypeAccepted[] = LINE_ITEMS_SHIPPABLE
 
 export const StepShipping: React.FC<Props> = () => {
+  const { logEvent } = useAmplitude()
   const appCtx = useContext(AppContext)
   const accordionCtx = useContext(AccordionContext)
   const gtmCtx = useContext(GTMContext)
@@ -151,6 +154,9 @@ export const StepShipping: React.FC<Props> = () => {
   }
 
   const handleSave = async () => {
+    logEvent("Continue to payment", {
+      buttonName: "Submit",
+    })
     setIsLocalLoader(true)
 
     saveShipments()
