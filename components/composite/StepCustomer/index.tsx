@@ -118,6 +118,9 @@ export const StepCustomer: React.FC<Props> = () => {
   const handleSave = async (params: { success: boolean; order?: Order }) => {
     logEvent("Continue to delivary", {
       buttonName: "Submit",
+      properties: {
+        userId: emailAddress,
+      },
     })
 
     setIsLocalLoader(true)

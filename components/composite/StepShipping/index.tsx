@@ -156,6 +156,9 @@ export const StepShipping: React.FC<Props> = () => {
   const handleSave = async () => {
     logEvent("Continue to payment", {
       buttonName: "Submit",
+      properties: {
+        userId: appCtx.emailAddress,
+      },
     })
     setIsLocalLoader(true)
 

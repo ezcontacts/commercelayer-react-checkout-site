@@ -60,9 +60,6 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     setIsLoading(true)
     const order = await getOrderFromRef()
     if (order) {
-      logEvent("Place order", {
-        buttonName: "place order",
-      })
       setIsLoading(true)
       event.preventDefault()
       const response = await getData(order)
@@ -93,6 +90,9 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
           .then((result) => {
             setIsLoading(false)
             if (result) {
+              logEvent("Place order", {
+                buttonName: "Submitt",
+              })
               window.location.reload()
               setIsLoading(false)
             }
@@ -157,6 +157,9 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
             setIsLoading(false)
             if (result?.success) {
               const res = result?.data?.payment_source_token
+              logEvent("Place order line item", {
+                buttonName: "Submitt",
+              })
               return res
             } else {
               if (Number(card.cvv) === 0) {
@@ -631,6 +634,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       </div>
 
       <Button
+        data-testid="save-payment-button"
         className="btn-background"
         disabled={
           !expireDateerrorMessage.isValid ||
