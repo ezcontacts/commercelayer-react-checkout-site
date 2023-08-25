@@ -33,6 +33,7 @@ import { Accordion, AccordionItem } from "components/ui/Accordion"
 import { Footer } from "components/ui/Footer"
 import { Logo } from "components/ui/Logo"
 import ReviewBanner from "../ReviewBanner"
+import useAmplitude from "utils/getAmplitude"
 
 interface Props {
   logoUrl?: string
@@ -55,7 +56,7 @@ const Checkout: React.FC<Props> = ({
 }) => {
   const [paymentType, setPaymentType] = useState("")
   const ctx = useContext(AppContext)
-
+  const { logEvent } = useAmplitude()
   const { query } = useRouter()
 
   useEffect(() => {
@@ -98,6 +99,14 @@ const Checkout: React.FC<Props> = ({
                 data.country_name !== storedCountryName
               ) {
                 localStorage.setItem("CountryName", data.country_name)
+                logEvent("cl_checkout_view", {
+                  buttonName: "Submit",
+                  properties: {
+                    userId: ctx?.emailAddress
+                      ? ctx?.emailAddress
+                      : "8363683783838",
+                  },
+                })
               }
             })
             .catch((error) =>

@@ -17,7 +17,7 @@ const useAmplitude = (config = {}) => {
     track(eventName, undefined, {
       user_id: properties?.properties?.userId
         ? properties?.properties?.userId
-        : "",
+        : "87897876757",
       country: countrname ? countrname : "USA",
       platform: "web",
     })

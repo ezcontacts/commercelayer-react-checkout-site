@@ -116,7 +116,7 @@ export const StepCustomer: React.FC<Props> = () => {
   }
 
   const handleSave = async (params: { success: boolean; order?: Order }) => {
-    logEvent("Continue to delivary", {
+    logEvent(" cl_checkout_step1_continue_delivary_payment_click", {
       buttonName: "Submit",
       properties: {
         userId: emailAddress,

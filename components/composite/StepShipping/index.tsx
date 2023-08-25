@@ -154,7 +154,7 @@ export const StepShipping: React.FC<Props> = () => {
   }
 
   const handleSave = async () => {
-    logEvent("Continue to payment", {
+    logEvent("cl_checkout_step2_continue_payment_click", {
       buttonName: "Submit",
       properties: {
         userId: appCtx.emailAddress,

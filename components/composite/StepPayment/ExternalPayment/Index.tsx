@@ -90,7 +90,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
           .then((result) => {
             setIsLoading(false)
             if (result) {
-              logEvent("Place order", {
+              logEvent("cl_checkout_step3_continue_placeorder_click", {
                 buttonName: "Submitt",
               })
               window.location.reload()
@@ -157,7 +157,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
             setIsLoading(false)
             if (result?.success) {
               const res = result?.data?.payment_source_token
-              logEvent("Place order line item", {
+              logEvent("cl_checkout_step3_continue_placeorder_click", {
                 buttonName: "Submitt",
               })
               return res
