@@ -94,7 +94,7 @@
   text-align: center;
   text-decoration-line: underline;
   text-transform: uppercase;
-  color: #e2242d;
+  color: #c91f27;
 }
 
 .cart-container {
@@ -105,7 +105,7 @@
   background: #fbfbfb;
 }
 .button-checkout {
-  background: #e2242d;
+  background: #c91f27;
   border-radius: 4px;
 }
 
@@ -118,7 +118,7 @@
 
 .error-container {
   background: #fffafa;
-  border: 1px solid #e2242d;
+  border: 1px solid #c91f27;
   border-radius: 4px;
 }
 
@@ -154,7 +154,7 @@
   padding: 3px;
   color: #ffffff;
   text-align: center;
-  background: #e2242d;
+  background: #c91f27;
 }
 
 .step-circle-inactive {
@@ -175,7 +175,7 @@
 }
 
 .border-background-red {
-  border: 1px solid #e2242d;
+  border: 1px solid #c91f27;
 }
 .right-tik {
   /* Vector */
@@ -185,7 +185,7 @@
   height: 24px;
 
   /* Primary_main */
-  background: #e2242d;
+  background: #c91f27;
 }
 
 .wrapper {
@@ -197,7 +197,7 @@
 
 .circle {
   position: relative;
-  background: #e2242d;
+  background: #c91f27;
   border-radius: 100%;
   height: 24px;
   width: 24px;
@@ -218,7 +218,7 @@
 }
 
 .btn-background {
-  background: #e2242d !important;
+  background: #c91f27 !important;
   border-radius: 6px !important;
 }
 
@@ -244,12 +244,12 @@ input[type="button"] {
   border-radius: none;
 }
 .btn-background-address {
-  background: #e2242d !important;
+  background: #c91f27 !important;
   border-radius: 6px !important;
 }
 
 .badge-background-color {
-  background: #e2242d !important;
+  background: #c91f27 !important;
 }
 
 .order-btn-text {
@@ -261,12 +261,12 @@ input[type="button"] {
   color: #ffffff;
 }
 .text-color {
-  color: #e2242d;
-  border: 1px solid #e2242d;
+  color: #c91f27;
+  border: 1px solid #c91f27;
 }
 
 .loader-color {
-  border: 1px solid #e2242d;
+  border: 1px solid #c91f27;
 }
 
 /**************loader container********/
@@ -309,27 +309,27 @@ input[type="button"] {
     border-color: #e4b1b1 transparent #e4b1b1 transparent;
   }
   25% {
-    border-color: #e2242d transparent #e4b1b1 transparent;
+    border-color: #c91f27 transparent #e4b1b1 transparent;
   }
   50% {
-    border-color: #e2242d transparent #e2242d transparent;
+    border-color: #c91f27 transparent #c91f27 transparent;
   }
   75% {
-    border-color: #e4b1b1 transparent #e2242d transparent;
+    border-color: #e4b1b1 transparent #c91f27 transparent;
   }
   100% {
     border-color: #e4b1b1 transparent #e4b1b1 transparent;
   }
 }
-.four-zero-four-img{
+.four-zero-four-img {
   width: 440px;
   margin-bottom: 30px;
 }
-.four-zero-four-main-text{
+.four-zero-four-main-text {
   font-size: 36px;
   font-weight: 700;
 }
-.four-zero-four-sub-text{
+.four-zero-four-sub-text {
   font-size: 14px;
 }
 .four-zero-four-btn {
@@ -342,3 +342,17 @@ input[type="button"] {
   border-radius: 4px !important;
 }
 
+.toggle-background {
+  background: #c91f27 !important;
+}
+
+select#billing_address_country_code option:not([value="US"]) {
+  display: none;
+}
+select#shipping_address_country_code option:not([value="US"]) {
+  display: none;
+}
+
+.input-border:focus {
+  outline-color: #c91f27;
+}

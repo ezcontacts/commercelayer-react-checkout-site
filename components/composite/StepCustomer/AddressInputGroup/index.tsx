@@ -79,7 +79,7 @@ export const AddressInputGroup: React.FC<Props> = ({
     shippingCountryCodeLock = appCtx.shippingCountryCodeLock
   }
 
-  const label = t(`addressForm.${fieldName}`)
+  const label = t(`addressForm.${fieldName}`) + (required ? " *" : "")
 
   const [valueStatus, setValueStatus] = useState(value)
 
@@ -111,6 +111,7 @@ export const AddressInputGroup: React.FC<Props> = ({
       return (
         <>
           <StyledAddressCountrySelector
+            style={{ pointerEvents: "none" }}
             id={fieldName}
             className="form-select"
             data-testid={`input_${fieldName}`}
@@ -120,16 +121,8 @@ export const AddressInputGroup: React.FC<Props> = ({
               value: "",
             }}
             onChange={handleChange}
-            value={
-              shippingCountryCodeLock &&
-              fieldName === "shipping_address_country_code"
-                ? shippingCountryCodeLock
-                : value
-            }
-            disabled={Boolean(
-              shippingCountryCodeLock &&
-                fieldName === "shipping_address_country_code"
-            )}
+            value={"US"}
+            disabled={Boolean(true)}
           />
           <Label htmlFor={fieldName}>{label}</Label>
         </>

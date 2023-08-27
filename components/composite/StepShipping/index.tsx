@@ -48,6 +48,8 @@ import {
   StyledShippingMethodRadioButton,
 } from "./styled"
 
+import useAmplitude from "utils/getAmplitude"
+
 interface Props {
   className?: string
   step: number
@@ -100,6 +102,7 @@ export const StepHeaderShipping: React.FC<HeaderProps> = ({ step }) => {
 const ShippingLineItems: TypeAccepted[] = LINE_ITEMS_SHIPPABLE
 
 export const StepShipping: React.FC<Props> = () => {
+  const { logEvent } = useAmplitude()
   const appCtx = useContext(AppContext)
   const accordionCtx = useContext(AccordionContext)
   const gtmCtx = useContext(GTMContext)
@@ -158,6 +161,15 @@ export const StepShipping: React.FC<Props> = () => {
   }
 
   const handleSave = async () => {
+
+    logEvent("cl_checkout_step2_continue_payment_click", {
+      buttonName: "Submit",
+      properties: {
+        userId: appCtx.emailAddress,
+      },
+    })
+    setIsLocalLoader(true)
+    
     saveShipments()
     if (gtmCtx?.fireAddShippingInfo) {
       await gtmCtx.fireAddShippingInfo()
@@ -267,7 +279,7 @@ export const StepShipping: React.FC<Props> = () => {
                                           props?.deliveryLeadTimeForShipment
                                         return (
                                           <label
-                                            className="flex flex-col p-3 border rounded cursor-pointer hover:border-primary transition duration-200 ease-in"
+                                            className="flex flex-col p-3 border rounded cursor-pointer hover:border-red-600 transition duration-200 ease-in"
                                             htmlFor={props.htmlFor}
                                           >
                                             <div className="flex justify-between">

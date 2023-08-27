@@ -5,10 +5,11 @@ import { Order } from "@commercelayer/sdk"
 import { Button } from "components/ui/Button"
 import { number as validate, cvv as cvvNumber } from "card-validator"
 import Loader from "components/ui/Loader"
+import useAmplitude from "utils/getAmplitude"
 
 export const ExternalPaymentCard = ({ paymentToken }: any) => {
   const ctx = useContext(AppContext)
-
+  const { logEvent } = useAmplitude()
   const [isLoading, setIsLoading] = useState(false)
   const [cardNumberErrorMessage, setErrorMessage] = useState({
     message: "",
@@ -89,6 +90,9 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
           .then((result) => {
             setIsLoading(false)
             if (result) {
+              logEvent("cl_checkout_step3_continue_placeorder_click", {
+                buttonName: "Submitt",
+              })
               window.location.reload()
               setIsLoading(false)
             }
@@ -153,6 +157,9 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
             setIsLoading(false)
             if (result?.success) {
               const res = result?.data?.payment_source_token
+              logEvent("cl_checkout_step3_continue_placeorder_click", {
+                buttonName: "Submitt",
+              })
               return res
             } else {
               if (Number(card.cvv) === 0) {
@@ -268,7 +275,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
 
   const onSelectCVVCardDetails = (event: any) => {
     const valArray = event.target.value.split(" ").join("").split("")
-    if (valArray.length === 6) return
+    if (valArray.length === 5) return
     const { name, value } = event.target
     setCardDetails({
       ...card,
@@ -285,7 +292,11 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
           message =
             "Please enter the 3 or 4 digit security code from your card."
           isValid = false
+        } else if (/^0+$/.test(event.target.value)) {
+          message = "Please enter a valid CVC"
+          isValid = false
         }
+
         setcvverrorMessage({
           message: message,
           isValid: isValid,
@@ -313,7 +324,11 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       if (valArray.length !== 3 && valArray.length !== 4) {
         message = "Please enter the 3 or 4 digit security code from your card."
         isValid = false
+      } else if (/^0+$/.test(event.target.value)) {
+        message = "Please enter a valid CVC"
+        isValid = false
       }
+
       setcvvOnBlurShowError(true)
       setcvverrorMessage({
         message: message,
@@ -457,6 +472,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
               value={card?.cardNumber}
               onChange={(event) => onChangeCreditCardNumber(event)}
               onBlur={(event) => onBlurCreditCardNumber(event)}
+              style={{ width: "414px" }}
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -497,6 +513,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   onBlur={(event) => onBlurSelectExpireDateCardDetails(event)}
                   maxLength={5}
                   placeholder="MM/YY"
+                  style={{ width: "200px" }}
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -551,6 +568,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   onChange={(event) => onSelectCVVCardDetails(event)}
                   onKeyDown={(event) => onKeyCardKeyDown(event)}
                   onBlur={(event) => onBlurCVVCardDetails(event)}
+                  style={{ width: "200px" }}
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -576,7 +594,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
           </div>
         </div>
         <div className="flex gap-5 pt-5 pb-5 w-full">
-          <div className="w-1/2">
+          <div>
             <div>
               <label className="relative flex-1 flex flex-col">
                 <span className="font-semibold text-sm leading-5 text-gray-700 mb-3">
@@ -589,11 +607,12 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   value={card?.firstname}
                   onChange={(event) => onSelectCardNames(event)}
                   placeholder="First name"
+                  style={{ width: "200px" }}
                 />
               </label>
             </div>
           </div>
-          <div className="w-1/2">
+          <div>
             <div>
               <label className="relative flex-1 flex flex-col">
                 <span className="flex items-center gap-3 mb-3 font-semibold text-sm leading-5 text-gray-700">
@@ -606,6 +625,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   name="lastname"
                   placeholder="Last name"
                   onChange={(event) => onSelectCardNames(event)}
+                  style={{ width: "200px" }}
                 />
               </label>
             </div>
@@ -614,6 +634,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       </div>
 
       <Button
+        data-testid="save-payment-button"
         className="btn-background"
         disabled={
           !expireDateerrorMessage.isValid ||

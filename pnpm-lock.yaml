@@ -7,8 +7,11 @@ settings:
 overrides:
   npm: ^8.18.0
   dset: ^3.1.2
-  
+
 dependencies:
+  '@amplitude/analytics-node':
+    specifier: ^1.3.2
+    version: 1.3.2
   '@commercelayer/react-components':
     specifier: 4.3.6
     version: 4.3.6(react-dom@18.2.0)(react@18.2.0)
@@ -102,6 +105,9 @@ dependencies:
   react-i18next:
     specifier: ^11.18.6
     version: 11.18.6(i18next@21.10.0)(react-dom@18.2.0)(react@18.2.0)
+  react-icons:
+    specifier: ^4.10.1
+    version: 4.10.1(react@18.2.0)
   react-router-dom:
     specifier: ^6.12.0
     version: 6.14.2(react-dom@18.2.0)(react@18.2.0)
@@ -117,11 +123,6 @@ dependencies:
   typescript:
     specifier: ^5.1
     version: 5.1.6
-  react-icons: 
-    specifier: ^4.10.1
-    version: 4.10.1
-  
-
 
 devDependencies:
   '@semantic-release/changelog':
@@ -142,6 +143,9 @@ devDependencies:
   '@semantic-release/release-notes-generator':
     specifier: ^11.0.3
     version: 11.0.4(semantic-release@21.0.7)
+  '@types/amplitude-js':
+    specifier: ^8.16.2
+    version: 8.16.2
   '@typescript-eslint/eslint-plugin':
     specifier: ^5.59.9
     version: 5.62.0(@typescript-eslint/parser@5.62.0)(eslint@8.45.0)(typescript@5.1.6)
@@ -232,6 +236,25 @@ packages:
   /@alloc/quick-lru@5.2.0:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
+    dev: false
+
+  /@amplitude/analytics-core@1.2.2:
+    resolution: {integrity: sha512-szAcAd7ce8lyaOiRq3R7E/tjEU52hsLQk8hTroZiKKUhMsR+kQhMsBn91ToLMyCgxA+l62UrRBJFedDh+lde5g==}
+    dependencies:
+      '@amplitude/analytics-types': 1.3.2
+      tslib: 2.6.0
+    dev: false
+
+  /@amplitude/analytics-node@1.3.2:
+    resolution: {integrity: sha512-WoU/jWncR5SvgLDgY/zVxPB4qGEgn50zpWwHfuDqxLKj3HffWzHlTkxcVVElzOINf46cuam/DqK6T19DgC3m0A==}
+    dependencies:
+      '@amplitude/analytics-core': 1.2.2
+      '@amplitude/analytics-types': 1.3.2
+      tslib: 2.6.0
+    dev: false
+
+  /@amplitude/analytics-types@1.3.2:
+    resolution: {integrity: sha512-y5k7ZhBu2/IVqfC+rNKwxU60IuVpUlko4dCH34OBqsO5hJmaz2syBj5NDZrFTkeENrPbbp1NhK6l9OwXXuwy5w==}
     dev: false
 
   /@ampproject/remapping@2.2.1:
@@ -1317,6 +1340,10 @@ packages:
     dependencies:
       '@tufjs/canonical-json': 1.0.0
       minimatch: 9.0.3
+    dev: true
+
+  /@types/amplitude-js@8.16.2:
+    resolution: {integrity: sha512-a+tb/CEQOlrHRvEvAuYNOcoUy1POERANnAhfKgiTmsy0eACj3eukGP0ucA9t115QOPzVUhbnUfZqtyHp99IZyA==}
     dev: true
 
   /@types/applepayjs@3.0.4:
@@ -6524,15 +6551,15 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
- /react-icons/4.10.1:
+  /react-icons@4.10.1(react@18.2.0):
     resolution: {integrity: sha512-/ngzDP/77tlCfqthiiGNZeYFACw85fUjZtLbedmJ5DTlNDIwETxhwBzdOJ21zj4iJdvc0J3y7yOsX3PpxAJzrw==}
     peerDependencies:
       react: '*'
     dependencies:
       react: 18.2.0
     dev: false
- 
-  /react-is/16.13.1:
+
+  /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
   /react-router-dom@6.14.2(react-dom@18.2.0)(react@18.2.0):

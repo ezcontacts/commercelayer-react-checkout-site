@@ -19,6 +19,7 @@ import { StepHeader } from "components/ui/StepHeader"
 import { CheckoutCustomerPayment } from "./CheckoutCustomerPayment"
 import { CheckoutPayment } from "./CheckoutPayment"
 import { PaymentSkeleton } from "./PaymentSkeleton"
+import useAmplitude from "utils/getAmplitude"
 
 export type THandleClick = (params: {
   payment?: PaymentMethodType | Record<string, any>
@@ -93,6 +94,7 @@ interface PaymentHeaderProps {
 export const StepPayment: React.FC<PaymentHeaderProps> = ({
   onSelectPayment,
 }: any) => {
+  const { logEvent } = useAmplitude()
   const appCtx = useContext(AppContext)
   const accordionCtx = useContext(AccordionContext)
   const [hasMultiplePaymentMethods, setHasMultiplePaymentMethods] =
@@ -118,6 +120,13 @@ export const StepPayment: React.FC<PaymentHeaderProps> = ({
   const { isGuest, isPaymentRequired, setPayment } = appCtx
 
   const selectPayment: THandleClick = async ({ payment, paymentSource }) => {
+    logEvent("Select payment", {
+      buttonName: "Submitt",
+      properties: {
+        userId: appCtx.emailAddress,
+      },
+    })
+
     if (paymentSource?.payment_methods?.paymentMethods?.length > 1) {
       setHasMultiplePaymentMethods(true)
     }

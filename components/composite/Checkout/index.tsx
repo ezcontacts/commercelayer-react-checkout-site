@@ -33,6 +33,7 @@ import { Accordion, AccordionItem } from "components/ui/Accordion"
 import { Footer } from "components/ui/Footer"
 import { Logo } from "components/ui/Logo"
 import ReviewBanner from "../ReviewBanner"
+import useAmplitude from "utils/getAmplitude"
 
 interface Props {
   logoUrl?: string
@@ -55,8 +56,66 @@ const Checkout: React.FC<Props> = ({
 }) => {
   const [paymentType, setPaymentType] = useState("")
   const ctx = useContext(AppContext)
-
+  const { logEvent } = useAmplitude()
   const { query } = useRouter()
+
+  useEffect(() => {
+    const storedCountryName = localStorage.getItem("CountryName")
+
+    if (!storedCountryName) {
+      // Fetch user's IP address from a service like ipify.org
+      fetch("https://api.ipify.org?format=json")
+        .then((response) => response.json())
+        .then((data) => {
+          const userIP = data.ip
+
+          // Fetch country information from ipapi API
+          fetch(`https://ipapi.co/${userIP}/json/`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data && data.country_name) {
+                localStorage.setItem("CountryName", data.country_name)
+              }
+            })
+            .catch((error) =>
+              console.error("Error fetching country information:", error)
+            )
+        })
+        .catch((error) => console.error("Error fetching user IP:", error))
+    } else {
+      // Country name is already in local storage
+      // You might want to compare and update if necessary
+      fetch("https://api.ipify.org?format=json")
+        .then((response) => response.json())
+        .then((data) => {
+          const userIP = data.ip
+
+          fetch(`https://ipapi.co/${userIP}/json/`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (
+                data &&
+                data.country_name &&
+                data.country_name !== storedCountryName
+              ) {
+                localStorage.setItem("CountryName", data.country_name)
+                logEvent("cl_checkout_view", {
+                  buttonName: "Submit",
+                  properties: {
+                    userId: ctx?.emailAddress
+                      ? ctx?.emailAddress
+                      : "8363683783838",
+                  },
+                })
+              }
+            })
+            .catch((error) =>
+              console.error("Error fetching country information:", error)
+            )
+        })
+        .catch((error) => console.error("Error fetching user IP:", error))
+    }
+  }, [])
 
   let paypalPayerId = ""
   let checkoutComSession = ""
@@ -202,15 +261,17 @@ const Checkout: React.FC<Props> = ({
                           <StepPayment onSelectPayment={onSelectPayment} />
                         </div>
                         {paymentType !== "External Payment" ? (
-                        <StepPlaceOrder
-                          isActive={
-                            activeStep === "Payment" ||
-                            activeStep === "Complete"
-                          }
-                          termsUrl={termsUrl}
-                          privacyUrl={privacyUrl}
-                        />
-                      ):<div/>}
+                          <StepPlaceOrder
+                            isActive={
+                              activeStep === "Payment" ||
+                              activeStep === "Complete"
+                            }
+                            termsUrl={termsUrl}
+                            privacyUrl={privacyUrl}
+                          />
+                        ) : (
+                          <div />
+                        )}
                       </AccordionItem>
                     </PlaceOrderContainer>
                   </PaymentContainer>
@@ -226,7 +287,7 @@ const Checkout: React.FC<Props> = ({
   return (
     <OrderContainer orderId={ctx.orderId} fetchOrder={ctx.getOrder as any}>
       {ctx.isComplete ? renderComplete() : renderSteps()}
-      <ReviewBanner/>
+      <ReviewBanner />
     </OrderContainer>
   )
 }

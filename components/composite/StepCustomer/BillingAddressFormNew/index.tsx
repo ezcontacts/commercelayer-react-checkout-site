@@ -28,12 +28,14 @@ export const BillingAddressFormNew: React.FC<Props> = ({
     <Wrapper>
       <Grid>
         <AddressInputGroup
+          required={true}
           fieldName="billing_address_first_name"
           resource="billing_address"
           type="text"
           value={billingAddress?.first_name || ""}
         />
         <AddressInputGroup
+          required={true}
           fieldName="billing_address_last_name"
           resource="billing_address"
           type="text"
@@ -41,6 +43,7 @@ export const BillingAddressFormNew: React.FC<Props> = ({
         />
       </Grid>
       <AddressInputGroup
+        required={true}
         fieldName="billing_address_line_1"
         resource="billing_address"
         type="text"
@@ -55,12 +58,14 @@ export const BillingAddressFormNew: React.FC<Props> = ({
       />
       <Grid>
         <AddressInputGroup
+          required={true}
           fieldName="billing_address_city"
           resource="billing_address"
           type="text"
           value={billingAddress?.city || ""}
         />
         <AddressInputGroup
+          required={true}
           fieldName="billing_address_country_code"
           resource="billing_address"
           type="text"
@@ -70,12 +75,14 @@ export const BillingAddressFormNew: React.FC<Props> = ({
       </Grid>
       <Grid>
         <AddressInputGroup
+          required={true}
           fieldName="billing_address_state_code"
           resource="billing_address"
           type="text"
           value={billingAddress?.state_code || ""}
         />
         <AddressInputGroup
+          required={true}
           fieldName="billing_address_zip_code"
           resource="billing_address"
           type="text"
@@ -83,6 +90,7 @@ export const BillingAddressFormNew: React.FC<Props> = ({
         />
       </Grid>
       <AddressInputGroup
+        required={true}
         fieldName="billing_address_phone"
         resource="billing_address"
         type="tel"
