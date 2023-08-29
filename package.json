@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "dev": "NODE_OPTIONS='--inspect' next dev",
+    "dev": "next dev",
     "build": "next build",
     "export": "next build && next export",
     "start": "next start -p $PORT",
@@ -73,8 +73,8 @@
   ],
   "dependencies": {
     "@amplitude/analytics-node": "^1.3.2",
-    "@commercelayer/react-components": "4.3.6",
     "@commercelayer/sdk": "^5.4.1",
+    "@ezcontacts/react-components": "1.0.4",
     "@faker-js/faker": "^8.0.2",
     "@headlessui/react": "^1.7.15",
     "@next/bundle-analyzer": "^12.3.4",
