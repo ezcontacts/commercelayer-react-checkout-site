@@ -1,7 +1,7 @@
-import PaymentMethod from "@commercelayer/react-components/payment_methods/PaymentMethod"
+import PaymentMethod from "@ezcontacts/react-components/payment_methods/PaymentMethod"
 import PaymentSource, {
   CustomerSaveToWalletProps,
-} from "@commercelayer/react-components/payment_source/PaymentSource"
+} from "@ezcontacts/react-components/payment_source/PaymentSource"
 import { MouseEvent, useState } from "react"
 import { useTranslation } from "react-i18next"
 

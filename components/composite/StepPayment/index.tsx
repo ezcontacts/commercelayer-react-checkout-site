@@ -4,7 +4,7 @@ import {
   PaymentSourceDetail,
   PaymentSource,
   PaymentSourceBrandIcon,
-} from "@commercelayer/react-components"
+} from "@ezcontacts/react-components"
 import { PaymentMethod as PaymentMethodType } from "@commercelayer/sdk"
 import classNames from "classnames"
 import { useContext, useEffect, useState } from "react"

@@ -1,13 +1,13 @@
-import { LineItemCode, LineItemField } from "@commercelayer/react-components"
+import { LineItemCode, LineItemField } from "@ezcontacts/react-components"
 import {
   LineItem,
   TLineItem,
-} from "@commercelayer/react-components/line_items/LineItem"
-import LineItemAmount from "@commercelayer/react-components/line_items/LineItemAmount"
-import LineItemImage from "@commercelayer/react-components/line_items/LineItemImage"
-import LineItemName from "@commercelayer/react-components/line_items/LineItemName"
-import LineItemOption from "@commercelayer/react-components/line_items/LineItemOption"
-import LineItemQuantity from "@commercelayer/react-components/line_items/LineItemQuantity"
+} from "@ezcontacts/react-components/line_items/LineItem"
+import LineItemAmount from "@ezcontacts/react-components/line_items/LineItemAmount"
+import LineItemImage from "@ezcontacts/react-components/line_items/LineItemImage"
+import LineItemName from "@ezcontacts/react-components/line_items/LineItemName"
+import LineItemOption from "@ezcontacts/react-components/line_items/LineItemOption"
+import LineItemQuantity from "@ezcontacts/react-components/line_items/LineItemQuantity"
 import { useTranslation } from "next-i18next"
 import React from "react"
 

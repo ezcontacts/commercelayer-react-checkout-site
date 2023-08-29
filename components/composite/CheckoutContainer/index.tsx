@@ -1,4 +1,4 @@
-import CommerceLayer from "@commercelayer/react-components/auth/CommerceLayer"
+import CommerceLayer from "@ezcontacts/react-components/auth/CommerceLayer"
 
 import { CheckoutHead } from "components/composite/CheckoutTitle"
 import { AppProvider } from "components/data/AppProvider"

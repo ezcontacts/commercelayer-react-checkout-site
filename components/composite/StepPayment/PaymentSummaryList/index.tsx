@@ -1,4 +1,4 @@
-import { PaymentMethodPrice } from "@commercelayer/react-components"
+import { PaymentMethodPrice } from "@ezcontacts/react-components"
 
 import { PaymentMethodNameWithStripe } from "../PaymentMethodNameWithStripe"
 import {

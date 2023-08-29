@@ -1,4 +1,4 @@
-import TotalAmount from "@commercelayer/react-components/orders/TotalAmount"
+import TotalAmount from "@ezcontacts/react-components/orders/TotalAmount"
 import { useTranslation } from "react-i18next"
 import styled from "styled-components"
 import tw from "twin.macro"
