@@ -129,6 +129,7 @@ export const StepShipping: React.FC<Props> = () => {
     appCtx
 
   const [canContinue, setCanContinue] = useState(false)
+  const [changePendingSave, setChangePendingSave] = useState(false)
   const [isLocalLoader, setIsLocalLoader] = useState(false)
   const [outOfStockError, setOutOfStockError] = useState(false)
   const [shippingMethodError, setShippingMethodError] = useState(false)
@@ -142,10 +143,10 @@ export const StepShipping: React.FC<Props> = () => {
   }, [shipments])
 
   useEffect(() => {
-    if (canContinue) {
+    if (canContinue && changePendingSave) {
       handleSave()
     }
-  }, [isLocalLoader, canContinue])
+  }, [canContinue, changePendingSave])
 
   const handleChange = (params: {
     shippingMethod: ShippingMethodCollection
@@ -153,11 +154,13 @@ export const StepShipping: React.FC<Props> = () => {
     order?: Order
   }) => {
     setIsLocalLoader(true)
+    setChangePendingSave(true)
     selectShipment({
       shippingMethod: params.shippingMethod,
       shipmentId: params.shipmentId,
       order: params.order,
     })
+    setIsLocalLoader(false)
   }
 
   const handleSave = async () => {
@@ -170,6 +173,7 @@ export const StepShipping: React.FC<Props> = () => {
     setIsLocalLoader(true)
 
     saveShipments()
+    setChangePendingSave(false)
     if (gtmCtx?.fireAddShippingInfo) {
       await gtmCtx.fireAddShippingInfo()
     }
