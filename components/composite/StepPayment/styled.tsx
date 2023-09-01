@@ -1,4 +1,4 @@
-import { PaymentMethodRadioButton } from "@commercelayer/react-components"
+import { PaymentMethodRadioButton } from "@ezcontacts/react-components"
 import styled from "styled-components"
 import tw from "twin.macro"
 

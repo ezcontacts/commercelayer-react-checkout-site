@@ -1,4 +1,4 @@
-import { PaymentMethodsContainer } from "@commercelayer/react-components"
+import { PaymentMethodsContainer } from "@ezcontacts/react-components"
 import { ButtonWrapper, Button } from "components/ui/Button"
 import { SpinnerIcon } from "components/ui/SpinnerIcon"
 import { resolve } from "path"

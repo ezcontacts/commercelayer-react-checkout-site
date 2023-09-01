@@ -1,7 +1,7 @@
-import PaymentSource from "@commercelayer/react-components/payment_source/PaymentSource"
-import PaymentSourceBrandIcon from "@commercelayer/react-components/payment_source/PaymentSourceBrandIcon"
-import PaymentSourceBrandName from "@commercelayer/react-components/payment_source/PaymentSourceBrandName"
-import PaymentSourceDetail from "@commercelayer/react-components/payment_source/PaymentSourceDetail"
+import PaymentSource from "@ezcontacts/react-components/payment_source/PaymentSource"
+import PaymentSourceBrandIcon from "@ezcontacts/react-components/payment_source/PaymentSourceBrandIcon"
+import PaymentSourceBrandName from "@ezcontacts/react-components/payment_source/PaymentSourceBrandName"
+import PaymentSourceDetail from "@ezcontacts/react-components/payment_source/PaymentSourceDetail"
 import { useContext } from "react"
 import { useTranslation, Trans } from "react-i18next"
 

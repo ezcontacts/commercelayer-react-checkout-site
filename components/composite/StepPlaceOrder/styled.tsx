@@ -2,7 +2,7 @@ import {
   Errors,
   PlaceOrderButton,
   PrivacyAndTermsCheckbox,
-} from "@commercelayer/react-components"
+} from "@ezcontacts/react-components"
 import styled from "styled-components"
 import tw from "twin.macro"
 

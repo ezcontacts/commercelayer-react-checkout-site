@@ -12,12 +12,12 @@ dependencies:
   '@amplitude/analytics-node':
     specifier: ^1.3.2
     version: 1.3.2
-  '@commercelayer/react-components':
-    specifier: 4.3.6
-    version: 4.3.6(react-dom@18.2.0)(react@18.2.0)
   '@commercelayer/sdk':
     specifier: ^5.4.1
     version: 5.8.0
+  '@ezcontacts/react-components':
+    specifier: 1.0.4
+    version: 1.0.4(react-dom@18.2.0)(react@18.2.0)
   '@faker-js/faker':
     specifier: ^8.0.2
     version: 8.0.2
@@ -532,40 +532,6 @@ packages:
     dev: true
     optional: true
 
-  /@commercelayer/react-components@4.3.6(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-WP+NnrUg56pH9F4VhidFFmgcpmoNx352udrm8rK6iC7NkqBssewHxY2tXlYKdshs3XYzvxXFdx8yCpXSXJyncA==}
-    peerDependencies:
-      react: ^18.0.0
-    dependencies:
-      '@ac-dev/countries-service': 1.2.0
-      '@ac-dev/states-service': 1.1.1
-      '@adyen/adyen-web': 5.49.0
-      '@commercelayer/sdk': 4.32.0
-      '@stripe/react-stripe-js': 2.1.1(@stripe/stripe-js@1.54.1)(react-dom@18.2.0)(react@18.2.0)
-      '@stripe/stripe-js': 1.54.1
-      axios: 1.4.0
-      braintree-web: 3.96.0
-      frames-react: 1.1.0(react@18.2.0)
-      jwt-decode: 3.1.2
-      lodash: 4.17.21
-      rapid-form: 2.1.0
-      react: 18.2.0
-      react-table: 7.8.0(react@18.2.0)
-      react-window: 1.8.9(react-dom@18.2.0)(react@18.2.0)
-    transitivePeerDependencies:
-      - debug
-      - react-dom
-    dev: false
-
-  /@commercelayer/sdk@4.32.0:
-    resolution: {integrity: sha512-jpau9OzlDB5yhDpmoUf+FLNjpMKqhp5c+8EpCa2m2M/c64M/3nYewUwixl6Y06S8pj6Qd13Nqe6dKRV5MDOBgg==}
-    engines: {node: '>=16 || ^14.17'}
-    dependencies:
-      axios: 1.3.4
-    transitivePeerDependencies:
-      - debug
-    dev: false
-
   /@commercelayer/sdk@5.8.0:
     resolution: {integrity: sha512-Kxb1OfXwtpSj02NejhRc0G98MSyYp4sElIqA2OPob73XxCG4QZgz+RVGI6Gq/z8F7da+BHFSxqHvVjBlmDkslQ==}
     engines: {node: '>=16 || ^14.17'}
@@ -663,6 +629,32 @@ packages:
     resolution: {integrity: sha512-Ag+9YM4ocKQx9AarydN0KY2j0ErMHNIocPDrVo8zAE44xLTjEtz81OdR68/cydGtk6m6jDb5Za3r2useMzYmSw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
+
+  /@ezcontacts/react-components@1.0.4(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-lPMYJcpL63NGR2mspNl5LGxskI/G56ItoecIEUUhsA1vTlj0fofr2DNfC5ZqHkztGlgsPxJ3X0EgUW4K4K5v4Q==}
+    peerDependencies:
+      react: ^18.0.0
+    dependencies:
+      '@ac-dev/countries-service': 1.2.0
+      '@ac-dev/states-service': 1.1.1
+      '@adyen/adyen-web': 5.49.0
+      '@commercelayer/sdk': 5.8.0
+      '@stripe/react-stripe-js': 2.1.1(@stripe/stripe-js@1.54.1)(react-dom@18.2.0)(react@18.2.0)
+      '@stripe/stripe-js': 1.54.1
+      '@tanstack/react-table': 8.9.3(react-dom@18.2.0)(react@18.2.0)
+      '@types/iframe-resizer': 3.5.9
+      axios: 1.4.0
+      braintree-web: 3.96.0
+      frames-react: 1.1.0(react@18.2.0)
+      iframe-resizer: 4.3.6
+      jwt-decode: 3.1.2
+      lodash: 4.17.21
+      rapid-form: 2.1.0
+      react: 18.2.0
+    transitivePeerDependencies:
+      - debug
+      - react-dom
+    dev: false
 
   /@faker-js/faker@8.0.2:
     resolution: {integrity: sha512-Uo3pGspElQW91PCvKSIAXoEgAUlRnH29sX2/p89kg7sP1m2PzCufHINd0FhTXQf6DYGiUlVncdSPa2F9wxed2A==}
@@ -1324,6 +1316,23 @@ packages:
       tailwindcss: 3.3.3
     dev: false
 
+  /@tanstack/react-table@8.9.3(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-Ng9rdm3JPoSCi6cVZvANsYnF+UoGVRxflMb270tVj0+LjeT/ZtZ9ckxF6oLPLcKesza6VKBqtdF9mQ+vaz24Aw==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      '@tanstack/table-core': 8.9.3
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@tanstack/table-core@8.9.3:
+    resolution: {integrity: sha512-NpHZBoHTfqyJk0m/s/+CSuAiwtebhYK90mDuf5eylTvgViNOujiaOaxNDxJkQQAsVvHWZftUGAx1EfO1rkKtLg==}
+    engines: {node: '>=12'}
+    dev: false
+
   /@tootallnate/once@2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
@@ -1370,6 +1379,10 @@ packages:
   /@types/http-cache-semantics@4.0.1:
     resolution: {integrity: sha512-SZs7ekbP8CN0txVG2xVRH6EgKmEm31BOxA07vkFaETzZz1xh+cbt8BcI0slpymvwhx5dlFnQG2rTlPVQn+iRPQ==}
     dev: true
+
+  /@types/iframe-resizer@3.5.9:
+    resolution: {integrity: sha512-RQUBI75F+uXruB95BFpC/8V8lPgJg4MQ6HxOCtAZYBB/h0FNCfrFfb4I+u2pZJIV7sKeszZbFqy1UnGeBMrvsA==}
+    dev: false
 
   /@types/json-schema@7.0.12:
     resolution: {integrity: sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==}
@@ -1947,16 +1960,6 @@ packages:
     resolution: {integrity: sha512-zIURGIS1E1Q4pcrMjp+nnEh+16G56eG/MUllJH8yEvw7asDo7Ac9uhC9KIH5jzpITueEZolfYglnCGIuSBz39g==}
     engines: {node: '>=4'}
     dev: true
-
-  /axios@1.3.4:
-    resolution: {integrity: sha512-toYm+Bsyl6VC5wSkfkbbNB6ROv7KY93PEBBL6xyDczaIHasAiv4wPqQ/c4RjoQzipxRD2W5g21cOqQulZ7rHwQ==}
-    dependencies:
-      follow-redirects: 1.15.2
-      form-data: 4.0.0
-      proxy-from-env: 1.1.0
-    transitivePeerDependencies:
-      - debug
-    dev: false
 
   /axios@1.4.0:
     resolution: {integrity: sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==}
@@ -4369,6 +4372,11 @@ packages:
     dev: true
     optional: true
 
+  /iframe-resizer@4.3.6:
+    resolution: {integrity: sha512-wz0WodRIF6eP0oGQa5NIP1yrITAZ59ZJvVaVJqJRjaeCtfm461vy2C3us6CKx0e7pooqpIGLpVMSTzrfAjX9Sg==}
+    engines: {node: '>=0.8.0'}
+    dev: false
+
   /ignore-walk@6.0.3:
     resolution: {integrity: sha512-C7FfFoTA+bI10qfeydT8aZbvr91vAEU+2W5BZUlzPec47oNb07SsOfwYrtxuvOYdUApPP/Qlh4DtAO51Ekk2QA==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
@@ -5157,10 +5165,6 @@ packages:
   /mdn-data@2.0.30:
     resolution: {integrity: sha512-GaqWWShW4kv/G9IEucWScBx9G1/vsFZZJUO+tD26M8J8z3Kw5RDQjaoZe03YAClgeS/SWPOcb4nkFBTEi5DUEA==}
     dev: true
-
-  /memoize-one@5.2.1:
-    resolution: {integrity: sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==}
-    dev: false
 
   /meow@10.1.5:
     resolution: {integrity: sha512-/d+PQ4GKmGvM9Bee/DPa8z3mXs/pkvJE2KEThngVNOqtmljC6K7NMPxtc2JeZYTmpWb9k/TmxjeL18ez3h7vCw==}
@@ -6583,27 +6587,6 @@ packages:
     dependencies:
       '@remix-run/router': 1.7.2
       react: 18.2.0
-    dev: false
-
-  /react-table@7.8.0(react@18.2.0):
-    resolution: {integrity: sha512-hNaz4ygkZO4bESeFfnfOft73iBUj8K5oKi1EcSHPAibEydfsX2MyU6Z8KCr3mv3C9Kqqh71U+DhZkFvibbnPbA==}
-    peerDependencies:
-      react: ^16.8.3 || ^17.0.0-0 || ^18.0.0
-    dependencies:
-      react: 18.2.0
-    dev: false
-
-  /react-window@1.8.9(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-+Eqx/fj1Aa5WnhRfj9dJg4VYATGwIUP2ItwItiJ6zboKWA6EX3lYDAXfGF2hyNqplEprhbtjbipiADEcwQ823Q==}
-    engines: {node: '>8.0.0'}
-    peerDependencies:
-      react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-    dependencies:
-      '@babel/runtime': 7.22.6
-      memoize-one: 5.2.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /react@18.2.0:

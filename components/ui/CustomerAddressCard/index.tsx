@@ -1,4 +1,4 @@
-import { Address, AddressField } from "@commercelayer/react-components"
+import { Address, AddressField } from "@ezcontacts/react-components"
 import { Address as AddressCollection } from "@commercelayer/sdk"
 
 interface AddressCardProps {

@@ -1,18 +1,18 @@
-import Errors from "@commercelayer/react-components/errors/Errors"
-import LineItem from "@commercelayer/react-components/line_items/LineItem"
-import LineItemImage from "@commercelayer/react-components/line_items/LineItemImage"
-import LineItemName from "@commercelayer/react-components/line_items/LineItemName"
-import LineItemQuantity from "@commercelayer/react-components/line_items/LineItemQuantity"
-import LineItemsContainer from "@commercelayer/react-components/line_items/LineItemsContainer"
-import Shipment from "@commercelayer/react-components/shipments/Shipment"
-import ShipmentField from "@commercelayer/react-components/shipments/ShipmentField"
-import ShipmentsContainer from "@commercelayer/react-components/shipments/ShipmentsContainer"
-import ShippingMethod from "@commercelayer/react-components/shipping_methods/ShippingMethod"
-import ShippingMethodName from "@commercelayer/react-components/shipping_methods/ShippingMethodName"
-import ShippingMethodPrice from "@commercelayer/react-components/shipping_methods/ShippingMethodPrice"
-import DeliveryLeadTime from "@commercelayer/react-components/skus/DeliveryLeadTime"
-import StockTransfer from "@commercelayer/react-components/stock_transfers/StockTransfer"
-import StockTransferField from "@commercelayer/react-components/stock_transfers/StockTransferField"
+import Errors from "@ezcontacts/react-components/errors/Errors"
+import LineItem from "@ezcontacts/react-components/line_items/LineItem"
+import LineItemImage from "@ezcontacts/react-components/line_items/LineItemImage"
+import LineItemName from "@ezcontacts/react-components/line_items/LineItemName"
+import LineItemQuantity from "@ezcontacts/react-components/line_items/LineItemQuantity"
+import LineItemsContainer from "@ezcontacts/react-components/line_items/LineItemsContainer"
+import Shipment from "@ezcontacts/react-components/shipments/Shipment"
+import ShipmentField from "@ezcontacts/react-components/shipments/ShipmentField"
+import ShipmentsContainer from "@ezcontacts/react-components/shipments/ShipmentsContainer"
+import ShippingMethod from "@ezcontacts/react-components/shipping_methods/ShippingMethod"
+import ShippingMethodName from "@ezcontacts/react-components/shipping_methods/ShippingMethodName"
+import ShippingMethodPrice from "@ezcontacts/react-components/shipping_methods/ShippingMethodPrice"
+import DeliveryLeadTime from "@ezcontacts/react-components/skus/DeliveryLeadTime"
+import StockTransfer from "@ezcontacts/react-components/stock_transfers/StockTransfer"
+import StockTransferField from "@ezcontacts/react-components/stock_transfers/StockTransferField"
 import type {
   Order,
   ShippingMethod as ShippingMethodCollection,
@@ -142,12 +142,12 @@ export const StepShipping: React.FC<Props> = () => {
   }, [shipments])
 
   useEffect(() => {
-    if(canContinue){
+    if (canContinue) {
       handleSave()
     }
-  }, [isLocalLoader,canContinue])
+  }, [isLocalLoader, canContinue])
 
-  const handleChange =  (params: {
+  const handleChange = (params: {
     shippingMethod: ShippingMethodCollection
     shipmentId: string
     order?: Order
@@ -161,7 +161,6 @@ export const StepShipping: React.FC<Props> = () => {
   }
 
   const handleSave = async () => {
-
     logEvent("cl_checkout_step2_continue_payment_click", {
       buttonName: "Submit",
       properties: {
@@ -169,7 +168,7 @@ export const StepShipping: React.FC<Props> = () => {
       },
     })
     setIsLocalLoader(true)
-    
+
     saveShipments()
     if (gtmCtx?.fireAddShippingInfo) {
       await gtmCtx.fireAddShippingInfo()
@@ -264,11 +263,13 @@ export const StepShipping: React.FC<Props> = () => {
                                 <ShippingMethod
                                   emptyText={t("stepShipping.notAvailable")}
                                 >
-                                  <ShippingSummary data-testid="shipping-methods-container">                         
+                                  <ShippingSummary data-testid="shipping-methods-container">
                                     <StyledShippingMethodRadioButton
                                       data-testid="shipping-method-button"
                                       className="form-radio mt-0.5 md:mt-0"
-                                      onChange={(params) => handleChange(params)}
+                                      onChange={(params) =>
+                                        handleChange(params)
+                                      }
                                       disabled={isLocalLoader}
                                     />
                                     <ShippingMethodName data-test-id="shipping-method-name">

@@ -1,4 +1,4 @@
-import { Errors } from "@commercelayer/react-components/errors/Errors"
+import { Errors } from "@ezcontacts/react-components/errors/Errors"
 import { Dispatch, SetStateAction, useEffect } from "react"
 
 interface Props {
