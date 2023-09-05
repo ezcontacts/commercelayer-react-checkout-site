@@ -103,6 +103,16 @@ const ShippingLineItems: TypeAccepted[] = LINE_ITEMS_SHIPPABLE
 
 export const StepShipping: React.FC<Props> = () => {
   const { logEvent } = useAmplitude()
+
+  useEffect(() => {
+    logEvent("cl_checkout_step2_view", {
+      buttonName: "Submit",
+      properties: {
+        userId: "manju45kk@gmail.com",
+      },
+    })
+  }, [])
+
   const appCtx = useContext(AppContext)
   const accordionCtx = useContext(AccordionContext)
   const gtmCtx = useContext(GTMContext)
@@ -164,7 +174,7 @@ export const StepShipping: React.FC<Props> = () => {
   }
 
   const handleSave = async () => {
-    logEvent("cl_checkout_step2_continue_payment_click", {
+    logEvent("cl_checkout_step2_continue_click", {
       buttonName: "Submit",
       properties: {
         userId: appCtx.emailAddress,

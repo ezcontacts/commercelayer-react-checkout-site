@@ -24,6 +24,17 @@ export interface ShippingToggleProps {
 }
 
 export const StepHeaderCustomer: React.FC<Props> = ({ step }) => {
+  const { logEvent } = useAmplitude()
+
+  useEffect(() => {
+    logEvent("cl_checkout_step1_view", {
+      buttonName: "Submit",
+      properties: {
+        userId: "manju45kk@gmail.com",
+      },
+    })
+  }, [])
+
   const appCtx = useContext(AppContext)
   const accordionCtx = useContext(AccordionContext)
   if (!appCtx || !accordionCtx) {
@@ -116,7 +127,7 @@ export const StepCustomer: React.FC<Props> = () => {
   }
 
   const handleSave = async (params: { success: boolean; order?: Order }) => {
-    logEvent(" cl_checkout_step1_continue_delivary_payment_click", {
+    logEvent("cl_checkout_step1_continue_click", {
       buttonName: "Submit",
       properties: {
         userId: emailAddress,

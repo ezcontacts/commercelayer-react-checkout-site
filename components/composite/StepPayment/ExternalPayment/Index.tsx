@@ -7,9 +7,11 @@ import { number as validate, cvv as cvvNumber } from "card-validator"
 import Loader from "components/ui/Loader"
 import useAmplitude from "utils/getAmplitude"
 
-export const ExternalPaymentCard = ({ paymentToken }: any) => {
+export const ExternalPaymentCard = ({
+  paymentToken,
+  onSelectPlaceOrder,
+}: any) => {
   const ctx = useContext(AppContext)
-  const { logEvent } = useAmplitude()
   const [isLoading, setIsLoading] = useState(false)
   const [cardNumberErrorMessage, setErrorMessage] = useState({
     message: "",
@@ -56,6 +58,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
   }
 
   const handlePlaceOrder = async (event: any) => {
+    onSelectPlaceOrder()
     clearServerMessage()
     setIsLoading(true)
     const order = await getOrderFromRef()
@@ -90,9 +93,6 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
           .then((result) => {
             setIsLoading(false)
             if (result) {
-              logEvent("cl_checkout_step3_continue_placeorder_click", {
-                buttonName: "Submitt",
-              })
               window.location.reload()
               setIsLoading(false)
             }
@@ -157,9 +157,6 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
             setIsLoading(false)
             if (result?.success) {
               const res = result?.data?.payment_source_token
-              logEvent("cl_checkout_step3_continue_placeorder_click", {
-                buttonName: "Submitt",
-              })
               return res
             } else {
               if (Number(card.cvv) === 0) {

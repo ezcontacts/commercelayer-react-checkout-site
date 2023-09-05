@@ -20,6 +20,11 @@ const useAmplitude = (config = {}) => {
         : "87897876757",
       country: countrname ? countrname : "USA",
       platform: "web",
+    }).promise.then((result) => {
+      debugger
+      result.event // {...} (The final event object sent to Amplitude)
+      result.code // 200 (The HTTP response status code of the request.
+      result.message // "Event tracked successfully" (The response message)
     })
   }
 

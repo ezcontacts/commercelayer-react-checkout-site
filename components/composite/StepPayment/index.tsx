@@ -35,7 +35,7 @@ interface HeaderProps {
 export const StepHeaderPayment: React.FC<HeaderProps> = ({ step }) => {
   const appCtx = useContext(AppContext)
   const accordionCtx = useContext(AccordionContext)
-
+  const { logEvent } = useAmplitude()
   if (!appCtx || !accordionCtx) {
     return null
   }
@@ -43,6 +43,15 @@ export const StepHeaderPayment: React.FC<HeaderProps> = ({ step }) => {
   const { hasPaymentMethod, isPaymentRequired, isCreditCard } = appCtx
 
   const { t } = useTranslation()
+
+  useEffect(() => {
+    logEvent("cl_checkout_step3_view", {
+      buttonName: "Submit",
+      properties: {
+        userId: "manju45kk@gmail.com",
+      },
+    })
+  }, [])
 
   const recapText = () => {
     if (!isPaymentRequired) {
@@ -120,19 +129,18 @@ export const StepPayment: React.FC<PaymentHeaderProps> = ({
   const { isGuest, isPaymentRequired, setPayment } = appCtx
 
   const selectPayment: THandleClick = async ({ payment, paymentSource }) => {
-    logEvent("Select payment", {
-      buttonName: "Submitt",
-      properties: {
-        userId: appCtx.emailAddress,
-      },
-    })
-
     if (paymentSource?.payment_methods?.paymentMethods?.length > 1) {
       setHasMultiplePaymentMethods(true)
     }
     setPayment({ payment: payment as PaymentMethodType })
 
     onSelectPayment(payment?.name)
+    logEvent("cl_checkout_step3_continue_click", {
+      buttonName: "Submit",
+      properties: {
+        userId: "manju45kk@gmail.com",
+      },
+    })
   }
 
   const autoSelectCallback = async () => {

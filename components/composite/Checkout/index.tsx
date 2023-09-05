@@ -115,6 +115,13 @@ const Checkout: React.FC<Props> = ({
         })
         .catch((error) => console.error("Error fetching user IP:", error))
     }
+
+    logEvent("cl_procceed_checkout_click", {
+      buttonName: "Submit",
+      properties: {
+        userId: "manju45kk@gmail.com",
+      },
+    })
   }, [])
 
   let paypalPayerId = ""
