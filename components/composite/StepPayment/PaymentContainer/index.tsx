@@ -1,4 +1,4 @@
-import { PaymentMethodsContainer } from "@commercelayer/react-components"
+import { PaymentMethodsContainer } from "@ezcontacts/react-components"
 import { ButtonWrapper, Button } from "components/ui/Button"
 import { SpinnerIcon } from "components/ui/SpinnerIcon"
 import { resolve } from "path"
@@ -11,6 +11,7 @@ import { AppContext } from "components/data/AppProvider"
 import { GTMContext } from "components/data/GTMProvider"
 import { useSearchParams } from "react-router-dom"
 import { ExternalPaymentCard } from "../ExternalPayment/Index"
+import useAmplitude from "utils/getAmplitude"
 interface Props {
   children: JSX.Element[] | JSX.Element
 }
@@ -18,10 +19,9 @@ interface Props {
 export const PaymentContainer = ({ children }: Props) => {
   const [searchParams] = useSearchParams()
   const paymentToken = searchParams.get("paymentToken")
-  const [isPlacingOrder, setIsPlacingOrder] = useState(false)
   const ctx = useContext(AppContext)
   const gtmCtx = useContext(GTMContext)
-
+  const { logEvent } = useAmplitude()
   if (!ctx) return null
 
   const { t } = useTranslation()
@@ -29,6 +29,15 @@ export const PaymentContainer = ({ children }: Props) => {
   const checkoutReturnUrl = `${
     window.location.href.split("?")[0]
   }?paymentReturn=true`
+
+  const onSelectPlaceOrder = () => {
+    logEvent("cl_checkout_complete_click ", {
+      buttonName: "Submit",
+      properties: {
+        userId: "manju45kk@gmail.com",
+      },
+    })
+  }
 
   return (
     <PaymentMethodsContainer
@@ -71,7 +80,10 @@ export const PaymentContainer = ({ children }: Props) => {
             return (
               <>
                 <div>
-                  <ExternalPaymentCard paymentToken={paymentToken} />
+                  <ExternalPaymentCard
+                    paymentToken={paymentToken}
+                    onSelectPlaceOrder={onSelectPlaceOrder}
+                  />
                 </div>
               </>
             )

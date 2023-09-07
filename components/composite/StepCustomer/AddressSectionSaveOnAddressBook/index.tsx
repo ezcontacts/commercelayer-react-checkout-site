@@ -1,4 +1,4 @@
-import { AddressInput } from "@commercelayer/react-components"
+import { AddressInput } from "@ezcontacts/react-components"
 import { useTranslation } from "react-i18next"
 import styled from "styled-components"
 

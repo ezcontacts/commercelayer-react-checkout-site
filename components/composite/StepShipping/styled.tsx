@@ -1,4 +1,4 @@
-import { ShippingMethodRadioButton } from "@commercelayer/react-components"
+import { ShippingMethodRadioButton } from "@ezcontacts/react-components"
 import styled from "styled-components"
 import tw from "twin.macro"
 
@@ -16,7 +16,7 @@ export const ShippingTitle = styled.h4`
 export const ShippingSummary = styled.div`
   ${tw`mb-2`}
   input:checked + label {
-    ${tw`border-2 border-primary shadow-md bg-gray-50 mb-2`}
+    ${tw`border-2 border-red-600 shadow-md bg-gray-50 mb-2`}
   }
 `
 export const ShippingSummaryItem = styled.div`

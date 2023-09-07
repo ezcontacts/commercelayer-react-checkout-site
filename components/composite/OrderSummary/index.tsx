@@ -1,13 +1,13 @@
-import LineItemsContainer from "@commercelayer/react-components/line_items/LineItemsContainer"
-import LineItemsCount from "@commercelayer/react-components/line_items/LineItemsCount"
-import AdjustmentAmount from "@commercelayer/react-components/orders/AdjustmentAmount"
-import DiscountAmount from "@commercelayer/react-components/orders/DiscountAmount"
-import GiftCardAmount from "@commercelayer/react-components/orders/GiftCardAmount"
-import PaymentMethodAmount from "@commercelayer/react-components/orders/PaymentMethodAmount"
-import ShippingAmount from "@commercelayer/react-components/orders/ShippingAmount"
-import SubTotalAmount from "@commercelayer/react-components/orders/SubTotalAmount"
-import TaxesAmount from "@commercelayer/react-components/orders/TaxesAmount"
-import TotalAmount from "@commercelayer/react-components/orders/TotalAmount"
+import LineItemsContainer from "@ezcontacts/react-components/line_items/LineItemsContainer"
+import LineItemsCount from "@ezcontacts/react-components/line_items/LineItemsCount"
+import AdjustmentAmount from "@ezcontacts/react-components/orders/AdjustmentAmount"
+import DiscountAmount from "@ezcontacts/react-components/orders/DiscountAmount"
+import GiftCardAmount from "@ezcontacts/react-components/orders/GiftCardAmount"
+import PaymentMethodAmount from "@ezcontacts/react-components/orders/PaymentMethodAmount"
+import ShippingAmount from "@ezcontacts/react-components/orders/ShippingAmount"
+import SubTotalAmount from "@ezcontacts/react-components/orders/SubTotalAmount"
+import TaxesAmount from "@ezcontacts/react-components/orders/TaxesAmount"
+import TotalAmount from "@ezcontacts/react-components/orders/TotalAmount"
 import { Trans, useTranslation } from "react-i18next"
 
 import { AppProviderData } from "components/data/AppProvider"
@@ -235,7 +235,7 @@ export const OrderSummary: React.FC<Props> = ({ appCtx, readonly }) => {
                 className="text-sm font-semibold leading-7 text-gray-700"
               />
             </div>
-            <ReturnToCart cartUrl={appCtx.cartUrl} /> 
+            <ReturnToCart cartUrl={appCtx.cartUrl} />
           </AmountWrapper>
         </TotalWrapper>
       </Wrapper>

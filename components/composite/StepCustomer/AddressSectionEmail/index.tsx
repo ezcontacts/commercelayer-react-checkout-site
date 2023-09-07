@@ -1,5 +1,5 @@
-import CustomerInput from "@commercelayer/react-components/customers/CustomerInput"
-import Errors from "@commercelayer/react-components/errors/Errors"
+import CustomerInput from "@ezcontacts/react-components/customers/CustomerInput"
+import Errors from "@ezcontacts/react-components/errors/Errors"
 import { useTranslation } from "react-i18next"
 import styled from "styled-components"
 import tw from "twin.macro"

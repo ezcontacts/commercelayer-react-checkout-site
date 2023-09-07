@@ -1,4 +1,4 @@
-import { PaymentMethodRadioButton } from "@commercelayer/react-components"
+import { PaymentMethodRadioButton } from "@ezcontacts/react-components"
 import styled from "styled-components"
 import tw from "twin.macro"
 
@@ -6,14 +6,14 @@ import { CheckCss } from "components/ui/form/CheckBox"
 import { RadioCss } from "components/ui/form/RadioButton"
 
 export const PaymentWrapper = styled.div`
-  ${tw`text-black border border-gray-300 mb-5 p-3 rounded bg-gray-50 relative transition duration-200 ease-in hover:border-primary group-hover:(cursor-pointer) group-last:mb-0`}
+  ${tw`text-black border border-gray-300 mb-5 p-3 rounded bg-gray-50 relative transition duration-200 ease-in hover:border-red-600 group-hover:(cursor-pointer) group-last:mb-0`}
 
   label {
     ${tw`group-hover:(cursor-pointer)`}
   }
 
   .payment.active & {
-    ${tw`border-2 border-primary bg-white cursor-default shadow-md`}
+    ${tw`border-2 border-red-600 bg-white cursor-default shadow-md`}
 
     input[type="radio"] + label {
       ${tw`pointer-events-none cursor-default`}
@@ -52,7 +52,7 @@ export const PaymentSourceContainer = styled.div`
   }
   .frame--activated {
     ${tw`h-12 mb-3`}
-    &.expiry-date-frame, 
+    &.expiry-date-frame,
     &.cvv-frame {
       ${tw`inline-block w-1/2 mb-0`}
     }

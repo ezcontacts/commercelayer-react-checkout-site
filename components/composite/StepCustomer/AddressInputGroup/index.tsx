@@ -1,7 +1,7 @@
-import AddressCountrySelector from "@commercelayer/react-components/addresses/AddressCountrySelector"
-import AddressInput from "@commercelayer/react-components/addresses/AddressInput"
-import AddressStateSelector from "@commercelayer/react-components/addresses/AddressStateSelector"
-import { Errors } from "@commercelayer/react-components/errors/Errors"
+import AddressCountrySelector from "@ezcontacts/react-components/addresses/AddressCountrySelector"
+import AddressInput from "@ezcontacts/react-components/addresses/AddressInput"
+import AddressStateSelector from "@ezcontacts/react-components/addresses/AddressStateSelector"
+import { Errors } from "@ezcontacts/react-components/errors/Errors"
 import { ChangeEvent, useContext, useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import styled from "styled-components"
@@ -111,6 +111,7 @@ export const AddressInputGroup: React.FC<Props> = ({
       return (
         <>
           <StyledAddressCountrySelector
+            style={{ pointerEvents: "none" }}
             id={fieldName}
             className="form-select"
             data-testid={`input_${fieldName}`}
@@ -120,16 +121,8 @@ export const AddressInputGroup: React.FC<Props> = ({
               value: "",
             }}
             onChange={handleChange}
-            value={
-              shippingCountryCodeLock &&
-              fieldName === "shipping_address_country_code"
-                ? shippingCountryCodeLock
-                : value
-            }
-            disabled={Boolean(
-              shippingCountryCodeLock &&
-                fieldName === "shipping_address_country_code"
-            )}
+            value={"US"}
+            disabled={Boolean(true)}
           />
           <Label htmlFor={fieldName}>{label}</Label>
         </>

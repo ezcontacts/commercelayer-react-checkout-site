@@ -4,7 +4,7 @@ import {
   PaymentSourceDetail,
   PaymentSource,
   PaymentSourceBrandIcon,
-} from "@commercelayer/react-components"
+} from "@ezcontacts/react-components"
 import { PaymentMethod as PaymentMethodType } from "@commercelayer/sdk"
 import classNames from "classnames"
 import { useContext, useEffect, useState } from "react"
@@ -19,6 +19,7 @@ import { StepHeader } from "components/ui/StepHeader"
 import { CheckoutCustomerPayment } from "./CheckoutCustomerPayment"
 import { CheckoutPayment } from "./CheckoutPayment"
 import { PaymentSkeleton } from "./PaymentSkeleton"
+import useAmplitude from "utils/getAmplitude"
 
 export type THandleClick = (params: {
   payment?: PaymentMethodType | Record<string, any>
@@ -34,7 +35,7 @@ interface HeaderProps {
 export const StepHeaderPayment: React.FC<HeaderProps> = ({ step }) => {
   const appCtx = useContext(AppContext)
   const accordionCtx = useContext(AccordionContext)
-
+  const { logEvent } = useAmplitude()
   if (!appCtx || !accordionCtx) {
     return null
   }
@@ -42,6 +43,15 @@ export const StepHeaderPayment: React.FC<HeaderProps> = ({ step }) => {
   const { hasPaymentMethod, isPaymentRequired, isCreditCard } = appCtx
 
   const { t } = useTranslation()
+
+  useEffect(() => {
+    logEvent("cl_checkout_step3_view", {
+      buttonName: "Submit",
+      properties: {
+        userId: "manju45kk@gmail.com",
+      },
+    })
+  }, [])
 
   const recapText = () => {
     if (!isPaymentRequired) {
@@ -93,6 +103,7 @@ interface PaymentHeaderProps {
 export const StepPayment: React.FC<PaymentHeaderProps> = ({
   onSelectPayment,
 }: any) => {
+  const { logEvent } = useAmplitude()
   const appCtx = useContext(AppContext)
   const accordionCtx = useContext(AccordionContext)
   const [hasMultiplePaymentMethods, setHasMultiplePaymentMethods] =
@@ -124,6 +135,12 @@ export const StepPayment: React.FC<PaymentHeaderProps> = ({
     setPayment({ payment: payment as PaymentMethodType })
 
     onSelectPayment(payment?.name)
+    logEvent("cl_checkout_step3_continue_click", {
+      buttonName: "Submit",
+      properties: {
+        userId: "manju45kk@gmail.com",
+      },
+    })
   }
 
   const autoSelectCallback = async () => {

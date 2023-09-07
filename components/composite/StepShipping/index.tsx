@@ -1,18 +1,18 @@
-import Errors from "@commercelayer/react-components/errors/Errors"
-import LineItem from "@commercelayer/react-components/line_items/LineItem"
-import LineItemImage from "@commercelayer/react-components/line_items/LineItemImage"
-import LineItemName from "@commercelayer/react-components/line_items/LineItemName"
-import LineItemQuantity from "@commercelayer/react-components/line_items/LineItemQuantity"
-import LineItemsContainer from "@commercelayer/react-components/line_items/LineItemsContainer"
-import Shipment from "@commercelayer/react-components/shipments/Shipment"
-import ShipmentField from "@commercelayer/react-components/shipments/ShipmentField"
-import ShipmentsContainer from "@commercelayer/react-components/shipments/ShipmentsContainer"
-import ShippingMethod from "@commercelayer/react-components/shipping_methods/ShippingMethod"
-import ShippingMethodName from "@commercelayer/react-components/shipping_methods/ShippingMethodName"
-import ShippingMethodPrice from "@commercelayer/react-components/shipping_methods/ShippingMethodPrice"
-import DeliveryLeadTime from "@commercelayer/react-components/skus/DeliveryLeadTime"
-import StockTransfer from "@commercelayer/react-components/stock_transfers/StockTransfer"
-import StockTransferField from "@commercelayer/react-components/stock_transfers/StockTransferField"
+import Errors from "@ezcontacts/react-components/errors/Errors"
+import LineItem from "@ezcontacts/react-components/line_items/LineItem"
+import LineItemImage from "@ezcontacts/react-components/line_items/LineItemImage"
+import LineItemName from "@ezcontacts/react-components/line_items/LineItemName"
+import LineItemQuantity from "@ezcontacts/react-components/line_items/LineItemQuantity"
+import LineItemsContainer from "@ezcontacts/react-components/line_items/LineItemsContainer"
+import Shipment from "@ezcontacts/react-components/shipments/Shipment"
+import ShipmentField from "@ezcontacts/react-components/shipments/ShipmentField"
+import ShipmentsContainer from "@ezcontacts/react-components/shipments/ShipmentsContainer"
+import ShippingMethod from "@ezcontacts/react-components/shipping_methods/ShippingMethod"
+import ShippingMethodName from "@ezcontacts/react-components/shipping_methods/ShippingMethodName"
+import ShippingMethodPrice from "@ezcontacts/react-components/shipping_methods/ShippingMethodPrice"
+import DeliveryLeadTime from "@ezcontacts/react-components/skus/DeliveryLeadTime"
+import StockTransfer from "@ezcontacts/react-components/stock_transfers/StockTransfer"
+import StockTransferField from "@ezcontacts/react-components/stock_transfers/StockTransferField"
 import type {
   Order,
   ShippingMethod as ShippingMethodCollection,
@@ -47,6 +47,8 @@ import {
   ShippingLineItemQty,
   StyledShippingMethodRadioButton,
 } from "./styled"
+
+import useAmplitude from "utils/getAmplitude"
 
 interface Props {
   className?: string
@@ -100,6 +102,17 @@ export const StepHeaderShipping: React.FC<HeaderProps> = ({ step }) => {
 const ShippingLineItems: TypeAccepted[] = LINE_ITEMS_SHIPPABLE
 
 export const StepShipping: React.FC<Props> = () => {
+  const { logEvent } = useAmplitude()
+
+  useEffect(() => {
+    logEvent("cl_checkout_step2_view", {
+      buttonName: "Submit",
+      properties: {
+        userId: "manju45kk@gmail.com",
+      },
+    })
+  }, [])
+
   const appCtx = useContext(AppContext)
   const accordionCtx = useContext(AccordionContext)
   const gtmCtx = useContext(GTMContext)
@@ -126,6 +139,7 @@ export const StepShipping: React.FC<Props> = () => {
     appCtx
 
   const [canContinue, setCanContinue] = useState(false)
+  const [changePendingSave, setChangePendingSave] = useState(false)
   const [isLocalLoader, setIsLocalLoader] = useState(false)
   const [outOfStockError, setOutOfStockError] = useState(false)
   const [shippingMethodError, setShippingMethodError] = useState(false)
@@ -138,28 +152,54 @@ export const StepShipping: React.FC<Props> = () => {
     }
   }, [shipments])
 
+  useEffect(() => {
+    if (canContinue && changePendingSave) {
+      handleSave()
+    }
+  }, [canContinue, changePendingSave])
+
   const handleChange = (params: {
     shippingMethod: ShippingMethodCollection
     shipmentId: string
     order?: Order
-  }): void => {
+  }) => {
+    setIsLocalLoader(true)
+    setChangePendingSave(true)
     selectShipment({
       shippingMethod: params.shippingMethod,
       shipmentId: params.shipmentId,
       order: params.order,
     })
+    setIsLocalLoader(false)
   }
 
   const handleSave = async () => {
+    logEvent("cl_checkout_step2_continue_click", {
+      buttonName: "Submit",
+      properties: {
+        userId: appCtx.emailAddress,
+      },
+    })
     setIsLocalLoader(true)
 
     saveShipments()
-
-    setIsLocalLoader(false)
+    setChangePendingSave(false)
     if (gtmCtx?.fireAddShippingInfo) {
       await gtmCtx.fireAddShippingInfo()
     }
+    setIsLocalLoader(false)
   }
+
+  // const handleSave = async () => {
+  //   setIsLocalLoader(true)
+
+  //   saveShipments()
+
+  //   setIsLocalLoader(false)
+  //   if (gtmCtx?.fireAddShippingInfo) {
+  //     await gtmCtx.fireAddShippingInfo()
+  //   }
+  // }
 
   const autoSelectCallback = async (order?: Order) => {
     if (gtmCtx?.fireAddShippingInfo) {
@@ -244,6 +284,7 @@ export const StepShipping: React.FC<Props> = () => {
                                       onChange={(params) =>
                                         handleChange(params)
                                       }
+                                      disabled={isLocalLoader}
                                     />
                                     <ShippingMethodName data-test-id="shipping-method-name">
                                       {(props) => {
@@ -253,7 +294,7 @@ export const StepShipping: React.FC<Props> = () => {
                                           props?.deliveryLeadTimeForShipment
                                         return (
                                           <label
-                                            className="flex flex-col p-3 border rounded cursor-pointer hover:border-primary transition duration-200 ease-in"
+                                            className="flex flex-col p-3 border rounded cursor-pointer hover:border-red-600 transition duration-200 ease-in"
                                             htmlFor={props.htmlFor}
                                           >
                                             <div className="flex justify-between">
@@ -362,17 +403,19 @@ export const StepShipping: React.FC<Props> = () => {
                               </LineItemsContainer> */}
                             </ShippingWrapper>
                           </Shipment>
-                          <ButtonWrapper className="btn-background">
-                            <Button
-                              disabled={!canContinue || isLocalLoader}
-                              // disabled={!canContinue || isLocalLoader}
-                              data-testid="save-shipping-button"
-                              onClick={handleSave}
-                            >
-                              {isLocalLoader && <SpinnerIcon />}
-                              {t("stepShipping.continueToPayment")}
-                            </Button>
-                          </ButtonWrapper>
+                          {/* {!isLocalLoader && canContinue  && (
+                            <ButtonWrapper className="btn-background">
+                              <Button
+                                disabled={!canContinue || isLocalLoader}
+                                // disabled={!canContinue || isLocalLoader}
+                                data-testid="save-shipping-button"
+                                onClick={handleSave}
+                              >
+                                {isLocalLoader && <SpinnerIcon />}
+                                {t("stepShipping.continueToPayment")}
+                              </Button>
+                            </ButtonWrapper>
+                          )} */}
                         </>
                       )}
                     </ShipmentsContainer>
