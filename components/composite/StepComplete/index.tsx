@@ -37,6 +37,7 @@ import {
   WrapperButton,
 } from "./styled"
 import { SupportMessage } from "./SupportMessage"
+import { goContinueShopping } from "components/utils/common"
 
 interface Props {
   logoUrl?: string
@@ -67,11 +68,13 @@ export const StepComplete: React.FC<Props> = ({
     <Base>
       <Top>
         <Wrapper>
-          <Logo
-            logoUrl={logoUrl}
-            companyName={companyName}
-            className="mb-10 md:self-auto"
-          />
+          <div className="cursor-pointer" onClick={goContinueShopping}>
+            <Logo
+              logoUrl={logoUrl}
+              companyName={companyName}
+              className="mb-10 md:self-auto"
+            />
+          </div>
           <Main>
             <div className="p-8">
               <CheckIcon />
