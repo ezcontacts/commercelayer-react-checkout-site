@@ -6,6 +6,7 @@ import { Button } from "components/ui/Button"
 import { number as validate, cvv as cvvNumber } from "card-validator"
 import Loader from "components/ui/Loader"
 import useAmplitude from "utils/getAmplitude"
+import LoaderComponent from "components/utils/Loader"
 
 export const ExternalPaymentCard = ({
   paymentToken,
@@ -58,13 +59,12 @@ export const ExternalPaymentCard = ({
   }
 
   const handlePlaceOrder = async (event: any) => {
+    event.preventDefault()
     onSelectPlaceOrder()
     clearServerMessage()
     setIsLoading(true)
     const order = await getOrderFromRef()
     if (order) {
-      setIsLoading(true)
-      event.preventDefault()
       const response = await getData(order)
       if (response) {
         const body = JSON.stringify({
@@ -91,19 +91,19 @@ export const ExternalPaymentCard = ({
         )
           .then((response) => response.json())
           .then((result) => {
-            setIsLoading(false)
             if (result) {
               window.location.reload()
-              setIsLoading(false)
             }
           })
           .catch((error) => {
+            if (error) setIsLoading(false)
+            setCardErrorMessage({
+              isSuccess: false,
+              message: "Unable to process the payment, please try again",
+            })
+          })
+          .finally(() => {
             setIsLoading(false)
-            if (error)
-              setCardErrorMessage({
-                isSuccess: false,
-                message: "Unable to process the payment, please try again",
-              })
           })
       }
     }
@@ -154,7 +154,6 @@ export const ExternalPaymentCard = ({
         )
           .then((response) => response.json())
           .then((result) => {
-            setIsLoading(false)
             if (result?.success) {
               const res = result?.data?.payment_source_token
               return res
@@ -176,12 +175,11 @@ export const ExternalPaymentCard = ({
             }
           })
           .catch((error) => {
-            setIsLoading(false)
-            if (error)
-              setCardErrorMessage({
-                isSuccess: false,
-                message: "Unable to process the payment, please try again",
-              })
+            if (error) setIsLoading(false)
+            setCardErrorMessage({
+              isSuccess: false,
+              message: "Unable to process the payment, please try again",
+            })
           })
       }
     }
@@ -446,9 +444,13 @@ export const ExternalPaymentCard = ({
     })
   }
 
+  if (isLoading) {
+    return <LoaderComponent />
+  }
+
   return (
     <>
-      <Loader isLoading={isLoading} />
+      {/* <Loader isLoading={isLoading} /> */}
       <div className="flex flex-wrap w-full p-5">
         {!apiCardErrorMessage.isSuccess && (
           <div className="w-full pb-2 text-red-400">

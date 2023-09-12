@@ -1,5 +1,5 @@
 export const goContinueShopping = () => {
-  window.location.href = `${process.env.NEXT_PUBLIC_PROD_ODO_URL_PATH}`
+  window.location.href = `${process.env.NEXT_PUBLIC_API_URL}`
 }
 
 export const ContinueShopping = () => {
