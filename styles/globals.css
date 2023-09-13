@@ -365,7 +365,7 @@ select#shipping_address_country_code option:not([value="US"]) {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Add background blur effect here */
+  background-color: #181717e8; /* Add background blur effect here */
   backdrop-filter: blur(5px);
   display: flex;
   justify-content: center;
