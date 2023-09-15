@@ -1,4 +1,4 @@
-import { Address, AddressField } from "@commercelayer/react-components"
+import { Address, AddressField } from "@ezcontacts/react-components"
 import { Address as AddressCollection } from "@commercelayer/sdk"
 
 interface AddressCardProps {
@@ -23,9 +23,9 @@ export const CustomerAddressCard: React.FC<AddressCardProps> = ({
       data-testid={dataTestId}
       addresses={addresses}
       className={`text-black p-3 rounded border ${
-        onSelect && "hover:border-primary cursor-pointer"
+        onSelect && "hover:border-red-600 cursor-pointer"
       } transition duration-200 ease-in`}
-      selectedClassName="!border-2 border-primary shadow-md bg-gray-50"
+      selectedClassName="!border-2 border-red-600 shadow-md bg-gray-50"
       deselect={deselect}
       onSelect={(address) => onSelect && onSelect(address as AddressCollection)}
       disabledClassName="opacity-50 cursor-not-allowed"

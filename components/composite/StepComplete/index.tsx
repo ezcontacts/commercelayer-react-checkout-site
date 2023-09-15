@@ -1,7 +1,7 @@
-import PaymentSource from "@commercelayer/react-components/payment_source/PaymentSource"
-import PaymentSourceBrandIcon from "@commercelayer/react-components/payment_source/PaymentSourceBrandIcon"
-import PaymentSourceBrandName from "@commercelayer/react-components/payment_source/PaymentSourceBrandName"
-import PaymentSourceDetail from "@commercelayer/react-components/payment_source/PaymentSourceDetail"
+import PaymentSource from "@ezcontacts/react-components/payment_source/PaymentSource"
+import PaymentSourceBrandIcon from "@ezcontacts/react-components/payment_source/PaymentSourceBrandIcon"
+import PaymentSourceBrandName from "@ezcontacts/react-components/payment_source/PaymentSourceBrandName"
+import PaymentSourceDetail from "@ezcontacts/react-components/payment_source/PaymentSourceDetail"
 import { useContext } from "react"
 import { useTranslation, Trans } from "react-i18next"
 
@@ -37,6 +37,7 @@ import {
   WrapperButton,
 } from "./styled"
 import { SupportMessage } from "./SupportMessage"
+import { goContinueShopping } from "components/utils/common"
 
 interface Props {
   logoUrl?: string
@@ -67,11 +68,13 @@ export const StepComplete: React.FC<Props> = ({
     <Base>
       <Top>
         <Wrapper>
-          <Logo
-            logoUrl={logoUrl}
-            companyName={companyName}
-            className="mb-10 md:self-auto"
-          />
+          <div className="cursor-pointer" onClick={goContinueShopping}>
+            <Logo
+              logoUrl={logoUrl}
+              companyName={companyName}
+              className="mb-10 md:self-auto"
+            />
+          </div>
           <Main>
             <div className="p-8">
               <CheckIcon />

@@ -11,6 +11,7 @@ import { StepHeader } from "components/ui/StepHeader"
 
 import { CheckoutAddresses } from "./CheckoutAddresses"
 import { CheckoutCustomerAddresses } from "./CheckoutCustomerAddresses"
+import useAmplitude from "utils/getAmplitude"
 
 interface Props {
   className?: string
@@ -23,6 +24,17 @@ export interface ShippingToggleProps {
 }
 
 export const StepHeaderCustomer: React.FC<Props> = ({ step }) => {
+  const { logEvent } = useAmplitude()
+
+  useEffect(() => {
+    logEvent("cl_checkout_step1_view", {
+      buttonName: "Submit",
+      properties: {
+        userId: "manju45kk@gmail.com",
+      },
+    })
+  }, [])
+
   const appCtx = useContext(AppContext)
   const accordionCtx = useContext(AccordionContext)
   if (!appCtx || !accordionCtx) {
@@ -66,7 +78,7 @@ export const StepHeaderCustomer: React.FC<Props> = ({ step }) => {
 export const StepCustomer: React.FC<Props> = () => {
   const appCtx = useContext(AppContext)
   const accordionCtx = useContext(AccordionContext)
-
+  const { logEvent } = useAmplitude()
   const [isLocalLoader, setIsLocalLoader] = useState(false)
 
   if (!appCtx || !accordionCtx) {
@@ -115,6 +127,13 @@ export const StepCustomer: React.FC<Props> = () => {
   }
 
   const handleSave = async (params: { success: boolean; order?: Order }) => {
+    logEvent("cl_checkout_step1_continue_click", {
+      buttonName: "Submit",
+      properties: {
+        userId: emailAddress,
+      },
+    })
+
     setIsLocalLoader(true)
     await setAddresses(params.order)
 

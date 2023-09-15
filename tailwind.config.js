@@ -21,9 +21,9 @@ module.exports = {
         dark: "var(--primary-dark)",
       },
       contrast: "var(--contrast)",
-      transparent: 'transparent',
-      black: '#101111',
-      white: '#fff',
+      transparent: "transparent",
+      black: "#101111",
+      white: "#fff",
       gray: {
         // 100: "#f8f8f8",
         // 300: "#E6E6E6",
@@ -45,6 +45,7 @@ module.exports = {
         50: "#ffe0e1",
         400: "#FF656B",
         500: "#cc5156",
+        600: "#e2242d",
       },
       green: {
         400: "#1FDA8A",
@@ -56,10 +57,10 @@ module.exports = {
     fontFamily: {
       sans: ["Manrope", "ui-sans-serif", "sans-serif"],
     },
-    borderColor: theme => ({
-      ...theme('colors'),
-       DEFAULT: theme('colors.gray.200', 'currentColor'),
-     }),
+    borderColor: (theme) => ({
+      ...theme("colors"),
+      DEFAULT: theme("colors.gray.200", "currentColor"),
+    }),
     extend: {
       fontSize: {
         md: "0.938rem",
@@ -88,8 +89,8 @@ module.exports = {
         top: "0px -4px 1px 0px rgb(0, 0, 0, 0.025)",
       },
       transitionProperty: {
-        'bg': 'background',
-      }
+        bg: "background",
+      },
     },
   },
   variants: {

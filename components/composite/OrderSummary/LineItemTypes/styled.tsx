@@ -1,5 +1,5 @@
-import { LineItemCode } from "@commercelayer/react-components/line_items/LineItemCode"
-import { LineItemOptions } from "@commercelayer/react-components/line_items/LineItemOptions"
+import { LineItemCode } from "@ezcontacts/react-components/line_items/LineItemCode"
+import { LineItemOptions } from "@ezcontacts/react-components/line_items/LineItemOptions"
 import styled from "styled-components"
 import tw from "twin.macro"
 

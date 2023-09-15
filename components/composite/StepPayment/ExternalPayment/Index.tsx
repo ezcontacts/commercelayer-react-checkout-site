@@ -5,10 +5,14 @@ import { Order } from "@commercelayer/sdk"
 import { Button } from "components/ui/Button"
 import { number as validate, cvv as cvvNumber } from "card-validator"
 import Loader from "components/ui/Loader"
+import useAmplitude from "utils/getAmplitude"
+import LoaderComponent from "components/utils/Loader"
 
-export const ExternalPaymentCard = ({ paymentToken }: any) => {
+export const ExternalPaymentCard = ({
+  paymentToken,
+  onSelectPlaceOrder,
+}: any) => {
   const ctx = useContext(AppContext)
-
   const [isLoading, setIsLoading] = useState(false)
   const [cardNumberErrorMessage, setErrorMessage] = useState({
     message: "",
@@ -55,12 +59,12 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
   }
 
   const handlePlaceOrder = async (event: any) => {
+    event.preventDefault()
+    onSelectPlaceOrder()
     clearServerMessage()
     setIsLoading(true)
     const order = await getOrderFromRef()
     if (order) {
-      setIsLoading(true)
-      event.preventDefault()
       const response = await getData(order)
       if (response) {
         const body = JSON.stringify({
@@ -87,19 +91,19 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
         )
           .then((response) => response.json())
           .then((result) => {
-            setIsLoading(false)
             if (result) {
               window.location.reload()
-              setIsLoading(false)
             }
           })
           .catch((error) => {
+            if (error) setIsLoading(false)
+            setCardErrorMessage({
+              isSuccess: false,
+              message: "Unable to process the payment, please try again",
+            })
+          })
+          .finally(() => {
             setIsLoading(false)
-            if (error)
-              setCardErrorMessage({
-                isSuccess: false,
-                message: "Unable to process the payment, please try again",
-              })
           })
       }
     }
@@ -150,7 +154,6 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
         )
           .then((response) => response.json())
           .then((result) => {
-            setIsLoading(false)
             if (result?.success) {
               const res = result?.data?.payment_source_token
               return res
@@ -172,12 +175,11 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
             }
           })
           .catch((error) => {
-            setIsLoading(false)
-            if (error)
-              setCardErrorMessage({
-                isSuccess: false,
-                message: "Unable to process the payment, please try again",
-              })
+            if (error) setIsLoading(false)
+            setCardErrorMessage({
+              isSuccess: false,
+              message: "Unable to process the payment, please try again",
+            })
           })
       }
     }
@@ -442,9 +444,13 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
     })
   }
 
+  if (isLoading) {
+    return <LoaderComponent />
+  }
+
   return (
     <>
-      <Loader isLoading={isLoading} />
+      {/* <Loader isLoading={isLoading} /> */}
       <div className="flex flex-wrap w-full p-5">
         {!apiCardErrorMessage.isSuccess && (
           <div className="w-full pb-2 text-red-400">
@@ -465,6 +471,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
               value={card?.cardNumber}
               onChange={(event) => onChangeCreditCardNumber(event)}
               onBlur={(event) => onBlurCreditCardNumber(event)}
+              style={{ width: "414px" }}
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -505,6 +512,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   onBlur={(event) => onBlurSelectExpireDateCardDetails(event)}
                   maxLength={5}
                   placeholder="MM/YY"
+                  style={{ width: "200px" }}
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -559,6 +567,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   onChange={(event) => onSelectCVVCardDetails(event)}
                   onKeyDown={(event) => onKeyCardKeyDown(event)}
                   onBlur={(event) => onBlurCVVCardDetails(event)}
+                  style={{ width: "200px" }}
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -584,7 +593,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
           </div>
         </div>
         <div className="flex gap-5 pt-5 pb-5 w-full">
-          <div className="w-1/2">
+          <div>
             <div>
               <label className="relative flex-1 flex flex-col">
                 <span className="font-semibold text-sm leading-5 text-gray-700 mb-3">
@@ -597,11 +606,12 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   value={card?.firstname}
                   onChange={(event) => onSelectCardNames(event)}
                   placeholder="First name"
+                  style={{ width: "200px" }}
                 />
               </label>
             </div>
           </div>
-          <div className="w-1/2">
+          <div>
             <div>
               <label className="relative flex-1 flex flex-col">
                 <span className="flex items-center gap-3 mb-3 font-semibold text-sm leading-5 text-gray-700">
@@ -614,6 +624,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
                   name="lastname"
                   placeholder="Last name"
                   onChange={(event) => onSelectCardNames(event)}
+                  style={{ width: "200px" }}
                 />
               </label>
             </div>
@@ -622,6 +633,7 @@ export const ExternalPaymentCard = ({ paymentToken }: any) => {
       </div>
 
       <Button
+        data-testid="save-payment-button"
         className="btn-background"
         disabled={
           !expireDateerrorMessage.isValid ||
