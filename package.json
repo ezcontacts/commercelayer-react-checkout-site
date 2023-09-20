@@ -74,7 +74,7 @@
   "dependencies": {
     "@amplitude/analytics-node": "^1.3.2",
     "@commercelayer/sdk": "^5.4.1",
-    "@ezcontacts/react-components": "1.0.4",
+    "@ezcontacts/react-components": "1.0.5",
     "@faker-js/faker": "^8.0.2",
     "@headlessui/react": "^1.7.15",
     "@next/bundle-analyzer": "^12.3.4",
