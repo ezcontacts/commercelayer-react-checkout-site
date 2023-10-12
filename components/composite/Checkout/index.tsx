@@ -34,6 +34,7 @@ import { Footer } from "components/ui/Footer"
 import { Logo } from "components/ui/Logo"
 import ReviewBanner from "../ReviewBanner"
 import useAmplitude from "utils/getAmplitude"
+import { saveUserActivitylogData } from "utils/useCustomLogData"
 
 interface Props {
   logoUrl?: string
@@ -115,6 +116,14 @@ const Checkout: React.FC<Props> = ({
         })
         .catch((error) => console.error("Error fetching user IP:", error))
     }
+
+    let requestBody = {
+      requested_method: "View cart",
+      cl_token: "eyJhbGciOiJIUzUxMiJ9.eyJvcmdhbml6YXRp",
+      requested_data: "",
+      response_data: "",
+    }
+    saveUserActivitylogData(requestBody)
 
     logEvent("cl_procceed_checkout_click", {
       buttonName: "Submit",

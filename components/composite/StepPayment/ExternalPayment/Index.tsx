@@ -7,6 +7,7 @@ import { number as validate, cvv as cvvNumber } from "card-validator"
 import Loader from "components/ui/Loader"
 import useAmplitude from "utils/getAmplitude"
 import LoaderComponent from "components/utils/Loader"
+import { saveUserActivitylogData } from "utils/useCustomLogData"
 
 export const ExternalPaymentCard = ({
   paymentToken,
@@ -58,11 +59,22 @@ export const ExternalPaymentCard = ({
     console.log(e.keyCode)
   }
 
+  const lotData = (event: string) => {
+    let requestBody = {
+      requested_method: event,
+      cl_token: "eyJhbGciOiJIUzUxMiJ9.eyJvcmdhbml6YXRp",
+      requested_data: "",
+      response_data: "",
+    }
+    saveUserActivitylogData(requestBody)
+  }
+
   const handlePlaceOrder = async (event: any) => {
     event.preventDefault()
     onSelectPlaceOrder()
     clearServerMessage()
     setIsLoading(true)
+    lotData("handlePlaceOrder")
     const order = await getOrderFromRef()
     if (order) {
       const response = await getData(order)
@@ -158,6 +170,7 @@ export const ExternalPaymentCard = ({
               const res = result?.data?.payment_source_token
               return res
             } else {
+              setIsLoading(false)
               if (Number(card.cvv) === 0) {
                 setCardErrorMessage({
                   isSuccess: false,
@@ -180,6 +193,9 @@ export const ExternalPaymentCard = ({
               isSuccess: false,
               message: "Unable to process the payment, please try again",
             })
+          })
+          .finally(() => {
+            setIsLoading(false)
           })
       }
     }
