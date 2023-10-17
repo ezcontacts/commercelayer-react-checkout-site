@@ -1,4 +1,12 @@
+import { saveUserActivitylogData } from "utils/useCustomLogData"
+
 export const goContinueShopping = () => {
+  let requestBody = {
+    requested_method: "goContinueShopping",
+    requested_data: "",
+    response_data: "",
+  }
+  saveUserActivitylogData(requestBody)
   window.location.href = `${process.env.NEXT_PUBLIC_API_URL}`
 }
 

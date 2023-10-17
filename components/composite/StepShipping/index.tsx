@@ -49,6 +49,7 @@ import {
 } from "./styled"
 
 import useAmplitude from "utils/getAmplitude"
+import { saveUserActivitylogData } from "utils/useCustomLogData"
 
 interface Props {
   className?: string
@@ -180,6 +181,13 @@ export const StepShipping: React.FC<Props> = () => {
         userId: appCtx.emailAddress,
       },
     })
+
+    let requestBody = {
+      requested_method: "cl_checkout_step2_continue_click",
+      requested_data: appCtx.emailAddress,
+      response_data: "",
+    }
+    saveUserActivitylogData(requestBody)
     setIsLocalLoader(true)
 
     saveShipments()

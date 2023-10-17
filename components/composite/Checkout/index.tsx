@@ -116,10 +116,8 @@ const Checkout: React.FC<Props> = ({
         })
         .catch((error) => console.error("Error fetching user IP:", error))
     }
-
     let requestBody = {
       requested_method: "View cart",
-      cl_token: "eyJhbGciOiJIUzUxMiJ9.eyJvcmdhbml6YXRp",
       requested_data: "",
       response_data: "",
     }
@@ -128,7 +126,7 @@ const Checkout: React.FC<Props> = ({
     logEvent("cl_procceed_checkout_click", {
       buttonName: "Submit",
       properties: {
-        userId: "manju45kk@gmail.com",
+        userId: "8363683783838",
       },
     })
   }, [])

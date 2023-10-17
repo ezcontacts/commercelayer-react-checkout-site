@@ -20,6 +20,7 @@ import {
   StyledPrivacyAndTermsCheckbox,
   PlaceOrderButtonWrapper,
 } from "./styled"
+import { saveUserActivitylogData } from "utils/useCustomLogData"
 
 interface Props {
   isActive: boolean
@@ -53,6 +54,12 @@ const StepPlaceOrder: React.FC<Props> = ({
     order?: Order
   }) => {
     if (placed) {
+      let requestBody = {
+        requested_method: "handlePlaceOrder",
+        requested_data: order,
+        response_data: "",
+      }
+      saveUserActivitylogData(requestBody)
       setIsPlacingOrder(true)
       await placeOrder(order)
       if (gtmCtx?.firePurchase && gtmCtx?.fireAddPaymentInfo) {

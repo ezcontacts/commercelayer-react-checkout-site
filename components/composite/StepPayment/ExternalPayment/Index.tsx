@@ -56,15 +56,13 @@ export const ExternalPaymentCard = ({
     if ([69, 187, 188, 189, 190].includes(e.keyCode)) {
       e.preventDefault()
     }
-    console.log(e.keyCode)
   }
 
-  const lotData = (event: string) => {
+  const logData = (eventname: string, request: any, response: any) => {
     let requestBody = {
-      requested_method: event,
-      cl_token: "eyJhbGciOiJIUzUxMiJ9.eyJvcmdhbml6YXRp",
-      requested_data: "",
-      response_data: "",
+      requested_method: eventname,
+      requested_data: request,
+      response_data: response,
     }
     saveUserActivitylogData(requestBody)
   }
@@ -74,7 +72,7 @@ export const ExternalPaymentCard = ({
     onSelectPlaceOrder()
     clearServerMessage()
     setIsLoading(true)
-    lotData("handlePlaceOrder")
+    logData("handlePlaceOrder", "", "")
     const order = await getOrderFromRef()
     if (order) {
       const response = await getData(order)
@@ -104,11 +102,13 @@ export const ExternalPaymentCard = ({
           .then((response) => response.json())
           .then((result) => {
             if (result) {
+              logData("handlePlaceOrder-success-response", ctx.orderId, result)
               window.location.reload()
             }
           })
           .catch((error) => {
             if (error) setIsLoading(false)
+            logData("handlePlaceOrder-error-response", ctx.orderId, error)
             setCardErrorMessage({
               isSuccess: false,
               message: "Unable to process the payment, please try again",
@@ -154,6 +154,7 @@ export const ExternalPaymentCard = ({
             },
           },
         }
+        logData("onCreate-authorization", requestBody, "")
         return fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/cl/order/payment/v1/create-authorization`,
           {
@@ -168,8 +169,14 @@ export const ExternalPaymentCard = ({
           .then((result) => {
             if (result?.success) {
               const res = result?.data?.payment_source_token
+              logData("onCreate-authorization", requestBody, res)
               return res
             } else {
+              logData(
+                "onCreate-authorization",
+                requestBody,
+                "Please enter a valid cvc."
+              )
               setIsLoading(false)
               if (Number(card.cvv) === 0) {
                 setCardErrorMessage({
@@ -193,6 +200,7 @@ export const ExternalPaymentCard = ({
               isSuccess: false,
               message: "Unable to process the payment, please try again",
             })
+            logData("onCreate-authorization", requestBody, error)
           })
           .finally(() => {
             setIsLoading(false)
