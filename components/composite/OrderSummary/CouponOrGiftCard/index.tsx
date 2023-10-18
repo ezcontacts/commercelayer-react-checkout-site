@@ -239,11 +239,15 @@ export const CouponOrGiftCard: React.FC<Props> = ({
                     </span>
                   </div>
                 ) : (
-                  <StyledErrors
-                    data-test-id="discount-error"
-                    resource="orders"
-                    messages={messages}
-                  />
+                  <>
+                    {codeError && (
+                      <StyledErrors
+                        data-test-id="discount-error"
+                        resource="orders"
+                        messages={messages}
+                      />
+                    )}
+                  </>
                 )}
               </CouponFormWrapper>
             </GiftCardOrCouponForm>
