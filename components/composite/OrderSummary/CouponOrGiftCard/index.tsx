@@ -244,6 +244,7 @@ export const CouponOrGiftCard: React.FC<Props> = ({
                       <StyledErrors
                         data-test-id="discount-error"
                         resource="orders"
+                        field="gift_card_or_coupon_code"
                         messages={messages}
                       />
                     )}

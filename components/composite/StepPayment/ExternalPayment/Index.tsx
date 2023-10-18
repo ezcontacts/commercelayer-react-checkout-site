@@ -484,8 +484,8 @@ export const ExternalPaymentCard = ({
 
         <div className="w-full">
           <label className="relative w-full flex flex-col">
-            <span className="font-semibold text-sm leading-5 text-gray-700 mb-3">
-              Card number
+            <span className="leading-5 text-xs text-gray-500  mb-3">
+              {"Card number" + " *"}
             </span>
             <input
               className="rounded-md peer pl-12 pr-2 py-2 input-border placeholder-gray-300"
@@ -524,8 +524,8 @@ export const ExternalPaymentCard = ({
           <div>
             <div>
               <label className="relative flex-1 flex flex-col">
-                <span className="font-semibold text-sm leading-5 text-gray-700 mb-3">
-                  Expiry date
+                <span className="text-xs text-gray-500 leading-5 mb-3">
+                  {" Expiry date" + " *"}
                 </span>
                 <input
                   type="text"
@@ -563,8 +563,8 @@ export const ExternalPaymentCard = ({
           <div>
             <div>
               <label className="relative flex-1 flex flex-col">
-                <span className="flex items-center gap-3 mb-3 font-semibold text-sm leading-5 text-gray-700">
-                  CVC/CVV
+                <span className="flex items-center gap-3 mb-3 text-xs text-gray-500 leading-5">
+                  {"CVC/CVV" + " *"}
                   <span className="relative group">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -620,8 +620,8 @@ export const ExternalPaymentCard = ({
           <div>
             <div>
               <label className="relative flex-1 flex flex-col">
-                <span className="font-semibold text-sm leading-5 text-gray-700 mb-3">
-                  First name
+                <span className="text-xs leading-5 text-gray-500 mb-3">
+                  {"First name"}
                 </span>
                 <input
                   type="text"
@@ -638,8 +638,8 @@ export const ExternalPaymentCard = ({
           <div>
             <div>
               <label className="relative flex-1 flex flex-col">
-                <span className="flex items-center gap-3 mb-3 font-semibold text-sm leading-5 text-gray-700">
-                  Last name
+                <span className="flex items-center gap-3 mb-3 text-xs leading-5 text-gray-500">
+                  {"Last name"}
                 </span>
                 <input
                   className="rounded-md peer pl-5 pr-2 py-2 border-2 input-border  placeholder-gray-200"
