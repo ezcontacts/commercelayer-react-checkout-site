@@ -137,6 +137,7 @@ export const StepCustomer: React.FC<Props> = () => {
 
     let requestBody = {
       requested_method: "cl_checkout_step1_continue_click",
+      cl_token: appCtx?.accessToken,
       requested_data: { "orderId-": params.order?.id },
       response_data: params.order,
     }

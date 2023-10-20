@@ -64,8 +64,9 @@ export const StepComplete: React.FC<Props> = ({
   const handleClick = () => {
     let requestBody = {
       requested_method: "Continue click",
-      requested_data: "",
-      response_data: "",
+      cl_token: ctx?.accessToken,
+      requested_data: ctx.orderId,
+      response_data: "OK",
     }
     saveUserActivitylogData(requestBody)
     ctx?.returnUrl && (document.location.href = ctx?.returnUrl)

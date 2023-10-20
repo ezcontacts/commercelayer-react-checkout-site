@@ -61,6 +61,7 @@ export const ExternalPaymentCard = ({
   const logData = (eventname: string, request: any, response: any) => {
     let requestBody = {
       requested_method: eventname,
+      cl_token: ctx?.accessToken,
       requested_data: request,
       response_data: response,
     }

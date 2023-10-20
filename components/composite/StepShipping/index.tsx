@@ -174,6 +174,7 @@ export const StepShipping: React.FC<Props> = () => {
     setIsLocalLoader(false)
     let requestBody = {
       requested_method: "cl_checkout_step2_continue_click",
+      cl_token: appCtx?.accessToken,
       requested_data: { "shippingMethod-": params.shippingMethod },
       response_data: params.order,
     }

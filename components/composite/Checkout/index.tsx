@@ -118,6 +118,7 @@ const Checkout: React.FC<Props> = ({
     }
     let requestBody = {
       requested_method: "View Checkout",
+      cl_token: ctx?.accessToken,
       requested_data: { "orderId-": ctx?.orderId },
       response_data: "OK",
     }

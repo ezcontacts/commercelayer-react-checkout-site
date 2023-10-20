@@ -56,6 +56,7 @@ const StepPlaceOrder: React.FC<Props> = ({
     if (placed) {
       let requestBody = {
         requested_method: "handlePlaceOrder",
+        cl_token: appCtx?.accessToken,
         requested_data: { "orderId-": order?.id },
         response_data: order,
       }
