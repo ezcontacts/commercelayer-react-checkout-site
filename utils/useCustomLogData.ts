@@ -1,7 +1,7 @@
 export const saveUserActivitylogData = async (request: any) => {
   let requestBody = {
     requested_method: request.requested_method,
-    cl_token: "eyJhbGciOiJIUzUxMiJ9.eyJvcmdhbml6YXRp",
+    cl_token: `eyJhbGciOiJIUzUxMiJ9.eyJvcmdhbml6YXRp`,
     requested_data: request.requested_data,
     response_data: request.response_data,
   }

@@ -72,7 +72,7 @@ export const ExternalPaymentCard = ({
     onSelectPlaceOrder()
     clearServerMessage()
     setIsLoading(true)
-    logData("handlePlaceOrder", "", "")
+
     const order = await getOrderFromRef()
     if (order) {
       const response = await getData(order)
@@ -102,13 +102,21 @@ export const ExternalPaymentCard = ({
           .then((response) => response.json())
           .then((result) => {
             if (result) {
-              logData("handlePlaceOrder-success-response", ctx.orderId, result)
+              logData(
+                "handlePlaceOrder-success-response",
+                { "orderId-": ctx.orderId },
+                result
+              )
               window.location.reload()
             }
           })
           .catch((error) => {
             if (error) setIsLoading(false)
-            logData("handlePlaceOrder-error-response", ctx.orderId, error)
+            logData(
+              "handlePlaceOrder-error-response",
+              { "orderId-": ctx.orderId },
+              error
+            )
             setCardErrorMessage({
               isSuccess: false,
               message: "Unable to process the payment, please try again",
@@ -154,7 +162,7 @@ export const ExternalPaymentCard = ({
             },
           },
         }
-        logData("onCreate-authorization", requestBody, "")
+
         return fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/cl/order/payment/v1/create-authorization`,
           {
@@ -169,14 +177,10 @@ export const ExternalPaymentCard = ({
           .then((result) => {
             if (result?.success) {
               const res = result?.data?.payment_source_token
-              logData("onCreate-authorization", requestBody, res)
+              logData("onCreate-authorization", requestBody, result?.success)
               return res
             } else {
-              logData(
-                "onCreate-authorization",
-                requestBody,
-                "Please enter a valid cvc."
-              )
+              logData("onCreate-authorization", requestBody, result)
               setIsLoading(false)
               if (Number(card.cvv) === 0) {
                 setCardErrorMessage({

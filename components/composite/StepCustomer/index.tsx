@@ -137,8 +137,8 @@ export const StepCustomer: React.FC<Props> = () => {
 
     let requestBody = {
       requested_method: "cl_checkout_step1_continue_click",
-      requested_data: emailAddress,
-      response_data: "",
+      requested_data: { "orderId-": params.order?.id },
+      response_data: params.order,
     }
     saveUserActivitylogData(requestBody)
 

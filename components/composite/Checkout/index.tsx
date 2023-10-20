@@ -117,9 +117,9 @@ const Checkout: React.FC<Props> = ({
         .catch((error) => console.error("Error fetching user IP:", error))
     }
     let requestBody = {
-      requested_method: "View cart",
-      requested_data: "",
-      response_data: "",
+      requested_method: "View Checkout",
+      requested_data: { "orderId-": ctx?.orderId },
+      response_data: "OK",
     }
     saveUserActivitylogData(requestBody)
 

@@ -56,8 +56,8 @@ const StepPlaceOrder: React.FC<Props> = ({
     if (placed) {
       let requestBody = {
         requested_method: "handlePlaceOrder",
-        requested_data: order,
-        response_data: "",
+        requested_data: { "orderId-": order?.id },
+        response_data: order,
       }
       saveUserActivitylogData(requestBody)
       setIsPlacingOrder(true)

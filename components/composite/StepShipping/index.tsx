@@ -172,6 +172,12 @@ export const StepShipping: React.FC<Props> = () => {
       order: params.order,
     })
     setIsLocalLoader(false)
+    let requestBody = {
+      requested_method: "cl_checkout_step2_continue_click",
+      requested_data: { "shippingMethod-": params.shippingMethod },
+      response_data: params.order,
+    }
+    saveUserActivitylogData(requestBody)
   }
 
   const handleSave = async () => {
@@ -182,12 +188,6 @@ export const StepShipping: React.FC<Props> = () => {
       },
     })
 
-    let requestBody = {
-      requested_method: "cl_checkout_step2_continue_click",
-      requested_data: appCtx.emailAddress,
-      response_data: "",
-    }
-    saveUserActivitylogData(requestBody)
     setIsLocalLoader(true)
 
     saveShipments()
