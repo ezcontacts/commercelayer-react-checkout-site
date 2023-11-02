@@ -241,8 +241,8 @@ export const ExternalPaymentCard = ({
     if (CardNumberonBlurShowError) {
       if (formattedInput) {
         let message = "Please enter a valid card number"
-        if (formattedInput.length < 15) {
-          message = "Please enter at least 15 digits."
+        if (formattedInput.length < 14) {
+          message = "Please enter at least 14 digits."
         }
         setErrorMessage({
           message: message,
@@ -282,8 +282,8 @@ export const ExternalPaymentCard = ({
     if (event.target.value) {
       setCardNumberonBlurShowError(true)
       let message = "Please enter a valid card number"
-      if (valArray.length < 15) {
-        message = "Please enter at least 15 digits."
+      if (valArray.length < 14) {
+        message = "Please enter at least 14 digits."
       }
       setErrorMessage({
         message: message,
@@ -301,6 +301,10 @@ export const ExternalPaymentCard = ({
     const valArray = event.target.value.split(" ").join("").split("")
     if (valArray.length === 5) return
     const { name, value } = event.target
+    if (!/^\d*$/.test(value)) {
+      return
+    }
+
     setCardDetails({
       ...card,
       [name]: value,
@@ -336,8 +340,12 @@ export const ExternalPaymentCard = ({
 
   const onBlurCVVCardDetails = (event: any) => {
     const valArray = event.target.value.split(" ").join("").split("")
-    if (valArray.length === 5) return // Exit if CVV length is 4
     const { name, value } = event.target
+    if (!/^\d*$/.test(value)) {
+      return
+    }
+    if (valArray.length === 5) return // Exit if CVV length is 4
+
     setCardDetails({
       ...card,
       [name]: value,
@@ -589,7 +597,7 @@ export const ExternalPaymentCard = ({
                 </span>
                 <input
                   className="rounded-md peer pl-12 pr-2 py-2 border-2 input-border  placeholder-gray-200"
-                  type="number"
+                  type="text"
                   value={card?.cvv}
                   name="cvv"
                   placeholder="&bull;&bull;&bull;"
