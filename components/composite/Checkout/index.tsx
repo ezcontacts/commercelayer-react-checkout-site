@@ -69,7 +69,7 @@ const Checkout: React.FC<Props> = ({
         .then((response) => response.json())
         .then((data) => {
           const userIP = data.ip
-
+          localStorage.setItem("IP", userIP)
           // Fetch country information from ipapi API
           fetch(`https://ipapi.co/${userIP}/json/`)
             .then((response) => response.json())

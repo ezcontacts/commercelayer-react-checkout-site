@@ -1,9 +1,11 @@
 export const saveUserActivitylogData = async (request: any) => {
+  const IP = localStorage.getItem("IP")
   let requestBody = {
     requested_method: request.requested_method,
     cl_token: request.cl_token,
     requested_data: request.requested_data,
     response_data: request.response_data,
+    ip_address: IP || "",
   }
   return fetch(`${process.env.NEXT_PUBLIC_API_URL}/cl/saveClUserTempLogs`, {
     headers: {
