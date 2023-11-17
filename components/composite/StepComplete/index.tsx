@@ -38,6 +38,7 @@ import {
 } from "./styled"
 import { SupportMessage } from "./SupportMessage"
 import { goContinueShopping } from "components/utils/common"
+import { saveUserActivitylogData } from "utils/useCustomLogData"
 
 interface Props {
   logoUrl?: string
@@ -61,6 +62,13 @@ export const StepComplete: React.FC<Props> = ({
   if (!ctx) return null
 
   const handleClick = () => {
+    let requestBody = {
+      requested_method: "Continue click",
+      cl_token: ctx?.accessToken,
+      requested_data: ctx.orderId,
+      response_data: "OK",
+    }
+    saveUserActivitylogData(requestBody)
     ctx?.returnUrl && (document.location.href = ctx?.returnUrl)
   }
 

@@ -12,6 +12,7 @@ import { StepHeader } from "components/ui/StepHeader"
 import { CheckoutAddresses } from "./CheckoutAddresses"
 import { CheckoutCustomerAddresses } from "./CheckoutCustomerAddresses"
 import useAmplitude from "utils/getAmplitude"
+import { saveUserActivitylogData } from "utils/useCustomLogData"
 
 interface Props {
   className?: string
@@ -133,6 +134,14 @@ export const StepCustomer: React.FC<Props> = () => {
         userId: emailAddress,
       },
     })
+
+    let requestBody = {
+      requested_method: "cl_checkout_step1_continue_click",
+      cl_token: appCtx?.accessToken,
+      requested_data: { "orderId-": params.order?.id },
+      response_data: params.order,
+    }
+    saveUserActivitylogData(requestBody)
 
     setIsLocalLoader(true)
     await setAddresses(params.order)

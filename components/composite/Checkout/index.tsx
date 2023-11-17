@@ -34,6 +34,7 @@ import { Footer } from "components/ui/Footer"
 import { Logo } from "components/ui/Logo"
 import ReviewBanner from "../ReviewBanner"
 import useAmplitude from "utils/getAmplitude"
+import { saveUserActivitylogData } from "utils/useCustomLogData"
 
 interface Props {
   logoUrl?: string
@@ -68,7 +69,7 @@ const Checkout: React.FC<Props> = ({
         .then((response) => response.json())
         .then((data) => {
           const userIP = data.ip
-
+          localStorage.setItem("IP", userIP)
           // Fetch country information from ipapi API
           fetch(`https://ipapi.co/${userIP}/json/`)
             .then((response) => response.json())
@@ -115,11 +116,18 @@ const Checkout: React.FC<Props> = ({
         })
         .catch((error) => console.error("Error fetching user IP:", error))
     }
+    let requestBody = {
+      requested_method: "View Checkout",
+      cl_token: ctx?.accessToken,
+      requested_data: { "orderId-": ctx?.orderId },
+      response_data: "OK",
+    }
+    saveUserActivitylogData(requestBody)
 
     logEvent("cl_procceed_checkout_click", {
       buttonName: "Submit",
       properties: {
-        userId: "manju45kk@gmail.com",
+        userId: "8363683783838",
       },
     })
   }, [])
