@@ -7,6 +7,7 @@ import { number as validate, cvv as cvvNumber } from "card-validator"
 import Loader from "components/ui/Loader"
 import useAmplitude from "utils/getAmplitude"
 import LoaderComponent from "components/utils/Loader"
+import { saveUserActivitylogData } from "utils/useCustomLogData"
 
 export const ExternalPaymentCard = ({
   paymentToken,
@@ -55,7 +56,16 @@ export const ExternalPaymentCard = ({
     if ([69, 187, 188, 189, 190].includes(e.keyCode)) {
       e.preventDefault()
     }
-    console.log(e.keyCode)
+  }
+
+  const logData = (eventname: string, request: any, response: any) => {
+    let requestBody = {
+      requested_method: eventname,
+      cl_token: ctx?.accessToken,
+      requested_data: request,
+      response_data: response,
+    }
+    saveUserActivitylogData(requestBody)
   }
 
   const handlePlaceOrder = async (event: any) => {
@@ -63,6 +73,7 @@ export const ExternalPaymentCard = ({
     onSelectPlaceOrder()
     clearServerMessage()
     setIsLoading(true)
+
     const order = await getOrderFromRef()
     if (order) {
       const response = await getData(order)
@@ -92,11 +103,21 @@ export const ExternalPaymentCard = ({
           .then((response) => response.json())
           .then((result) => {
             if (result) {
+              logData(
+                "handlePlaceOrder-success-response",
+                { "orderId-": ctx.orderId },
+                result
+              )
               window.location.reload()
             }
           })
           .catch((error) => {
             if (error) setIsLoading(false)
+            logData(
+              "handlePlaceOrder-error-response",
+              { "orderId-": ctx.orderId },
+              error
+            )
             setCardErrorMessage({
               isSuccess: false,
               message: "Unable to process the payment, please try again",
@@ -142,6 +163,7 @@ export const ExternalPaymentCard = ({
             },
           },
         }
+
         return fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/cl/order/payment/v1/create-authorization`,
           {
@@ -156,8 +178,11 @@ export const ExternalPaymentCard = ({
           .then((result) => {
             if (result?.success) {
               const res = result?.data?.payment_source_token
+              logData("onCreate-authorization", requestBody, result?.success)
               return res
             } else {
+              logData("onCreate-authorization", requestBody, result)
+              setIsLoading(false)
               if (Number(card.cvv) === 0) {
                 setCardErrorMessage({
                   isSuccess: false,
@@ -180,6 +205,10 @@ export const ExternalPaymentCard = ({
               isSuccess: false,
               message: "Unable to process the payment, please try again",
             })
+            logData("onCreate-authorization", requestBody, error)
+          })
+          .finally(() => {
+            setIsLoading(false)
           })
       }
     }
@@ -212,8 +241,8 @@ export const ExternalPaymentCard = ({
     if (CardNumberonBlurShowError) {
       if (formattedInput) {
         let message = "Please enter a valid card number"
-        if (formattedInput.length < 15) {
-          message = "Please enter at least 15 digits."
+        if (formattedInput.length < 14) {
+          message = "Please enter at least 14 digits."
         }
         setErrorMessage({
           message: message,
@@ -253,8 +282,8 @@ export const ExternalPaymentCard = ({
     if (event.target.value) {
       setCardNumberonBlurShowError(true)
       let message = "Please enter a valid card number"
-      if (valArray.length < 15) {
-        message = "Please enter at least 15 digits."
+      if (valArray.length < 14) {
+        message = "Please enter at least 14 digits."
       }
       setErrorMessage({
         message: message,
@@ -272,6 +301,10 @@ export const ExternalPaymentCard = ({
     const valArray = event.target.value.split(" ").join("").split("")
     if (valArray.length === 5) return
     const { name, value } = event.target
+    if (!/^\d*$/.test(value)) {
+      return
+    }
+
     setCardDetails({
       ...card,
       [name]: value,
@@ -307,8 +340,12 @@ export const ExternalPaymentCard = ({
 
   const onBlurCVVCardDetails = (event: any) => {
     const valArray = event.target.value.split(" ").join("").split("")
-    if (valArray.length === 5) return // Exit if CVV length is 4
     const { name, value } = event.target
+    if (!/^\d*$/.test(value)) {
+      return
+    }
+    if (valArray.length === 5) return // Exit if CVV length is 4
+
     setCardDetails({
       ...card,
       [name]: value,
@@ -460,8 +497,8 @@ export const ExternalPaymentCard = ({
 
         <div className="w-full">
           <label className="relative w-full flex flex-col">
-            <span className="font-semibold text-sm leading-5 text-gray-700 mb-3">
-              Card number
+            <span className="leading-5 text-xs text-gray-500  mb-3">
+              {"Card number" + " *"}
             </span>
             <input
               className="rounded-md peer pl-12 pr-2 py-2 input-border placeholder-gray-300"
@@ -500,8 +537,8 @@ export const ExternalPaymentCard = ({
           <div>
             <div>
               <label className="relative flex-1 flex flex-col">
-                <span className="font-semibold text-sm leading-5 text-gray-700 mb-3">
-                  Expiry date
+                <span className="text-xs text-gray-500 leading-5 mb-3">
+                  {" Expiry date" + " *"}
                 </span>
                 <input
                   type="text"
@@ -539,8 +576,8 @@ export const ExternalPaymentCard = ({
           <div>
             <div>
               <label className="relative flex-1 flex flex-col">
-                <span className="flex items-center gap-3 mb-3 font-semibold text-sm leading-5 text-gray-700">
-                  CVC/CVV
+                <span className="flex items-center gap-3 mb-3 text-xs text-gray-500 leading-5">
+                  {"CVC/CVV" + " *"}
                   <span className="relative group">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -560,7 +597,7 @@ export const ExternalPaymentCard = ({
                 </span>
                 <input
                   className="rounded-md peer pl-12 pr-2 py-2 border-2 input-border  placeholder-gray-200"
-                  type="number"
+                  type="text"
                   value={card?.cvv}
                   name="cvv"
                   placeholder="&bull;&bull;&bull;"
@@ -596,8 +633,8 @@ export const ExternalPaymentCard = ({
           <div>
             <div>
               <label className="relative flex-1 flex flex-col">
-                <span className="font-semibold text-sm leading-5 text-gray-700 mb-3">
-                  First name
+                <span className="text-xs leading-5 text-gray-500 mb-3">
+                  {"First name"}
                 </span>
                 <input
                   type="text"
@@ -614,8 +651,8 @@ export const ExternalPaymentCard = ({
           <div>
             <div>
               <label className="relative flex-1 flex flex-col">
-                <span className="flex items-center gap-3 mb-3 font-semibold text-sm leading-5 text-gray-700">
-                  Last name
+                <span className="flex items-center gap-3 mb-3 text-xs leading-5 text-gray-500">
+                  {"Last name"}
                 </span>
                 <input
                   className="rounded-md peer pl-5 pr-2 py-2 border-2 input-border  placeholder-gray-200"

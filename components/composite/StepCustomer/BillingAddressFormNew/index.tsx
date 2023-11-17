@@ -85,7 +85,7 @@ export const BillingAddressFormNew: React.FC<Props> = ({
           required={true}
           fieldName="billing_address_zip_code"
           resource="billing_address"
-          type="text"
+          type="number"
           value={billingAddress?.zip_code || ""}
         />
       </Grid>
@@ -93,7 +93,7 @@ export const BillingAddressFormNew: React.FC<Props> = ({
         required={true}
         fieldName="billing_address_phone"
         resource="billing_address"
-        type="tel"
+        type="number"
         value={billingAddress?.phone || ""}
       />
       {requiresBillingInfo && (

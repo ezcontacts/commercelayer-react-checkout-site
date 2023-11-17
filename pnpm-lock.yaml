@@ -16,8 +16,8 @@ dependencies:
     specifier: ^5.4.1
     version: 5.8.0
   '@ezcontacts/react-components':
-    specifier: 1.0.4
-    version: 1.0.4(react-dom@18.2.0)(react@18.2.0)
+    specifier: 1.0.6
+    version: 1.0.6(react-dom@18.2.0)(react@18.2.0)
   '@faker-js/faker':
     specifier: ^8.0.2
     version: 8.0.2
@@ -630,8 +630,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@ezcontacts/react-components@1.0.4(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-lPMYJcpL63NGR2mspNl5LGxskI/G56ItoecIEUUhsA1vTlj0fofr2DNfC5ZqHkztGlgsPxJ3X0EgUW4K4K5v4Q==}
+  /@ezcontacts/react-components@1.0.6(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-8z3woWVcHo3OYzWYJwAm2JpsHAlDu8un/t3s39sGsnxcpETSU3kiNv3t9ch+6Sla+i6qSLNB2XWafO7yNm3AiA==}
     peerDependencies:
       react: ^18.0.0
     dependencies:

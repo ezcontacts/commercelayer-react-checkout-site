@@ -15,7 +15,7 @@ import { LINE_ITEMS_SHOPPABLE } from "components/utils/constants"
 
 import { CouponOrGiftCard } from "./CouponOrGiftCard"
 import { LineItemTypes } from "./LineItemTypes"
-import { ReturnToCart } from "./ReturnToCart"
+
 import {
   SummaryHeader,
   SummarySubTitle,
