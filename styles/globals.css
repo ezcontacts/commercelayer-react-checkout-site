@@ -409,4 +409,5 @@ select#shipping_address_country_code option:not([value="US"]) {
   color: #31708f;
   background-color: #d9edf7;
   border-color: #308a9d;
+  margin: 10px;
 }
