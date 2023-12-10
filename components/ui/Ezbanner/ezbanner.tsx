@@ -7,14 +7,14 @@ export const Ezbanner: React.FC = () => {
     <>
       {showBanner && (
         <div
-          className="flex  justify-between items-center text-white text-sm font-bold px-4 py-3 mb-4 banner-background"
+          className="flex  justify-between items-center  text-white px-4 py-3 mb-4 banner-background"
           role="alert"
         >
           <div>
-            <strong>
+            <strong className="text-xs">
               📣 We're upgrading this page to enhance your shopping experience.
             </strong>
-            <span className="ml-1">we hope you like it.</span>
+            <span className="ml-2 text-xs">we hope you like it.</span>
           </div>
           <div className="cursor-pointer" onClick={() => setShowBanner(false)}>
             <svg
