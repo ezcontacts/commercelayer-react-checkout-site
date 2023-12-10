@@ -402,3 +402,11 @@ select#shipping_address_country_code option:not([value="US"]) {
     transform: rotate(360deg);
   }
 }
+
+.banner-background {
+  border-left: 4px solid #4c84a0;
+  border-radius: 4px;
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #308a9d;
+}
