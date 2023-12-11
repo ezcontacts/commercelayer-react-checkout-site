@@ -26,7 +26,7 @@ export const Ezbanner: React.FC = () => {
             <strong className="text-xs">
               📣 We're upgrading this page to enhance your shopping experience.
             </strong>
-            <span className="ml-2 text-xs">we hope you like it.</span>
+            <span className="text-xs">We hope you like it.</span>
           </div>
           <div className="cursor-pointer" onClick={handleCloseBanner}>
             <svg
