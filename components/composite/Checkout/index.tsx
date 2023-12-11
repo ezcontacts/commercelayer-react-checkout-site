@@ -35,6 +35,7 @@ import { Logo } from "components/ui/Logo"
 import ReviewBanner from "../ReviewBanner"
 import useAmplitude from "utils/getAmplitude"
 import { saveUserActivitylogData } from "utils/useCustomLogData"
+import { Ezbanner } from "components/ui/Ezbanner/ezbanner"
 
 interface Props {
   logoUrl?: string
@@ -177,6 +178,7 @@ const Checkout: React.FC<Props> = ({
   const renderSteps = () => {
     return (
       <CustomerContainer isGuest={ctx.isGuest}>
+        <Ezbanner />
         <LayoutDefault
           aside={
             <Sidebar className="sidebar-border-right">
@@ -198,7 +200,9 @@ const Checkout: React.FC<Props> = ({
                 companyName={companyName}
                 className="block md:hidden"
               />
+
               <MainHeader orderNumber={orderNumber} />
+
               <StepNav
                 steps={steps}
                 activeStep={activeStep}

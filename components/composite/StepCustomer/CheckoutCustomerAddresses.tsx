@@ -125,9 +125,14 @@ export const CheckoutCustomerAddresses: React.FC<Props> = ({
   }
 
   const handleShowBillingForm = () => {
-    setBillingAddressFill(undefined)
-    setShowBillingAddressForm(!showBillingAddressForm)
-    handleScroll("billing")
+    if (!showBillingAddressForm) {
+      setBillingAddressFill(undefined)
+      setShowBillingAddressForm(!showBillingAddressForm)
+      handleScroll("billing")
+    } else {
+      setShowBillingAddressForm(false)
+      setMountBillingAddressForm(false)
+    }
   }
 
   const handleShowShippingForm = () => {
