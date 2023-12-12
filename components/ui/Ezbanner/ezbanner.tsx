@@ -1,22 +1,25 @@
-import { useState, useEffect } from "react"
+import { AppContext } from "components/data/AppProvider"
+import { useState, useEffect, useContext } from "react"
 import { useSearchParams } from "react-router-dom"
 
 export const Ezbanner: React.FC = () => {
-  const [searchParams] = useSearchParams()
-  const accessToken = searchParams.get("accessToken")
+  const ctx = useContext(AppContext)
+  if (!ctx) {
+    return null
+  }
   const [showBanner, setShowBanner] = useState(true)
 
   useEffect(() => {
     const bannerShownCheckout = localStorage.getItem("bannerShownCheckout")
-    const userAccessToken = localStorage.getItem("userToken")
-    if (bannerShownCheckout && userAccessToken === accessToken) {
+    const checkoutUserEmail = localStorage.getItem("checkoutUserEmail")
+    if (bannerShownCheckout && checkoutUserEmail === ctx.emailAddress) {
       setShowBanner(false)
     }
-  }, [])
+  }, [ctx.emailAddress])
 
   const handleCloseBanner = () => {
     localStorage.setItem("bannerShownCheckout", "true")
-    localStorage.setItem("userToken", accessToken || "")
+    localStorage.setItem("checkoutUserEmail", ctx.emailAddress || "")
     setShowBanner(false)
   }
 
