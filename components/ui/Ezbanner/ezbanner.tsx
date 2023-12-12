@@ -1,17 +1,25 @@
-import { useState, useEffect } from "react"
+import { AppContext } from "components/data/AppProvider"
+import { useState, useEffect, useContext } from "react"
+import { useSearchParams } from "react-router-dom"
 
 export const Ezbanner: React.FC = () => {
+  const ctx = useContext(AppContext)
+  if (!ctx) {
+    return null
+  }
   const [showBanner, setShowBanner] = useState(true)
 
   useEffect(() => {
-    const bannerShown = localStorage.getItem("bannerShownCheckout")
-    if (bannerShown) {
+    const bannerShownCheckout = localStorage.getItem("bannerShownCheckout")
+    const checkoutUserEmail = localStorage.getItem("checkoutUserEmail")
+    if (bannerShownCheckout && checkoutUserEmail === ctx.emailAddress) {
       setShowBanner(false)
     }
-  }, [])
+  }, [ctx.emailAddress])
 
   const handleCloseBanner = () => {
     localStorage.setItem("bannerShownCheckout", "true")
+    localStorage.setItem("checkoutUserEmail", ctx.emailAddress || "")
     setShowBanner(false)
   }
 
@@ -26,7 +34,7 @@ export const Ezbanner: React.FC = () => {
             <strong className="text-xs">
               📣 We're upgrading this page to enhance your shopping experience.
             </strong>
-            <span className="ml-2 text-xs">we hope you like it.</span>
+            <span className="ml-1 text-xs">We hope you like it.</span>
           </div>
           <div className="cursor-pointer" onClick={handleCloseBanner}>
             <svg
