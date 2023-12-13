@@ -10,9 +10,14 @@ export const Ezbanner: React.FC = () => {
   const [showBanner, setShowBanner] = useState(true)
 
   useEffect(() => {
+    debugger
     const bannerShownCheckout = localStorage.getItem("bannerShownCheckout")
     const checkoutUserEmail = localStorage.getItem("checkoutUserEmail")
-    if (bannerShownCheckout && checkoutUserEmail === ctx.emailAddress) {
+    if (ctx.emailAddress) {
+      if (bannerShownCheckout && checkoutUserEmail === ctx.emailAddress) {
+        setShowBanner(false)
+      }
+    } else if (bannerShownCheckout) {
       setShowBanner(false)
     }
   }, [ctx.emailAddress])
