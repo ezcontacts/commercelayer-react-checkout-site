@@ -20,6 +20,7 @@ import { CheckoutCustomerPayment } from "./CheckoutCustomerPayment"
 import { CheckoutPayment } from "./CheckoutPayment"
 import { PaymentSkeleton } from "./PaymentSkeleton"
 import useAmplitude from "utils/getAmplitude"
+import { OptimizelyContext } from "@optimizely/react-sdk"
 
 export type THandleClick = (params: {
   payment?: PaymentMethodType | Record<string, any>
@@ -110,6 +111,7 @@ export const StepPayment: React.FC<PaymentHeaderProps> = ({
     useState(false)
   const [autoSelected, setAutoselected] = useState(false)
   const [hasTitle, setHasTitle] = useState(true)
+  const { optimizely } = useContext(OptimizelyContext)
 
   const { t } = useTranslation()
 
@@ -129,6 +131,29 @@ export const StepPayment: React.FC<PaymentHeaderProps> = ({
   const { isGuest, isPaymentRequired, setPayment } = appCtx
 
   const selectPayment: THandleClick = async ({ payment, paymentSource }) => {
+    debugger
+    if (optimizely?.track) {
+      const eventKey = "proceed_to_payment" // Replace with your valid event key
+      const eventTags = {
+        server_ip: "172.20.21.13",
+        country: "Germany",
+        city: "Frankfurt am Main",
+        region: "Hesse",
+        country_code: "DE",
+        postal_code: "60313",
+        continent_code: "",
+        os: "Windows",
+        device: "Desktop",
+        browser: "MSIE",
+        browser_version: "9.0",
+        Guest: "1",
+      }
+
+      optimizely?.onReady().then(() => {
+        optimizely?.track(eventKey, eventTags)
+      })
+    }
+
     if (paymentSource?.payment_methods?.paymentMethods?.length > 1) {
       setHasMultiplePaymentMethods(true)
     }
