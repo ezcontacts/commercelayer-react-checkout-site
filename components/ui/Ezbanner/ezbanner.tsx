@@ -8,19 +8,23 @@ export const Ezbanner: React.FC = () => {
     return null
   }
   const [showBanner, setShowBanner] = useState(true)
-
+  const [searchParams] = useSearchParams()
+  const islogged = searchParams.get("islogged")
   useEffect(() => {
-    debugger
     const bannerShownCheckout = localStorage.getItem("bannerShownCheckout")
     const checkoutUserEmail = localStorage.getItem("checkoutUserEmail")
-    if (ctx.emailAddress) {
-      if (bannerShownCheckout && checkoutUserEmail === ctx.emailAddress) {
+    if (islogged !== "0") {
+      if (ctx.emailAddress) {
+        if (bannerShownCheckout && checkoutUserEmail === ctx.emailAddress) {
+          setShowBanner(false)
+        }
+      }
+    } else {
+      if (bannerShownCheckout) {
         setShowBanner(false)
       }
-    } else if (bannerShownCheckout) {
-      setShowBanner(false)
     }
-  }, [ctx.emailAddress])
+  }, [ctx.emailAddress, islogged])
 
   const handleCloseBanner = () => {
     localStorage.setItem("bannerShownCheckout", "true")
