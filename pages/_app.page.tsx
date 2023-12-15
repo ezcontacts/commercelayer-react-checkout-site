@@ -7,6 +7,7 @@ import { OptimizelyProvider } from "@optimizely/react-sdk"
 
 import "components/data/i18n"
 import { useEffect, useState } from "react"
+import optimizelyConfig from "utils/optimizely"
 
 function CheckoutApp(props: AppProps) {
   const { Component, pageProps } = props
@@ -15,7 +16,17 @@ function CheckoutApp(props: AppProps) {
     if (typeof window !== "undefined") setBrowser(true)
   }, [])
 
-  return browser ? <Component {...pageProps} /> : null
+  const user = {
+    id: "user123",
+    attributes: {
+      logged_in: "true",
+    },
+  }
+  return browser ? (
+    <OptimizelyProvider optimizely={optimizelyConfig} user={user}>
+      <Component {...pageProps} />
+    </OptimizelyProvider>
+  ) : null
 }
 
 export default appWithTranslation(CheckoutApp)
