@@ -4,15 +4,15 @@ import { AppContext } from "components/data/AppProvider"
 import { Order } from "@commercelayer/sdk"
 import { Button } from "components/ui/Button"
 import { number as validate, cvv as cvvNumber } from "card-validator"
-import Loader from "components/ui/Loader"
-import useAmplitude from "utils/getAmplitude"
 import LoaderComponent from "components/utils/Loader"
 import { saveUserActivitylogData } from "utils/useCustomLogData"
+import useLogMetricsData from "utils/logClMetrics"
 
 export const ExternalPaymentCard = ({
   paymentToken,
   onSelectPlaceOrder,
 }: any) => {
+  const { logMetrics } = useLogMetricsData()
   const ctx = useContext(AppContext)
   const [isLoading, setIsLoading] = useState(false)
   const [cardNumberErrorMessage, setErrorMessage] = useState({
@@ -103,6 +103,7 @@ export const ExternalPaymentCard = ({
           .then((response) => response.json())
           .then((result) => {
             if (result) {
+              logMetrics("order_completion_success")
               logData(
                 "handlePlaceOrder-success-response",
                 { "orderId-": ctx.orderId },
@@ -113,6 +114,7 @@ export const ExternalPaymentCard = ({
           })
           .catch((error) => {
             if (error) setIsLoading(false)
+            logMetrics("order_completion_failed")
             logData(
               "handlePlaceOrder-error-response",
               { "orderId-": ctx.orderId },

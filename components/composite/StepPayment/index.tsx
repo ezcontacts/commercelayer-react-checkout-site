@@ -18,7 +18,7 @@ import { CheckoutCustomerPayment } from "./CheckoutCustomerPayment"
 import { CheckoutPayment } from "./CheckoutPayment"
 import { PaymentSkeleton } from "./PaymentSkeleton"
 import useAmplitude from "utils/getAmplitude"
-import { OptimizelyContext } from "@optimizely/react-sdk"
+import useLogMetricsData from "utils/logClMetrics"
 
 export type THandleClick = (params: {
   payment?: PaymentMethodType | Record<string, any>
@@ -102,7 +102,8 @@ interface PaymentHeaderProps {
 export const StepPayment: React.FC<PaymentHeaderProps> = ({
   onSelectPayment,
 }: any) => {
-  const { optimizely } = useContext(OptimizelyContext)
+  const { logMetrics } = useLogMetricsData()
+
   const { logEvent } = useAmplitude()
   const appCtx = useContext(AppContext)
   const accordionCtx = useContext(AccordionContext)
@@ -129,31 +130,7 @@ export const StepPayment: React.FC<PaymentHeaderProps> = ({
   const { isGuest, isPaymentRequired, setPayment } = appCtx
 
   const selectPayment: THandleClick = async ({ payment, paymentSource }) => {
-    if (optimizely?.track) {
-      const IP = localStorage.getItem("IP")
-      const eventKey = "proceed_to_payment" // Replace with your valid event key
-      const eventTags = {
-        server_ip: IP,
-        country: "Germany",
-        city: "Frankfurt am Main",
-        region: "Hesse",
-        country_code: "DE",
-        postal_code: "60313",
-        continent_code: "",
-        os: "Windows",
-        device: "Desktop",
-        browser: "MSIE",
-        browser_version: "9.0",
-        Guest: "1",
-      }
-
-      optimizely?.onReady().then((res) => {
-        console.log("res", res)
-        console.log("eventTags", eventTags)
-        optimizely?.track(eventKey, eventTags)
-      })
-    }
-
+    logMetrics("proceed_to_payment")
     if (paymentSource?.payment_methods?.paymentMethods?.length > 1) {
       setHasMultiplePaymentMethods(true)
     }
