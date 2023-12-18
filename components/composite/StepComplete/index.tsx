@@ -76,7 +76,7 @@ export const StepComplete: React.FC<Props> = ({
     <Base>
       <Top>
         <Wrapper>
-          <div className="cursor-pointer" onClick={goContinueShopping}>
+          <div>
             <Logo
               logoUrl={logoUrl}
               companyName={companyName}
