@@ -19,7 +19,18 @@ function CheckoutApp(props: AppProps) {
   const user = {
     id: "user123",
     attributes: {
-      logged_in: "true",
+      server_ip: "172.20.21.147",
+      country: "India",
+      city: "Bengaluru",
+      region: "Karnataka",
+      country_code: "IN",
+      postal_code: "560002",
+      continent_code: "",
+      os: "Linux",
+      device: "Desktop",
+      browser: "Chrome",
+      browser_version: "108.0.0.0",
+      Guest: "1",
     },
   }
   return browser ? (
