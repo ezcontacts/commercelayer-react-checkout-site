@@ -1,43 +1,66 @@
 import type { AppProps } from "next/app"
 import "../styles/globals.css"
 import "../styles/ReviewBanner.css"
-// eslint-disable-next-line import/order
+import { useEffect, useState } from "react"
 import { appWithTranslation } from "next-i18next"
 import { OptimizelyProvider } from "@optimizely/react-sdk"
-
 import "components/data/i18n"
-import { useEffect, useState } from "react"
 import optimizelyConfig from "utils/optimizely"
+
+const getIp = async () => {
+  const response = await fetch("https://api.ipify.org?format=json")
+  const data = await response.json()
+  const userResponse = await fetch(`https://ipapi.co/${data.ip}/json/`)
+  const userData = await userResponse.json()
+  return userData
+}
+
+const createUser = async () => {
+  const userLocation = await getIp()
+  return {
+    id: "user123",
+    attributes: {
+      logged_in: "true",
+      server_ip: userLocation.ip,
+      country: userLocation.country,
+      city: userLocation.city,
+      region: userLocation.region,
+      country_code: userLocation.country_code,
+      postal_code: userLocation.postal,
+      continent_code: userLocation.continent_code,
+      os: "windows",
+      device: "desktop",
+      Guest: "1",
+    },
+  }
+}
 
 function CheckoutApp(props: AppProps) {
   const { Component, pageProps } = props
   const [browser, setBrowser] = useState(false)
+  const [user, setUser] = useState(null) as any
+
   useEffect(() => {
-    if (typeof window !== "undefined") setBrowser(true)
+    const fetchUser = async () => {
+      const userData = await createUser()
+      setUser(userData)
+      setBrowser(true)
+    }
+
+    if (typeof window !== "undefined") {
+      fetchUser()
+    }
   }, [])
 
-  const user = {
-    id: "user123",
-    attributes: {
-      server_ip: "172.20.21.147",
-      country: "India",
-      city: "Bengaluru",
-      region: "Karnataka",
-      country_code: "IN",
-      postal_code: "560002",
-      continent_code: "",
-      os: "Linux",
-      device: "Desktop",
-      browser: "Chrome",
-      browser_version: "108.0.0.0",
-      Guest: "1",
-    },
+  if (!browser || !user) {
+    return null
   }
-  return browser ? (
+
+  return (
     <OptimizelyProvider optimizely={optimizelyConfig} user={user}>
       <Component {...pageProps} />
     </OptimizelyProvider>
-  ) : null
+  )
 }
 
 export default appWithTranslation(CheckoutApp)
