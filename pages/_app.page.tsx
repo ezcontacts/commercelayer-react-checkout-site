@@ -6,6 +6,7 @@ import { appWithTranslation } from "next-i18next"
 import { OptimizelyProvider } from "@optimizely/react-sdk"
 import "components/data/i18n"
 import optimizelyConfig from "utils/optimizely"
+import { useSearchParams } from "react-router-dom"
 
 const getIp = async () => {
   const response = await fetch("https://api.ipify.org?format=json")
@@ -16,9 +17,14 @@ const getIp = async () => {
 }
 
 const createUser = async () => {
+  var urlString = window?.location?.href
+  var url = new URL(urlString)
+  var queryParams = url?.searchParams
+  var visitorId = queryParams?.get("ezref")
+
   const userLocation = await getIp()
   return {
-    id: "user123",
+    id: visitorId ? visitorId : "user123",
     attributes: {
       logged_in: "true",
       server_ip: userLocation.ip,
@@ -39,6 +45,8 @@ function CheckoutApp(props: AppProps) {
   const { Component, pageProps } = props
   const [browser, setBrowser] = useState(false)
   const [user, setUser] = useState(null) as any
+  const [searchParams] = useSearchParams()
+  const visitorId = searchParams.get("ezref")
 
   useEffect(() => {
     const fetchUser = async () => {
