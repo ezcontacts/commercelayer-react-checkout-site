@@ -8,7 +8,7 @@ import { ErrorCss } from "components/ui/form/Error"
 import { InputCss } from "components/ui/form/Input"
 
 export const CouponFormWrapper = styled.div`
-  ${tw`pb-8 mb-8 border-b`}
+  ${tw`pb-4 mb-4 border-b`}
 `
 export const CouponFieldWrapper = styled.div`
   ${tw`flex mt-1`}
