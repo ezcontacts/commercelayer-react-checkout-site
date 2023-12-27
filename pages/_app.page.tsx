@@ -69,6 +69,8 @@ function CheckoutApp(props: AppProps) {
     return null
   }
 
+  console.log("user", user)
+
   return (
     <OptimizelyProvider optimizely={optimizelyConfig} user={user}>
       <Component {...pageProps} />
