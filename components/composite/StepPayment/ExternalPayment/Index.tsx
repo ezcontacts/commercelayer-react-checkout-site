@@ -12,6 +12,10 @@ export const ExternalPaymentCard = ({
   paymentToken,
   onSelectPlaceOrder,
 }: any) => {
+  var urlString = window?.location?.href
+  var url = new URL(urlString)
+  var queryParams = url?.searchParams
+  var visitorId = queryParams?.get("ezref")
   const { logMetrics } = useLogMetricsData()
   const ctx = useContext(AppContext)
   const [isLoading, setIsLoading] = useState(false)
@@ -163,6 +167,7 @@ export const ExternalPaymentCard = ({
             attributes: {
               payment_source_token: paymentToken,
             },
+            visitor_id: visitorId || "",
           },
         }
 
