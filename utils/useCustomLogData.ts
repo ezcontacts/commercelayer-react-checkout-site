@@ -1,4 +1,8 @@
 export const saveUserActivitylogData = async (request: any) => {
+  var urlString = window?.location?.href
+  var url = new URL(urlString)
+  var queryParams = url?.searchParams
+  var visitorId = queryParams?.get("ezref")
   const IP = localStorage.getItem("IP")
   let requestBody = {
     requested_method: request.requested_method,
@@ -6,6 +10,7 @@ export const saveUserActivitylogData = async (request: any) => {
     requested_data: request.requested_data,
     response_data: request.response_data,
     ip_address: IP || "",
+    visitor_id: visitorId || "",
   }
   return fetch(`${process.env.NEXT_PUBLIC_API_URL}/cl/saveClUserTempLogs`, {
     headers: {
