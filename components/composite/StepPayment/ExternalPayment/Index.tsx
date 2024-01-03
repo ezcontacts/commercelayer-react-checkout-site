@@ -89,7 +89,6 @@ export const ExternalPaymentCard = ({
             attributes: {
               _place: true,
             },
-            visitor_id: visitorId || "",
           },
         })
 
