@@ -9,17 +9,16 @@ import { PaymentMethod as PaymentMethodType } from "@commercelayer/sdk"
 import classNames from "classnames"
 import { useContext, useEffect, useState } from "react"
 import { Trans, useTranslation } from "react-i18next"
-
 import { AccordionContext } from "components/data/AccordionProvider"
 import { AppContext } from "components/data/AppProvider"
 import { StepContainer } from "components/ui/StepContainer"
 import { StepContent } from "components/ui/StepContent"
 import { StepHeader } from "components/ui/StepHeader"
-
 import { CheckoutCustomerPayment } from "./CheckoutCustomerPayment"
 import { CheckoutPayment } from "./CheckoutPayment"
 import { PaymentSkeleton } from "./PaymentSkeleton"
 import useAmplitude from "utils/getAmplitude"
+import useLogMetricsData from "utils/logClMetrics"
 
 export type THandleClick = (params: {
   payment?: PaymentMethodType | Record<string, any>
@@ -103,6 +102,8 @@ interface PaymentHeaderProps {
 export const StepPayment: React.FC<PaymentHeaderProps> = ({
   onSelectPayment,
 }: any) => {
+  const { logMetrics } = useLogMetricsData()
+
   const { logEvent } = useAmplitude()
   const appCtx = useContext(AppContext)
   const accordionCtx = useContext(AccordionContext)
@@ -129,6 +130,8 @@ export const StepPayment: React.FC<PaymentHeaderProps> = ({
   const { isGuest, isPaymentRequired, setPayment } = appCtx
 
   const selectPayment: THandleClick = async ({ payment, paymentSource }) => {
+    console.log("proceed_to_payment", "proceed_to_payment")
+    logMetrics("proceed_to_payment")
     if (paymentSource?.payment_methods?.paymentMethods?.length > 1) {
       setHasMultiplePaymentMethods(true)
     }
