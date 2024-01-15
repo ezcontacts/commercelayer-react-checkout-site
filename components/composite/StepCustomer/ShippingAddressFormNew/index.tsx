@@ -10,7 +10,7 @@ interface Props {
 }
 
 const handleKeyboardEvent = (e: KeyboardEvent<HTMLInputElement>) =>
-  (e.keyCode === 69 || e.keyCode === 190) && e.preventDefault()
+    ["e", "E", "+", "-", "ArrowUp", "ArrowDown"].includes(e.key) && e.preventDefault()
 
 export const ShippingAddressFormNew: React.FC<Props> = ({
   shippingAddress,
@@ -83,10 +83,10 @@ export const ShippingAddressFormNew: React.FC<Props> = ({
           required={true}
           fieldName="shipping_address_zip_code"
           resource="shipping_address"
-          type="number"
+          type="text"
           value={shippingAddress?.zip_code || ""}
-          regex_pattern="^[\d\(\)\-+]+$"
-          KeyDown={handleKeyboardEvent}
+          regex_pattern="^[0-9]+$"
+          // KeyDown={handleKeyboardEvent}
           title="Please Fill Valid Zip Code"
         />
       </Grid>
