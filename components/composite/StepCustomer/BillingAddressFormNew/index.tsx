@@ -25,7 +25,7 @@ export const BillingAddressFormNew: React.FC<Props> = ({
   const { requiresBillingInfo } = appCtx
 
   const handleKeyboardEvent = (e: KeyboardEvent<HTMLInputElement>) =>
-    ["e", "E", "+", "-", "ArrowUp", "ArrowDown"].includes(e.key) && e.preventDefault()
+    ["e", "E", "=", "ArrowUp", "ArrowDown"].includes(e.key) && e.preventDefault()
   
 
   return (
@@ -93,7 +93,7 @@ export const BillingAddressFormNew: React.FC<Props> = ({
           type="text"
           value={billingAddress?.zip_code || ""}
           regex_pattern="^[0-9]+$"
-          // KeyDown={handleKeyboardEvent}
+          KeyDown={handleKeyboardEvent}
           title="Please Fill Valid Zip Code"
         />
       </Grid>
