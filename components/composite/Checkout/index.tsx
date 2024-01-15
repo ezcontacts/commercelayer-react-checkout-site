@@ -62,61 +62,61 @@ const Checkout: React.FC<Props> = ({
   const { query } = useRouter()
 
   useEffect(() => {
-    const storedCountryName = localStorage.getItem("CountryName")
+    // const storedCountryName = localStorage.getItem("CountryName")
 
-    if (!storedCountryName) {
-      // Fetch user's IP address from a service like ipify.org
-      fetch("https://api.ipify.org?format=json")
-        .then((response) => response.json())
-        .then((data) => {
-          const userIP = data.ip
-          localStorage.setItem("IP", userIP)
-          // Fetch country information from ipapi API
-          fetch(`https://ipapi.co/${userIP}/json/`)
-            .then((response) => response.json())
-            .then((data) => {
-              if (data && data.country_name) {
-                localStorage.setItem("CountryName", data.country_name)
-              }
-            })
-            .catch((error) =>
-              console.error("Error fetching country information:", error)
-            )
-        })
-        .catch((error) => console.error("Error fetching user IP:", error))
-    } else {
-      // Country name is already in local storage
-      // You might want to compare and update if necessary
-      fetch("https://api.ipify.org?format=json")
-        .then((response) => response.json())
-        .then((data) => {
-          const userIP = data.ip
+    // if (!storedCountryName) {
+    //   // Fetch user's IP address from a service like ipify.org
+    //   fetch("https://api.ipify.org?format=json")
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       const userIP = data.ip
+    //       localStorage.setItem("IP", userIP)
+    //       // Fetch country information from ipapi API
+    //       fetch(`https://ipapi.co/${userIP}/json/`)
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //           if (data && data.country_name) {
+    //             localStorage.setItem("CountryName", data.country_name)
+    //           }
+    //         })
+    //         .catch((error) =>
+    //           console.error("Error fetching country information:", error)
+    //         )
+    //     })
+    //     .catch((error) => console.error("Error fetching user IP:", error))
+    // } else {
+    //   // Country name is already in local storage
+    //   // You might want to compare and update if necessary
+    //   fetch("https://api.ipify.org?format=json")
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       const userIP = data.ip
 
-          fetch(`https://ipapi.co/${userIP}/json/`)
-            .then((response) => response.json())
-            .then((data) => {
-              if (
-                data &&
-                data.country_name &&
-                data.country_name !== storedCountryName
-              ) {
-                localStorage.setItem("CountryName", data.country_name)
-                logEvent("cl_checkout_view", {
-                  buttonName: "Submit",
-                  properties: {
-                    userId: ctx?.emailAddress
-                      ? ctx?.emailAddress
-                      : "8363683783838",
-                  },
-                })
-              }
-            })
-            .catch((error) =>
-              console.error("Error fetching country information:", error)
-            )
-        })
-        .catch((error) => console.error("Error fetching user IP:", error))
-    }
+    //       fetch(`https://ipapi.co/${userIP}/json/`)
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //           if (
+    //             data &&
+    //             data.country_name &&
+    //             data.country_name !== storedCountryName
+    //           ) {
+    //             localStorage.setItem("CountryName", data.country_name)
+    //             logEvent("cl_checkout_view", {
+    //               buttonName: "Submit",
+    //               properties: {
+    //                 userId: ctx?.emailAddress
+    //                   ? ctx?.emailAddress
+    //                   : "8363683783838",
+    //               },
+    //             })
+    //           }
+    //         })
+    //         .catch((error) =>
+    //           console.error("Error fetching country information:", error)
+    //         )
+    //     })
+    //     .catch((error) => console.error("Error fetching user IP:", error))
+    // }
     let requestBody = {
       requested_method: "View Checkout",
       cl_token: ctx?.accessToken,

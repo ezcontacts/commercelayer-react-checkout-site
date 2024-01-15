@@ -4,15 +4,19 @@ import { AppContext } from "components/data/AppProvider"
 import { Order } from "@commercelayer/sdk"
 import { Button } from "components/ui/Button"
 import { number as validate, cvv as cvvNumber } from "card-validator"
-import Loader from "components/ui/Loader"
-import useAmplitude from "utils/getAmplitude"
 import LoaderComponent from "components/utils/Loader"
 import { saveUserActivitylogData } from "utils/useCustomLogData"
+import useLogMetricsData from "utils/logClMetrics"
 
 export const ExternalPaymentCard = ({
   paymentToken,
   onSelectPlaceOrder,
 }: any) => {
+  var urlString = window?.location?.href
+  var url = new URL(urlString)
+  var queryParams = url?.searchParams
+  var visitorId = queryParams?.get("ezref")
+  const { logMetrics } = useLogMetricsData()
   const ctx = useContext(AppContext)
   const [isLoading, setIsLoading] = useState(false)
   const [cardNumberErrorMessage, setErrorMessage] = useState({
@@ -103,6 +107,7 @@ export const ExternalPaymentCard = ({
           .then((response) => response.json())
           .then((result) => {
             if (result) {
+              logMetrics("order_completion_success")
               logData(
                 "handlePlaceOrder-success-response",
                 { "orderId-": ctx.orderId },
@@ -113,6 +118,7 @@ export const ExternalPaymentCard = ({
           })
           .catch((error) => {
             if (error) setIsLoading(false)
+            logMetrics("order_completion_failed")
             logData(
               "handlePlaceOrder-error-response",
               { "orderId-": ctx.orderId },
@@ -161,6 +167,7 @@ export const ExternalPaymentCard = ({
             attributes: {
               payment_source_token: paymentToken,
             },
+            visitor_id: visitorId || "",
           },
         }
 
@@ -181,6 +188,7 @@ export const ExternalPaymentCard = ({
               logData("onCreate-authorization", requestBody, result?.success)
               return res
             } else {
+              logMetrics("order_completion_failed")
               logData("onCreate-authorization", requestBody, result)
               setIsLoading(false)
               if (Number(card.cvv) === 0) {
@@ -200,6 +208,7 @@ export const ExternalPaymentCard = ({
             }
           })
           .catch((error) => {
+            logMetrics("order_completion_failed")
             if (error) setIsLoading(false)
             setCardErrorMessage({
               isSuccess: false,

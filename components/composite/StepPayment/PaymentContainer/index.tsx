@@ -1,17 +1,12 @@
 import { PaymentMethodsContainer } from "@ezcontacts/react-components"
-import { ButtonWrapper, Button } from "components/ui/Button"
-import { SpinnerIcon } from "components/ui/SpinnerIcon"
-import { resolve } from "path"
-import { useState } from "react"
 import { useTranslation } from "react-i18next"
-
 import { useContext } from "react"
 import { AppContext } from "components/data/AppProvider"
-
 import { GTMContext } from "components/data/GTMProvider"
 import { useSearchParams } from "react-router-dom"
 import { ExternalPaymentCard } from "../ExternalPayment/Index"
 import useAmplitude from "utils/getAmplitude"
+
 interface Props {
   children: JSX.Element[] | JSX.Element
 }
