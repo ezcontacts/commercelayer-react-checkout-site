@@ -25,11 +25,6 @@ const DynamicCheckout: any = dynamic(
 CheckoutSkeleton.displayName = "Skeleton Loader"
 
 const Order: NextPage = () => {
-  var urlString = window?.location?.href
-  var url = new URL(urlString)
-  var queryParams = url?.searchParams
-  //To get the value of the parameter
-  var itemOrderNumber = queryParams?.get("itemOrderNumber")
   const { settings, retryOnError, isLoading } = useSettingsOrInvalid()
   if (isLoading || (!settings && !retryOnError)) return <CheckoutSkeleton />
 
@@ -44,7 +39,7 @@ const Order: NextPage = () => {
     <DynamicCheckoutContainer settings={settings}>
       <DynamicCheckout
         logoUrl={settings.logoUrl}
-        orderNumber={itemOrderNumber}
+        orderNumber={settings.orderNumber}
         companyName={settings.companyName}
         supportEmail={settings.supportEmail}
         supportPhone={settings.supportPhone}
