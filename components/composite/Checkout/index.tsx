@@ -117,7 +117,7 @@ const Checkout: React.FC<Props> = ({
     //     })
     //     .catch((error) => console.error("Error fetching user IP:", error))
     // }
-    let requestBody = {
+    const requestBody = {
       requested_method: "View Checkout",
       cl_token: ctx?.accessToken,
       requested_data: { "orderId-": ctx?.orderId },

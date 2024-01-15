@@ -10,7 +10,7 @@ interface HSLProps {
 interface CheckoutSettings {
   accessToken: string
   orderId: string
-  orderNumber: number
+  orderNumber: number | string | null | undefined
   validCheckout: true
   endpoint: string
   domain: string
