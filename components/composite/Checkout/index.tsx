@@ -178,15 +178,17 @@ const Checkout: React.FC<Props> = ({
   const renderSteps = () => {
     return (
       <CustomerContainer isGuest={ctx.isGuest}>
+        <div className="site-header">
+          <Logo
+            logoUrl={logoUrl}
+            companyName={companyName}
+            className="hidden md:block"
+          />
+        </div>
         <Ezbanner />
         <LayoutDefault
           aside={
             <Sidebar className="sidebar-border-right">
-              <Logo
-                logoUrl={logoUrl}
-                companyName={companyName}
-                className="hidden md:block"
-              />
               <SummaryWrapper>
                 <OrderSummary appCtx={ctx} />
               </SummaryWrapper>
