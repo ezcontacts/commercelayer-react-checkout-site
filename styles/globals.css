@@ -409,7 +409,7 @@ select#shipping_address_country_code option:not([value="US"]) {
   color: #31708f;
   background-color: #d9edf7;
   border-color: #308a9d;
-  margin: 10px;
+  margin:10px 12rem;
 }
 
 .site-header{
@@ -427,11 +427,19 @@ select#shipping_address_country_code option:not([value="US"]) {
     padding-left:5rem;
     padding-right:5rem;
   }
+  .banner-background {
+    margin-left:5rem;
+    margin-right:5rem;
+  }
 }
 @media only screen and (max-width:1024px) {
   .site-header{
     padding-left:1.25rem;
     padding-right:1.25rem;
+  }
+  .banner-background {
+    margin-left:1.25rem;
+    margin-right:1.25rem;
   }
 }
 @media only screen and (max-width:767px) {
