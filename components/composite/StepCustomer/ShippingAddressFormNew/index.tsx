@@ -1,5 +1,5 @@
 import { Address } from "@commercelayer/sdk"
-import { Fragment } from "react"
+import { Fragment, KeyboardEvent } from "react"
 import styled from "styled-components"
 import tw from "twin.macro"
 
@@ -8,6 +8,9 @@ import { AddressInputGroup } from "components/composite/StepCustomer/AddressInpu
 interface Props {
   shippingAddress: NullableType<Address>
 }
+
+const handleKeyboardEvent = (e: KeyboardEvent<HTMLInputElement>) =>
+   ["e", "E", "=", "ArrowUp", "ArrowDown"].includes(e.key) && e.preventDefault()
 
 export const ShippingAddressFormNew: React.FC<Props> = ({
   shippingAddress,
@@ -55,6 +58,7 @@ export const ShippingAddressFormNew: React.FC<Props> = ({
           resource="shipping_address"
           type="text"
           value={shippingAddress?.city || ""}
+          regex_pattern="^[a-zA-Z]+$"
         />
 
         <AddressInputGroup
@@ -81,6 +85,9 @@ export const ShippingAddressFormNew: React.FC<Props> = ({
           resource="shipping_address"
           type="text"
           value={shippingAddress?.zip_code || ""}
+          regex_pattern="^[0-9]+$"
+          KeyDown={handleKeyboardEvent}
+          title="Please Fill Valid Zip Code"
         />
       </Grid>
 
@@ -88,8 +95,11 @@ export const ShippingAddressFormNew: React.FC<Props> = ({
         required={true}
         fieldName="shipping_address_phone"
         resource="shipping_address"
-        type="tel"
+        type="text"
         value={shippingAddress?.phone || ""}
+        regex_pattern="^\s*(?:\+?(\d{1,3}))?[- (]*(\d{3})[- )]*(\d{3})[- ]*(\d{4})(?: *[x\/#]{1}(\d+))?\s*$"
+        KeyDown={handleKeyboardEvent}
+        title="Please Fill Valid Phone Number"
       />
     </Fragment>
   )
