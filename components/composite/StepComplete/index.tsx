@@ -2,7 +2,7 @@ import PaymentSource from "@ezcontacts/react-components/payment_source/PaymentSo
 import PaymentSourceBrandIcon from "@ezcontacts/react-components/payment_source/PaymentSourceBrandIcon"
 import PaymentSourceBrandName from "@ezcontacts/react-components/payment_source/PaymentSourceBrandName"
 import PaymentSourceDetail from "@ezcontacts/react-components/payment_source/PaymentSourceDetail"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useTranslation, Trans } from "react-i18next"
 
 import { OrderSummary } from "components/composite/OrderSummary"
@@ -39,6 +39,7 @@ import {
 import { SupportMessage } from "./SupportMessage"
 import { goContinueShopping } from "components/utils/common"
 import { saveUserActivitylogData } from "utils/useCustomLogData"
+import OrderProcessLoading from "components/utils/orderProcessLoading"
 
 interface Props {
   logoUrl?: string
@@ -56,10 +57,44 @@ export const StepComplete: React.FC<Props> = ({
   orderNumber,
 }) => {
   const { t } = useTranslation()
+  var urlString = window?.location?.href
+  var url = new URL(urlString)
+  var queryParams = url?.searchParams
+  var visitorId = queryParams?.get("ezref")
 
   const ctx = useContext(AppContext)
 
   if (!ctx) return null
+  const [isLoading, setIsLoading] = useState(true)
+
+  const [productOrderId, setProductOrderId] = useState("")
+
+  useEffect(() => {
+    if (ctx?.orderId) {
+      const requestBody = {
+        cl_order_id: ctx?.orderId,
+        visitor_id: visitorId ? visitorId : "",
+      }
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/cl/order/reserve`, {
+        headers: {
+          Accept: "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(requestBody),
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          const res = result?.data?.order_id
+          if (res) {
+            setIsLoading(false)
+            setProductOrderId(res)
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error)
+        })
+    }
+  }, [])
 
   const handleClick = () => {
     let requestBody = {
@@ -70,6 +105,11 @@ export const StepComplete: React.FC<Props> = ({
     }
     saveUserActivitylogData(requestBody)
     ctx?.returnUrl && (document.location.href = ctx?.returnUrl)
+  }
+  console.log("productOrderId", productOrderId)
+
+  if (isLoading) {
+    return <OrderProcessLoading />
   }
 
   return (
@@ -94,7 +134,7 @@ export const StepComplete: React.FC<Props> = ({
             >
               <Trans
                 i18nKey={"stepComplete.description"}
-                values={{ orderNumber: orderNumber }}
+                values={{ orderNumber: productOrderId }}
                 components={{
                   WrapperOrderId: <strong className="text-black" />,
                 }}

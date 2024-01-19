@@ -2,7 +2,13 @@ import AddressCountrySelector from "@ezcontacts/react-components/addresses/Addre
 import AddressInput from "@ezcontacts/react-components/addresses/AddressInput"
 import AddressStateSelector from "@ezcontacts/react-components/addresses/AddressStateSelector"
 import { Errors } from "@ezcontacts/react-components/errors/Errors"
-import { ChangeEvent, useContext, useEffect, useState } from "react"
+import {
+  ChangeEvent,
+  useContext,
+  useEffect,
+  useState,
+  KeyboardEvent,
+} from "react"
 import { useTranslation } from "react-i18next"
 import styled from "styled-components"
 import tw from "twin.macro"
@@ -22,6 +28,7 @@ type TFieldName =
   | Parameters<typeof AddressStateSelector>[0]["name"]
 
 type TInputType = JSX.IntrinsicElements["input"]["type"]
+type TInputTitle = JSX.IntrinsicElements["input"]["title"]
 type TResource = Parameters<typeof Errors>[0]["resource"]
 type TMessages = Parameters<typeof Errors>[0]["messages"]
 
@@ -31,6 +38,9 @@ interface Props {
   resource: TResource
   required?: boolean
   value?: string
+  regex_pattern?: string
+  title?: TInputTitle
+  KeyDown?: (e: KeyboardEvent<HTMLInputElement>) => false | void
   openShippingAddress?: (props: ShippingToggleProps) => void
 }
 
@@ -40,6 +50,9 @@ export const AddressInputGroup: React.FC<Props> = ({
   required,
   type,
   value,
+  regex_pattern,
+  title,
+  KeyDown,
   openShippingAddress,
 }) => {
   const { t } = useTranslation()
@@ -152,6 +165,11 @@ export const AddressInputGroup: React.FC<Props> = ({
             type={type}
             value={valueStatus}
             className="form-input"
+            pattern={regex_pattern}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            onKeyDown={KeyDown}
+            title={title}
           />
           <Label htmlFor={fieldName}>{label}</Label>
         </>
