@@ -179,16 +179,19 @@ const Checkout: React.FC<Props> = ({
     return (
       <CustomerContainer isGuest={ctx.isGuest}>
         <div className="site-header">
+          <div className="site-container">
           <Logo
             logoUrl={logoUrl}
             companyName={companyName}
             className="hidden md:block"
           />
+          </div>
         </div>
         <Ezbanner />
+        <div className="site-container">
         <LayoutDefault
           aside={
-            <Sidebar className="sidebar-border-right">
+            <Sidebar className="sidebar-border-right left-content">
               <SummaryWrapper>
                 <OrderSummary appCtx={ctx} />
               </SummaryWrapper>
@@ -278,7 +281,7 @@ const Checkout: React.FC<Props> = ({
                           <StepHeaderPayment step={getStepNumber("Payment")} />
                         }
                       >
-                        <div className="mb-6">
+                        <div className="payment-methods-list">
                           <StepPayment onSelectPayment={onSelectPayment} />
                         </div>
                         {paymentType !== "External Payment" ? (
@@ -301,6 +304,7 @@ const Checkout: React.FC<Props> = ({
             </div>
           }
         />
+        </div>
       </CustomerContainer>
     )
   }

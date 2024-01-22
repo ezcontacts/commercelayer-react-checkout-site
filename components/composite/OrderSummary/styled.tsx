@@ -3,7 +3,7 @@ import tw from "twin.macro"
 
 export const Wrapper = styled.div``
 export const SummaryHeader = styled.div`
-  ${tw`mb-12`}
+  ${tw`mb-5`}
 `
 export const SummaryTitle = styled.h2`
   ${tw`text-xl text-black font-semibold`}
@@ -15,7 +15,7 @@ export const TotalWrapper = styled.div`
   ${tw`flex flex-row`}
 `
 export const AmountWrapper = styled.div`
-  ${tw`flex flex-col flex-1 pb-32 md:pb-0 lg:pl-8`}
+  ${tw`flex flex-col flex-1`}
 `
 export const AmountSpacer = styled.div`
   ${tw`hidden lg:flex lg:flex-85`}

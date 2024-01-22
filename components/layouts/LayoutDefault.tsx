@@ -17,7 +17,7 @@ export const LayoutDefault: React.FC<Props> = ({ main, aside }) => {
         <Wrapper>
           <Aside>{aside}</Aside>
           <Main>
-            <Card fullHeight>{main}</Card>
+            <Card className="right-content" fullHeight>{main}</Card>
           </Main>
         </Wrapper>
       </Container>
