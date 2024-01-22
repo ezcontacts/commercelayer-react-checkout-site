@@ -25,8 +25,8 @@ export const BillingAddressFormNew: React.FC<Props> = ({
   const { requiresBillingInfo } = appCtx
 
   const handleKeyboardEvent = (e: KeyboardEvent<HTMLInputElement>) =>
-    ["e", "E", "=", "ArrowUp", "ArrowDown"].includes(e.key) && e.preventDefault()
-  
+    ["e", "E", "=", "ArrowUp", "ArrowDown"].includes(e.key) &&
+    e.preventDefault()
 
   return (
     <Wrapper>
@@ -67,7 +67,7 @@ export const BillingAddressFormNew: React.FC<Props> = ({
           resource="billing_address"
           type="text"
           value={billingAddress?.city || ""}
-          regex_pattern="^[a-zA-Z]+$"
+          // regex_pattern="^[a-zA-Z]+$"
         />
         <AddressInputGroup
           required={true}
