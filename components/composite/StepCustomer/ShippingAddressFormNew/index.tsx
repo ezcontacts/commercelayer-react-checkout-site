@@ -10,7 +10,7 @@ interface Props {
 }
 
 const handleKeyboardEvent = (e: KeyboardEvent<HTMLInputElement>) =>
-   ["e", "E", "=", "ArrowUp", "ArrowDown"].includes(e.key) && e.preventDefault()
+  ["e", "E", "=", "ArrowUp", "ArrowDown"].includes(e.key) && e.preventDefault()
 
 export const ShippingAddressFormNew: React.FC<Props> = ({
   shippingAddress,
@@ -58,7 +58,7 @@ export const ShippingAddressFormNew: React.FC<Props> = ({
           resource="shipping_address"
           type="text"
           value={shippingAddress?.city || ""}
-          regex_pattern="^[a-zA-Z]+$"
+          // regex_pattern="^[a-zA-Z]+$"
         />
 
         <AddressInputGroup
