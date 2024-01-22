@@ -69,32 +69,32 @@ export const StepComplete: React.FC<Props> = ({
 
   const [productOrderId, setProductOrderId] = useState("")
 
-  useEffect(() => {
-    if (ctx?.orderId) {
-      const requestBody = {
-        cl_order_id: ctx?.orderId,
-        visitor_id: visitorId ? visitorId : "",
-      }
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/cl/order/reserve`, {
-        headers: {
-          Accept: "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify(requestBody),
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          const res = result?.data?.order_id
-          if (res) {
-            setIsLoading(false)
-            setProductOrderId(res)
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error)
-        })
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (ctx?.orderId) {
+  //     const requestBody = {
+  //       cl_order_id: ctx?.orderId,
+  //       visitor_id: visitorId ? visitorId : "",
+  //     }
+  //     fetch(`${process.env.NEXT_PUBLIC_API_URL}/cl/order/reserve`, {
+  //       headers: {
+  //         Accept: "application/json",
+  //       },
+  //       method: "POST",
+  //       body: JSON.stringify(requestBody),
+  //     })
+  //       .then((response) => response.json())
+  //       .then((result) => {
+  //         const res = result?.data?.order_id
+  //         if (res) {
+  //           setIsLoading(false)
+  //           setProductOrderId(res)
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error:", error)
+  //       })
+  //   }
+  // }, [])
 
   const handleClick = () => {
     let requestBody = {
@@ -108,9 +108,11 @@ export const StepComplete: React.FC<Props> = ({
   }
   console.log("productOrderId", productOrderId)
 
-  if (isLoading) {
-    return <OrderProcessLoading />
-  }
+  //Note ToDo changes.
+
+  // if (isLoading) {
+  //   return <OrderProcessLoading />
+  // }
 
   return (
     <Base>
@@ -134,7 +136,7 @@ export const StepComplete: React.FC<Props> = ({
             >
               <Trans
                 i18nKey={"stepComplete.description"}
-                values={{ orderNumber: productOrderId }}
+                values={{ orderNumber: orderNumber }}
                 components={{
                   WrapperOrderId: <strong className="text-black" />,
                 }}
