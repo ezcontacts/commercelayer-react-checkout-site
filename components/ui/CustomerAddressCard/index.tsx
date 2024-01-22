@@ -1,6 +1,7 @@
 import { Address, AddressField } from "@ezcontacts/react-components"
 import { Address as AddressCollection } from "@commercelayer/sdk"
-
+import { AppContext } from "components/data/AppProvider"
+import { useContext } from "react"
 interface AddressCardProps {
   addressType: "shipping" | "billing"
   addresses?: AddressCollection[]
@@ -18,21 +19,41 @@ export const CustomerAddressCard: React.FC<AddressCardProps> = ({
     addressType === "billing"
       ? "customer-billing-address"
       : "customer-shipping-address"
+  const appCtx = useContext(AppContext)
+  if (!appCtx) {
+    return null
+  }
   return (
     <Address
       data-testid={dataTestId}
-      addresses={addresses}
+      // addresses={addresses}
       className={`text-black p-3 rounded border ${
         onSelect && "hover:border-red-600 cursor-pointer"
       } transition duration-200 ease-in`}
       selectedClassName="!border-2 border-red-600 shadow-md bg-gray-50"
       deselect={deselect}
-      onSelect={(address) => onSelect && onSelect(address as AddressCollection)}
+      onSelect={(address) =>{ 
+        onSelect && onSelect(address as AddressCollection)
+        if(addressType === 'billing'){
+          localStorage.setItem(
+            "save_billing_address_id",
+            `${address.id}`
+          )
+        }
+        if(addressType === 'shipping'){
+          localStorage.setItem(
+            "save_shipping_address_id",
+            `${address.id}`
+          )
+        }
+      }}
       disabledClassName="opacity-50 cursor-not-allowed"
     >
       {
         <AddressField>
           {({ address }) => (
+            <>
+            {/* {console.log(address)} */}
             <CustomAddress
               firstName={address.first_name}
               lastName={address.last_name}
@@ -44,7 +65,9 @@ export const CustomerAddressCard: React.FC<AddressCardProps> = ({
               countryCode={address.country_code}
               phone={address.phone}
               addressType={addressType}
+              id={address.id}
             />
+            </>
           )}
         </AddressField>
       }
@@ -63,6 +86,7 @@ interface AddressProps {
   countryCode: NullableType<string>
   phone: NullableType<string>
   addressType: NullableType<string>
+  id:string | undefined
 }
 
 export const CustomAddress = ({
@@ -76,8 +100,9 @@ export const CustomAddress = ({
   countryCode,
   phone,
   addressType,
+  id,
 }: AddressProps) => (
-  <>
+  <div id={`${addressType}_${id}`}>
     <p className="font-bold text-md" data-testid={`fullname_${addressType}`}>
       {firstName} {lastName}
     </p>
@@ -91,5 +116,5 @@ export const CustomAddress = ({
       <br />
       {phone}
     </p>
-  </>
+  </div>
 )

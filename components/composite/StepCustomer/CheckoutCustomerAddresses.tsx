@@ -168,6 +168,25 @@ export const CheckoutCustomerAddresses: React.FC<Props> = ({
     )
   }
 
+  const save_billing_address_id = localStorage.getItem('save_billing_address_id');
+  useEffect(() => {
+      setTimeout(() => {
+        const element = document.getElementById(`billing_${save_billing_address_id}`);
+        if (element) {
+          element.click(); 
+        } 
+      },100);
+  }, [showBillingAddressForm])
+  const save_shipping_address_id = localStorage.getItem('save_shipping_address_id');
+  useEffect(() => {
+    setTimeout(() => {
+      const element = document.getElementById(`shipping_${save_shipping_address_id}`);
+      if (element) {
+        element.click(); 
+      } 
+    },100);
+}, [showShippingAddressForm])
+
   return (
     <Fragment>
       <AddressSectionEmail readonly emailAddress={emailAddress as string} />
@@ -318,7 +337,7 @@ export const CheckoutCustomerAddresses: React.FC<Props> = ({
           </>
         )}
         <AddressSectionSaveForm>
-          <ButtonWrapper className="btn-background-address">
+          <ButtonWrapper className="mb-6 btn-background-address">
             <StyledSaveAddressesButton
               disabled={isLocalLoader}
               label={

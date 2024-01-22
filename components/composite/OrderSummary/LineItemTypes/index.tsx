@@ -35,7 +35,7 @@ export const LineItemTypes: React.FC<Props> = ({ type }) => {
     <LineItem type={type}>
       <div key={1}>
         <div className="ml-5 mr-5">{/* <ErrorContainer /> */}</div>
-        <div className="p-5">
+        <div className="p-5 pl-0 pr-0">
           <div className="flex space-x-5">
             <div>
               <div className="card-image-container">
@@ -46,26 +46,26 @@ export const LineItemTypes: React.FC<Props> = ({ type }) => {
               <div className="flex">
                 <div className="w-full">
                   <div>
-                    <p className="box-border border-0 border-solid border-gray-200 text-sm  not-italic leading-5 text-[rgba(77,77,77,1)]">
+                    <p className="text-sm not-italic border-0 border-gray-200 border-solid box-border leading-5 text-[rgba(77,77,77,1)]">
                       {/* <LineItemName /> */}
                       <LineItemField attribute="metadata" tagElement="div">
                         {({ attributeValue }: any) => {
                           return (
                             <div className="flex-col">
                               {attributeValue?.brandName && (
-                                <div className="font-normal text-sm leading-5 text-gray-400">
+                                <div className="text-sm font-normal text-gray-400 leading-5">
                                   {attributeValue?.brandName}
                                 </div>
                               )}
                               {attributeValue?.skuDisplayName && (
-                                <div className="font-semibold text-md leading-5 text-gray-700 opacity-80">
+                                <div className="font-semibold text-gray-700 text-md leading-5 opacity-80">
                                   {attributeValue?.skuDisplayName}
                                 </div>
                               )}
                               {attributeValue?.color && (
                                 <div>
-                                  <div className="flex gap-1 text-sm">
-                                    <div className="font-semibold text-md leading-5 text-gray-700 opacity-80">
+                                  <div className="flex text-sm gap-1">
+                                    <div className="font-semibold text-gray-700 text-md leading-5 opacity-80">
                                       {attributeValue?.color}
                                     </div>
                                   </div>
@@ -73,8 +73,8 @@ export const LineItemTypes: React.FC<Props> = ({ type }) => {
                               )}
                               {attributeValue?.frame_size && (
                                 <div>
-                                  <div className="flex gap-1 text-sm">
-                                    <div className="font-semibold text-md leading-5 text-gray-700 opacity-80">
+                                  <div className="flex text-sm gap-1">
+                                    <div className="font-semibold text-gray-700 text-md leading-5 opacity-80">
                                       {attributeValue?.frame_size}
                                     </div>
                                   </div>
@@ -88,8 +88,8 @@ export const LineItemTypes: React.FC<Props> = ({ type }) => {
                   </div>
                 </div>
               </div>
-              <div className="flex justify-between items-center pt-4">
-                <div className="font-normal text-xxs leading-5 text-gray-700">
+              <div className="flex items-center justify-between pt-4">
+                <div className="font-normal text-gray-700 text-xxs leading-5">
                   <span>{"Qty:"}</span>{" "}
                   <span>
                     <LineItemQuantity>
@@ -102,7 +102,7 @@ export const LineItemTypes: React.FC<Props> = ({ type }) => {
                     </LineItemQuantity>
                   </span>
                 </div>
-                <div className="font-semibold text-xxs leading-5 text-gray-700">
+                <div className="font-semibold text-gray-700 text-xxs leading-5">
                   <LineItemAmount />
                 </div>
               </div>

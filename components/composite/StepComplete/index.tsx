@@ -191,6 +191,7 @@ export const StepComplete: React.FC<Props> = ({
                         countryCode={ctx.billingAddress?.country_code}
                         phone={ctx.billingAddress?.phone}
                         addressType="billing"
+                        id={ctx.billingAddress?.id}
                       />
                     </RecapBox>
                   </div>
@@ -212,6 +213,7 @@ export const StepComplete: React.FC<Props> = ({
                             countryCode={ctx.shippingAddress?.country_code}
                             phone={ctx.shippingAddress?.phone}
                             addressType="shipping"
+                            id={ctx.shippingAddress?.id}
                           />
                         </RecapBox>
                       </div>

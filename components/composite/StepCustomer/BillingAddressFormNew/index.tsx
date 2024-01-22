@@ -67,7 +67,7 @@ export const BillingAddressFormNew: React.FC<Props> = ({
           resource="billing_address"
           type="text"
           value={billingAddress?.city || ""}
-          // regex_pattern="^[a-zA-Z]+$"
+          regex_pattern="^[a-zA-Z]+(?:\s[a-zA-Z]+)?$"
         />
         <AddressInputGroup
           required={true}
