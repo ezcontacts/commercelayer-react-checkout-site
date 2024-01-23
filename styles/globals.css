@@ -409,5 +409,42 @@ select#shipping_address_country_code option:not([value="US"]) {
   color: #31708f;
   background-color: #d9edf7;
   border-color: #308a9d;
-  margin: 10px;
+  margin:10px 12rem;
+}
+
+.site-header{
+  padding-left: 12rem;
+  padding-right: 12rem;
+  padding-top:20px;
+  padding-bottom:20px;
+  border-bottom:1px solid rgba(230,231,231,var(--tw-border-opacity));
+}
+.site-header img{
+  margin-bottom:0;
+}
+@media only screen and (max-width:1280px) {
+  .site-header{
+    padding-left:5rem;
+    padding-right:5rem;
+  }
+  .banner-background {
+    margin-left:5rem;
+    margin-right:5rem;
+  }
+}
+@media only screen and (max-width:1024px) {
+  .site-header{
+    padding-left:1.25rem;
+    padding-right:1.25rem;
+  }
+  .banner-background {
+    margin-left:1.25rem;
+    margin-right:1.25rem;
+  }
+}
+@media only screen and (max-width:767px) {
+  .site-header{
+    padding:0;
+    border:0;
+  }
 }
