@@ -1,4 +1,4 @@
-import { useState , useContext } from "react"
+import { useState, useContext } from "react"
 
 import { AppContext } from "components/data/AppProvider"
 import { Order } from "@commercelayer/sdk"
@@ -81,6 +81,7 @@ export const ExternalPaymentCard = ({
     const order = await getOrderFromRef()
     if (order) {
       const response = await getData(order)
+
       if (response) {
         const body = JSON.stringify({
           data: {
@@ -113,7 +114,35 @@ export const ExternalPaymentCard = ({
                 { "orderId-": ctx.orderId },
                 result
               )
-              window.location.reload()
+              console.log(Date.now(), "InTime")
+              if (ctx?.orderId) {
+                const requestBody = {
+                  cl_order_id: ctx?.orderId,
+                  visitor_id: visitorId ? visitorId : "",
+                }
+                fetch(`${process.env.NEXT_PUBLIC_API_URL}/cl/order/reserve`, {
+                  headers: {
+                    Accept: "application/json",
+                  },
+                  method: "POST",
+                  body: JSON.stringify(requestBody),
+                })
+                  .then((response) => response.json())
+                  .then((result) => {
+                    console.log(Date.now(), "outTime")
+                    localStorage.removeItem("productOrderId")
+                    const res = result?.data?.order_id
+                    if (res) {
+                      localStorage.setItem("productOrderId", res)
+                    }
+                    window.location.reload()
+                  })
+                  .catch((error) => {
+                    console.log(Date.now(), "error")
+                    console.error("Error:", error)
+                    window.location.reload()
+                  })
+              }
             }
           })
           .catch((error) => {
@@ -147,78 +176,82 @@ export const ExternalPaymentCard = ({
     const cardNumber = card?.cardNumber?.split(" ").join("")
 
     if (cardNumber !== "" && card?.expireDate !== "" && card.cvv !== "") {
-      if (ctx?.orderId) {
-        const requestBody = {
-          data: {
-            card: {
-              number: Number(cardNumber),
-              expiration: card.expireDate,
-              cvv: Number(card.cvv),
-              firstname: card.firstname,
-              lastname: card.lastname,
+      try {
+        if (ctx?.orderId) {
+          const requestBody = {
+            data: {
+              card: {
+                number: Number(cardNumber),
+                expiration: card.expireDate,
+                cvv: Number(card.cvv),
+                firstname: card.firstname,
+                lastname: card.lastname,
+              },
+              order: {
+                id: ctx?.orderId,
+                attributes: order,
+              },
+              customer: {
+                email: ctx?.emailAddress,
+              },
+              attributes: {
+                payment_source_token: paymentToken,
+              },
+              visitor_id: visitorId || "",
             },
-            order: {
-              id: ctx?.orderId,
-              attributes: order,
-            },
-            customer: {
-              email: ctx?.emailAddress,
-            },
-            attributes: {
-              payment_source_token: paymentToken,
-            },
-            visitor_id: visitorId || "",
-          },
-        }
-
-        return fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/cl/order/payment/v1/create-authorization`,
-          {
-            headers: {
-              Accept: "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify(requestBody),
           }
-        )
-          .then((response) => response.json())
-          .then((result) => {
-            if (result?.success) {
-              const res = result?.data?.payment_source_token
-              logData("onCreate-authorization", requestBody, result?.success)
-              return res
-            } else {
-              logMetrics("order_completion_failed")
-              logData("onCreate-authorization", requestBody, result)
-              setIsLoading(false)
-              if (Number(card.cvv) === 0) {
-                setCardErrorMessage({
-                  isSuccess: false,
-                  message: "Please enter a valid cvc.",
-                })
-              } else {
-                setCardErrorMessage({
-                  isSuccess: false,
-                  message: result?.data?.error?.message?.replace(
-                    /\d|\(|\)/g,
-                    ""
-                  ),
-                })
-              }
+
+          return fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/cl/order/payment/v1/create-authorization`,
+            {
+              headers: {
+                Accept: "application/json",
+              },
+              method: "POST",
+              body: JSON.stringify(requestBody),
             }
-          })
-          .catch((error) => {
-            logMetrics("order_completion_failed")
-            if (error) setIsLoading(false)
-            setCardErrorMessage({
-              isSuccess: false,
-              message: "Unable to process the payment, please try again",
+          )
+            .then((response) => response.json())
+            .then((result) => {
+              if (result?.success) {
+                const res = result?.data?.payment_source_token
+                logData("onCreate-authorization", requestBody, result?.success)
+                return res
+              } else {
+                logMetrics("order_completion_failed")
+                logData("onCreate-authorization", requestBody, result)
+                setIsLoading(false)
+                if (Number(card.cvv) === 0) {
+                  setCardErrorMessage({
+                    isSuccess: false,
+                    message: "Please enter a valid cvc.",
+                  })
+                } else {
+                  setCardErrorMessage({
+                    isSuccess: false,
+                    message: result?.data?.error?.message?.replace(
+                      /\d|\(|\)/g,
+                      ""
+                    ),
+                  })
+                }
+              }
             })
-            logData("onCreate-authorization", requestBody, error)
-          })
-          .finally(() => {
-            setIsLoading(false)
-          })
+            .catch((error) => {
+              logMetrics("order_completion_failed")
+              if (error) setIsLoading(false)
+              setCardErrorMessage({
+                isSuccess: false,
+                message: "Unable to process the payment, please try again",
+              })
+              logData("onCreate-authorization", requestBody, error)
+            })
+            .finally(() => {
+              setIsLoading(false)
+            })
+        }
+      } catch (e) {
+        console.log(e)
       }
     }
   }
