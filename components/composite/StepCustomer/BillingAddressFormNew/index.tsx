@@ -92,7 +92,7 @@ export const BillingAddressFormNew: React.FC<Props> = ({
           resource="billing_address"
           type="text"
           value={billingAddress?.zip_code || ""}
-          regex_pattern="^[0-9]+$"
+          regex_pattern="^(\d+|\d+-\d+)$"
           KeyDown={handleKeyboardEvent}
           title="Please Fill Valid Zip Code"
         />
