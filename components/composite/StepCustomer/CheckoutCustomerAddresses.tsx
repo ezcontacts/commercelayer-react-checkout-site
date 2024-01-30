@@ -350,6 +350,7 @@ export const CheckoutCustomerAddresses: React.FC<Props> = ({
               }
               data-testid="save-customer-button"
               onClick={handleSave}
+              id="save-address-button"
             />
           </ButtonWrapper>
         </AddressSectionSaveForm>

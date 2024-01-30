@@ -85,7 +85,7 @@ export const ShippingAddressFormNew: React.FC<Props> = ({
           resource="shipping_address"
           type="text"
           value={shippingAddress?.zip_code || ""}
-          regex_pattern="^[0-9]+$"
+          regex_pattern="^(\d+|\d+-\d+)$"
           KeyDown={handleKeyboardEvent}
           title="Please Fill Valid Zip Code"
         />
