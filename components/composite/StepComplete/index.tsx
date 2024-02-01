@@ -57,45 +57,10 @@ export const StepComplete: React.FC<Props> = ({
   orderNumber,
 }) => {
   const { t } = useTranslation()
-  var urlString = window?.location?.href
-  var url = new URL(urlString)
-  var queryParams = url?.searchParams
-  var visitorId = queryParams?.get("ezref")
-
   const ctx = useContext(AppContext)
 
   if (!ctx) return null
-  const [isLoading, setIsLoading] = useState(true)
-
-  const [productOrderId, setProductOrderId] = useState("")
-
-  // useEffect(() => {
-  //   if (ctx?.orderId) {
-  //     const requestBody = {
-  //       cl_order_id: ctx?.orderId,
-  //       visitor_id: visitorId ? visitorId : "",
-  //     }
-  //     fetch(`${process.env.NEXT_PUBLIC_API_URL}/cl/order/reserve`, {
-  //       headers: {
-  //         Accept: "application/json",
-  //       },
-  //       method: "POST",
-  //       body: JSON.stringify(requestBody),
-  //     })
-  //       .then((response) => response.json())
-  //       .then((result) => {
-  //         const res = result?.data?.order_id
-  //         if (res) {
-  //           setIsLoading(false)
-  //           setProductOrderId(res)
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error:", error)
-  //       })
-  //   }
-  // }, [])
-
+ // const productOrderId = localStorage?.getItem("productOrderId") || orderNumber
   const handleClick = () => {
     let requestBody = {
       requested_method: "Continue click",
@@ -106,13 +71,6 @@ export const StepComplete: React.FC<Props> = ({
     saveUserActivitylogData(requestBody)
     ctx?.returnUrl && (document.location.href = ctx?.returnUrl)
   }
-  console.log("productOrderId", productOrderId)
-
-  //Note ToDo changes.
-
-  // if (isLoading) {
-  //   return <OrderProcessLoading />
-  // }
 
   return (
     <Base>
@@ -193,6 +151,7 @@ export const StepComplete: React.FC<Props> = ({
                         countryCode={ctx.billingAddress?.country_code}
                         phone={ctx.billingAddress?.phone}
                         addressType="billing"
+                        id={ctx.billingAddress?.id}
                       />
                     </RecapBox>
                   </div>
@@ -214,6 +173,7 @@ export const StepComplete: React.FC<Props> = ({
                             countryCode={ctx.shippingAddress?.country_code}
                             phone={ctx.shippingAddress?.phone}
                             addressType="shipping"
+                            id={ctx.shippingAddress?.id}
                           />
                         </RecapBox>
                       </div>
