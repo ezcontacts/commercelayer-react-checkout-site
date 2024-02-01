@@ -26,7 +26,7 @@ export const ShippingSummaryItemDescription = styled.p`
   ${tw`text-gray-500 font-normal text-ss`}
 `
 export const ShippingSummaryValue = styled.p`
-  ${tw`text-black font-bold uppercase text-sm`}
+  ${tw`text-black font-bold uppercase text-sm pt-2`}
 `
 export const ShippingLineItem = styled.div`
   ${tw`flex mt-4`}
