@@ -114,35 +114,36 @@ export const ExternalPaymentCard = ({
                 { "orderId-": ctx.orderId },
                 result
               )
-              console.log(Date.now(), "InTime")
-              if (ctx?.orderId) {
-                const requestBody = {
-                  cl_order_id: ctx?.orderId,
-                  visitor_id: visitorId ? visitorId : "",
-                }
-                fetch(`${process.env.NEXT_PUBLIC_API_URL}/cl/order/reserve`, {
-                  headers: {
-                    Accept: "application/json",
-                  },
-                  method: "POST",
-                  body: JSON.stringify(requestBody),
-                })
-                  .then((response) => response.json())
-                  .then((result) => {
-                    console.log(Date.now(), "outTime")
-                    localStorage.removeItem("productOrderId")
-                    const res = result?.data?.order_id
-                    if (res) {
-                      localStorage.setItem("productOrderId", res)
-                    }
-                    window.location.reload()
-                  })
-                  .catch((error) => {
-                    console.log(Date.now(), "error")
-                    console.error("Error:", error)
-                    window.location.reload()
-                  })
-              }
+              //Next release
+              // console.log(Date.now(), "InTime")
+              // if (ctx?.orderId) {
+              //   const requestBody = {
+              //     cl_order_id: ctx?.orderId,
+              //     visitor_id: visitorId ? visitorId : "",
+              //   }
+              //   fetch(`${process.env.NEXT_PUBLIC_API_URL}/cl/order/reserve`, {
+              //     headers: {
+              //       Accept: "application/json",
+              //     },
+              //     method: "POST",
+              //     body: JSON.stringify(requestBody),
+              //   })
+              //     .then((response) => response.json())
+              //     .then((result) => {
+              //       console.log(Date.now(), "outTime")
+              //       localStorage.removeItem("productOrderId")
+              //       const res = result?.data?.order_id
+              //       if (res) {
+              //         localStorage.setItem("productOrderId", res)
+              //       }
+              //       window.location.reload()
+              //     })
+              //     .catch((error) => {
+              //       console.log(Date.now(), "error")
+              //       console.error("Error:", error)
+              //       window.location.reload()
+              //     })
+              // }
             }
           })
           .catch((error) => {
