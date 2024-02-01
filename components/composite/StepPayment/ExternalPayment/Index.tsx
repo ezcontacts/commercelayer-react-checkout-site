@@ -114,6 +114,7 @@ export const ExternalPaymentCard = ({
                 { "orderId-": ctx.orderId },
                 result
               )
+              window.location.reload()
               //Next release
               // console.log(Date.now(), "InTime")
               // if (ctx?.orderId) {
