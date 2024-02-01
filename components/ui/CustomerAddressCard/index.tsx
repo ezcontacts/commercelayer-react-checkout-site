@@ -23,27 +23,11 @@ export const CustomerAddressCard: React.FC<AddressCardProps> = ({
   if (!appCtx) {
     return null
   }
-
-const handleClick = (event:any) => {
-  if (event.nativeEvent.isTrusted) {
-    setTimeout(function(){ 
-      const save_address_button = document.getElementById(`save-address-button`);
-      if (save_address_button) {
-        save_address_button.click(); 
-      }
-    }, 100);
-    // const save_address_button = document.getElementById(`save-address-button`);
-    // if (save_address_button) {
-    //   alert('sf');
-    //   save_address_button.click(); 
-    // }
-  }
-};
   return (
     <Address
       data-testid={dataTestId}
       // addresses={addresses}
-      className={`text-black rounded border ${
+      className={`text-black p-3 rounded border ${
         onSelect && "hover:border-red-600 cursor-pointer"
       } transition duration-200 ease-in`}
       selectedClassName="!border-2 border-red-600 shadow-md bg-gray-50"
@@ -84,7 +68,6 @@ const handleClick = (event:any) => {
               phone={address.phone}
               addressType={addressType}
               id={address.id}
-              handleClick={handleClick}
             />
             </>
           )}
@@ -106,7 +89,6 @@ interface AddressProps {
   phone: NullableType<string>
   addressType: NullableType<string>
   id:string | undefined
-  handleClick?:any
 }
 
 export const CustomAddress = ({
@@ -121,9 +103,8 @@ export const CustomAddress = ({
   phone,
   addressType,
   id,
-  handleClick
 }: AddressProps) => (
-  <div id={`${addressType}_${id}`} className="p-3" onClick={handleClick}>
+  <div id={`${addressType}_${id}`}>
     <p className="font-bold text-md" data-testid={`fullname_${addressType}`}>
       {firstName} {lastName}
     </p>
