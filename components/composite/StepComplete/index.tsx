@@ -60,7 +60,7 @@ export const StepComplete: React.FC<Props> = ({
   const ctx = useContext(AppContext)
 
   if (!ctx) return null
- // const productOrderId = localStorage?.getItem("productOrderId") || orderNumber
+  const productOrderId = localStorage?.getItem("productOrderId") || orderNumber
   const handleClick = () => {
     let requestBody = {
       requested_method: "Continue click",
@@ -94,7 +94,7 @@ export const StepComplete: React.FC<Props> = ({
             >
               <Trans
                 i18nKey={"stepComplete.description"}
-                values={{ orderNumber: orderNumber }}
+                values={{ orderNumber: productOrderId }}
                 components={{
                   WrapperOrderId: <strong className="text-black" />,
                 }}
