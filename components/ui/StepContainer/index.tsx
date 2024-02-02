@@ -11,7 +11,7 @@ export const StepContainer: React.FC<Props> = ({ children, className }) => (
 )
 
 const Container = styled.div`
-  ${tw`flex flex-row items-stretch justify-start mb-10`}
+  ${tw`flex flex-row items-stretch justify-start mb-10 pb-5 md:pb-5`}
   &.submitting {
     filter: opacity(25%);
   }

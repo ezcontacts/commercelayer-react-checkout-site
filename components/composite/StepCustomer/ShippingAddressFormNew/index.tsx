@@ -58,7 +58,7 @@ export const ShippingAddressFormNew: React.FC<Props> = ({
           resource="shipping_address"
           type="text"
           value={shippingAddress?.city || ""}
-          regex_pattern="^[a-zA-Z]+(?:\s[a-zA-Z]+)?$"
+          // regex_pattern="^[a-zA-Z]+$"
         />
 
         <AddressInputGroup
