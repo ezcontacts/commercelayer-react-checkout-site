@@ -167,6 +167,25 @@ export const CheckoutCustomerAddresses: React.FC<Props> = ({
       "false"
     )
   }
+  
+  const save_billing_address_id = localStorage.getItem('save_billing_address_id');
+  useEffect(() => {
+      setTimeout(() => {
+        const element = document.getElementById(`billing_${save_billing_address_id}`);
+        if (element) {
+          element.click(); 
+        } 
+      },100);
+  }, [showBillingAddressForm])
+  const save_shipping_address_id = localStorage.getItem('save_shipping_address_id');
+  useEffect(() => {
+    setTimeout(() => {
+      const element = document.getElementById(`shipping_${save_shipping_address_id}`);
+      if (element) {
+        element.click(); 
+      } 
+    },100);
+}, [showShippingAddressForm])
 
   return (
     <Fragment>
@@ -331,6 +350,7 @@ export const CheckoutCustomerAddresses: React.FC<Props> = ({
               }
               data-testid="save-customer-button"
               onClick={handleSave}
+              id="save-address-button"
             />
           </ButtonWrapper>
         </AddressSectionSaveForm>

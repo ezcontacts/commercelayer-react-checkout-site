@@ -67,7 +67,7 @@ export const BillingAddressFormNew: React.FC<Props> = ({
           resource="billing_address"
           type="text"
           value={billingAddress?.city || ""}
-          // regex_pattern="^[a-zA-Z]+$"
+          regex_pattern="^[a-zA-Z]+(?:\s[a-zA-Z]+)?$"
         />
         <AddressInputGroup
           required={true}
@@ -92,9 +92,9 @@ export const BillingAddressFormNew: React.FC<Props> = ({
           resource="billing_address"
           type="text"
           value={billingAddress?.zip_code || ""}
-          regex_pattern="^[0-9]+$"
+          regex_pattern="^\d{5}(-?\d{4})?$"
           KeyDown={handleKeyboardEvent}
-          title="Please Fill Valid Zip Code"
+          title="Please enter valid 5-digit or 9-digit Zip Code"
         />
       </Grid>
       <AddressInputGroup
