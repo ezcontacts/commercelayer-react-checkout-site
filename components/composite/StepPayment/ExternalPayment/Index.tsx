@@ -159,7 +159,7 @@ export const ExternalPaymentCard = ({
             })
           })
           .finally(() => {
-            setIsLoading(false)
+            // setIsLoading(false)
           })
       }
     }
@@ -247,7 +247,7 @@ export const ExternalPaymentCard = ({
               logData("onCreate-authorization", requestBody, error)
             })
             .finally(() => {
-              setIsLoading(false)
+              // setIsLoading(false)
             })
         }
       } catch (e) {
