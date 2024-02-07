@@ -306,7 +306,7 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
     </div>
     }
     <div className='affirm-payment' onClick={handleClick}>
-      <Image src="https://cdn-assets.affirm.com/images/buttons/checkout/42x205-white.png" width="205" height="42" alt="Affirm Payment"/>
+      <Image src="/img/42x205-white.png" width="205" height="42" alt="Affirm Payment"/>
     </div>
     {!apiCardErrorMessage.isSuccess && (
         <div className="w-full pb-2 text-red-400">
