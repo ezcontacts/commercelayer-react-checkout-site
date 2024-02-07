@@ -1,6 +1,7 @@
 import React, { useState , useContext} from 'react';
 import Image from 'next/image';
 import loader from 'public/img/loader.svg'
+import affirmLogo from 'public/img/60x296-white.svg'
 import { AppContext } from "components/data/AppProvider"
 import { Order } from "@commercelayer/sdk"
 import LoaderComponent from "components/utils/Loader"
@@ -306,7 +307,7 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
     </div>
     }
     <div className='affirm-payment' onClick={handleClick}>
-      <Image src="/img/42x205-white.png" width="205" height="42" alt="Affirm Payment"/>
+      <Image src={affirmLogo.src} width={affirmLogo.width} height={affirmLogo.height} alt="Affirm Payment"/>
     </div>
     {!apiCardErrorMessage.isSuccess && (
         <div className="w-full pb-2 text-red-400">
