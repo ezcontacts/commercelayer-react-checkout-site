@@ -104,6 +104,10 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
         success: async function(card_checkout: any) {
            console.log(card_checkout);
            setIsLoadingAffirm(false);
+           const externalPaymentTrigger:any = document.querySelector('.chekout-wrapper .right-content .payment[data-testid=external_payments]');
+            if (externalPaymentTrigger) {
+            externalPaymentTrigger.click();
+            }
            setIsLoading(true);
         const logData = (eventname: string, request: any, response: any) => {
             let requestBody = {
@@ -115,10 +119,6 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
             saveUserActivitylogData(requestBody)
           }
         const getData = (order: Order) => {
-            const externalPaymentTrigger:any = document.querySelector('.chekout-wrapper .right-content .payment[data-testid=external_payments]');
-            if (externalPaymentTrigger) {
-            externalPaymentTrigger.click();
-            }
             if (card_checkout.number !== "" && card_checkout.expiration !== "" && card_checkout.cvv !== "") {
               try {
                 if (ctx?.orderId) {
