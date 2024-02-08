@@ -105,9 +105,15 @@ export const ExternalPaymentCard = ({
             body,
           }
         )
-          .then((response) => response.json())
+          .then((response) => {
+            console.log("response.status" + response.status) // Will show you the status
+            if (!response.ok) {
+              throw new Error("HTTP status " + response.status)
+            }
+            return response.json()
+          })
           .then((result) => {
-            console.log("orderresponse", result)
+            console.log("orderresponse")
             if (result?.errors?.length !== 0) {
               logMetrics("order_completion_success")
               logData(
@@ -128,7 +134,13 @@ export const ExternalPaymentCard = ({
                   method: "POST",
                   body: JSON.stringify(requestBody),
                 })
-                  .then((response) => response.json())
+                  .then((response) => {
+                    console.log("response.status" + response.status) // Will show you the status
+                    if (!response.ok) {
+                      throw new Error("HTTP status " + response.status)
+                    }
+                    return response.json()
+                  })
                   .then((result) => {
                     console.log(Date.now(), "outTime")
                     localStorage.removeItem("productOrderId")
