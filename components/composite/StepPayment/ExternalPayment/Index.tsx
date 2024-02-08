@@ -107,7 +107,7 @@ export const ExternalPaymentCard = ({
         )
           .then((response) => response.json())
           .then((result) => {
-            console.log(result)
+            console.log("orderresponse", result)
             if (result?.errors?.length !== 0) {
               logMetrics("order_completion_success")
               logData(
@@ -144,6 +144,8 @@ export const ExternalPaymentCard = ({
                     window.location.reload()
                   })
               }
+            } else {
+              setIsLoading(false)
             }
           })
           .catch((error) => {
