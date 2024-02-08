@@ -47,6 +47,7 @@ interface Props {
   supportEmail?: string
   supportPhone?: string
   orderNumber: number
+  customerName?: string
 }
 
 export const StepComplete: React.FC<Props> = ({
@@ -55,11 +56,12 @@ export const StepComplete: React.FC<Props> = ({
   supportEmail,
   supportPhone,
   orderNumber,
+  customerName,
 }) => {
   const { t } = useTranslation()
   const ctx = useContext(AppContext)
-
   if (!ctx) return null
+
   const productOrderId = localStorage?.getItem("productOrderId") || orderNumber
   const handleClick = () => {
     let requestBody = {
@@ -129,9 +131,19 @@ export const StepComplete: React.FC<Props> = ({
             </RecapSummary>
             <RecapCustomer>
               <RecapTitle>{t("stepComplete.customer_title")}</RecapTitle>
+              {customerName && (
+                <RecapCol>
+                  <div className="pt-4">
+                    <RecapItemTitle>{"User name:"}</RecapItemTitle>
+                    <RecapItem>{customerName}</RecapItem>
+                  </div>
+                </RecapCol>
+              )}
               <RecapCol>
-                <RecapItemTitle>{t("stepComplete.email")}</RecapItemTitle>
-                <RecapItem>{ctx.emailAddress}</RecapItem>
+                <div className="pt-4">
+                  <RecapItemTitle>{t("stepComplete.email")}</RecapItemTitle>
+                  <RecapItem>{ctx.emailAddress}</RecapItem>
+                </div>
               </RecapCol>
               <RecapCol>
                 <AddressContainer className="lg:!grid-cols-1 xl:!grid-cols-2">
