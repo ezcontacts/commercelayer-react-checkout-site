@@ -107,7 +107,8 @@ export const ExternalPaymentCard = ({
         )
           .then((response) => response.json())
           .then((result) => {
-            if (result) {
+            console.log(result)
+            if (result.errors.length !== 0) {
               logMetrics("order_completion_success")
               logData(
                 "handlePlaceOrder-success-response",
