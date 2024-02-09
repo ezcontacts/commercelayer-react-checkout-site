@@ -107,7 +107,7 @@ export const ExternalPaymentCard = ({
         )
           .then((response) => {
             console.log("order response.status" + response.status) // Will show you the status
-            if (!response.ok) {
+            if (response.status !== 200 || !response.ok) {
               throw new Error("HTTP status " + response.status)
             }
             return response.json()
