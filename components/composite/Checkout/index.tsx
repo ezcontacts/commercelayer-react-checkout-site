@@ -59,12 +59,10 @@ const Checkout: React.FC<Props> = ({
   const [paymentType, setPaymentType] = useState("")
   const ctx = useContext(AppContext) as any
 
-  const customerName = ctx?.["order"]?.["customer"]?.["metadata"]?.[
-    "name_first"
-  ]
-    ? ctx?.["order"]?.["customer"]?.["metadata"]?.["name_first"] +
+  const customerName = ctx?.order?.customer?.metadata?.name_first
+    ? ctx?.order?.customer?.metadata?.name_first +
       " " +
-      ctx?.["order"]?.["customer"]?.["metadata"]?.["name_last"]
+      ctx?.order?.customer?.metadata?.name_last
     : ""
 
   const { logEvent } = useAmplitude()
