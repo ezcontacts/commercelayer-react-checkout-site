@@ -36,7 +36,7 @@ export const RecapCustomer = styled.div`
   ${tw`text-black order-1 md:order-2 mb-5 md:mb-0`}
 `
 export const RecapTitle = styled.h2`
-  ${tw`text-black text-lg font-semibold leading-none mb-8 md:mb-16`}
+  ${tw`text-black text-lg font-semibold leading-none mb-8 md:mb-4`}
 `
 export const RecapCol = styled.div`
   ${tw`mb-4 md:mb-8`}

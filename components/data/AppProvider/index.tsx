@@ -17,6 +17,7 @@ import {
 } from "components/data/AppProvider/utils"
 
 export interface AppProviderData extends FetchOrderByIdResponse {
+  [x: string]: any
   isLoading: boolean
   orderId: string
   accessToken: string

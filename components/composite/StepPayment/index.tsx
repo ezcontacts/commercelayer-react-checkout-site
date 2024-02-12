@@ -19,6 +19,7 @@ import { CheckoutPayment } from "./CheckoutPayment"
 import { PaymentSkeleton } from "./PaymentSkeleton"
 import useAmplitude from "utils/getAmplitude"
 import useLogMetricsData from "utils/logClMetrics"
+import AffirmPayment from "./AffirmPayment"
 
 export type THandleClick = (params: {
   payment?: PaymentMethodType | Record<string, any>
@@ -161,6 +162,9 @@ export const StepPayment: React.FC<PaymentHeaderProps> = ({
         <>
           {accordionCtx.isActive && (
             <div>
+              {appCtx.order.total_amount_with_taxes_float >= 50 &&
+                <AffirmPayment/>
+              }
               {isPaymentRequired ? (
                 isGuest ? (
                   <CheckoutPayment
