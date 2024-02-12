@@ -5,9 +5,10 @@ import { LayoutDefault } from "components/layouts/LayoutDefault"
 
 export const CheckoutSkeleton: React.FC = () => {
   return (
+    <div className="site-container">
     <LayoutDefault
       aside={
-        <Sidebar>
+        <Sidebar className="left-content">
           <div className="flex mb-12 animate-pulse">
             <SkeletonCircle className="w-10 h-10 mr-5" />
             <SkeletonBox className="w-1/2 h-10 bg-gray-200" />
@@ -91,6 +92,7 @@ export const CheckoutSkeleton: React.FC = () => {
         </div>
       }
     />
+    </div>
   )
 }
 
