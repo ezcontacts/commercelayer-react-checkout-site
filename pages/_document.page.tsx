@@ -19,6 +19,11 @@ class AppDocument extends Document {
     return (
       <Html>
         <Head>
+          <Script
+            src="//sec.webeyez.com/js/06328ff9-0904-44cf-989d-98490af2db02/wzbody.js"
+            async
+            strategy="beforeInteractive"
+          />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
             href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
