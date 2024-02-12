@@ -9,7 +9,7 @@ export const AddressSectionTitle = ({
   children,
   ...rest
 }: Props): JSX.Element => {
-  return <Wrapper {...rest}>{children}</Wrapper>
+  return <Wrapper {...rest}>{children} *</Wrapper>
 }
 
 const Wrapper = styled.h3`

@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { useContext } from "react"
+import { useState, useContext } from "react"
+
 import { AppContext } from "components/data/AppProvider"
 import { Order } from "@commercelayer/sdk"
 import { Button } from "components/ui/Button"
@@ -81,6 +81,7 @@ export const ExternalPaymentCard = ({
     const order = await getOrderFromRef()
     if (order) {
       const response = await getData(order)
+
       if (response) {
         const body = JSON.stringify({
           data: {
@@ -101,7 +102,7 @@ export const ExternalPaymentCard = ({
               Authorization: `Bearer ${ctx.accessToken}`,
               "Content-Type": "application/vnd.api+json",
             },
-            body: body,
+            body,
           }
         )
           .then((response) => response.json())
@@ -114,6 +115,36 @@ export const ExternalPaymentCard = ({
                 result
               )
               window.location.reload()
+              // Next release
+              // console.log(Date.now(), "InTime")
+              // if (ctx?.orderId) {
+              //   const requestBody = {
+              //     cl_order_id: ctx?.orderId,
+              //     visitor_id: visitorId ? visitorId : "",
+              //   }
+              //   fetch(`${process.env.NEXT_PUBLIC_API_URL}/cl/order/reserve`, {
+              //     headers: {
+              //       Accept: "application/json",
+              //     },
+              //     method: "POST",
+              //     body: JSON.stringify(requestBody),
+              //   })
+              //     .then((response) => response.json())
+              //     .then((result) => {
+              //       console.log(Date.now(), "outTime")
+              //       localStorage.removeItem("productOrderId")
+              //       const res = result?.data?.order_id
+              //       if (res) {
+              //         localStorage.setItem("productOrderId", res)
+              //       }
+              //       window.location.reload()
+              //     })
+              //     .catch((error) => {
+              //       console.log(Date.now(), "error")
+              //       console.error("Error:", error)
+              //       window.location.reload()
+              //     })
+              // }
             }
           })
           .catch((error) => {
@@ -147,78 +178,82 @@ export const ExternalPaymentCard = ({
     const cardNumber = card?.cardNumber?.split(" ").join("")
 
     if (cardNumber !== "" && card?.expireDate !== "" && card.cvv !== "") {
-      if (ctx?.orderId) {
-        const requestBody = {
-          data: {
-            card: {
-              number: Number(cardNumber),
-              expiration: card.expireDate,
-              cvv: Number(card.cvv),
-              firstname: card.firstname,
-              lastname: card.lastname,
+      try {
+        if (ctx?.orderId) {
+          const requestBody = {
+            data: {
+              card: {
+                number: Number(cardNumber),
+                expiration: card.expireDate,
+                cvv: Number(card.cvv),
+                firstname: card.firstname,
+                lastname: card.lastname,
+              },
+              order: {
+                id: ctx?.orderId,
+                attributes: order,
+              },
+              customer: {
+                email: ctx?.emailAddress,
+              },
+              attributes: {
+                payment_source_token: paymentToken,
+              },
+              visitor_id: visitorId || "",
             },
-            order: {
-              id: ctx?.orderId,
-              attributes: order,
-            },
-            customer: {
-              email: ctx?.emailAddress,
-            },
-            attributes: {
-              payment_source_token: paymentToken,
-            },
-            visitor_id: visitorId || "",
-          },
-        }
-
-        return fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/cl/order/payment/v1/create-authorization`,
-          {
-            headers: {
-              Accept: "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify(requestBody),
           }
-        )
-          .then((response) => response.json())
-          .then((result) => {
-            if (result?.success) {
-              const res = result?.data?.payment_source_token
-              logData("onCreate-authorization", requestBody, result?.success)
-              return res
-            } else {
-              logMetrics("order_completion_failed")
-              logData("onCreate-authorization", requestBody, result)
-              setIsLoading(false)
-              if (Number(card.cvv) === 0) {
-                setCardErrorMessage({
-                  isSuccess: false,
-                  message: "Please enter a valid cvc.",
-                })
-              } else {
-                setCardErrorMessage({
-                  isSuccess: false,
-                  message: result?.data?.error?.message?.replace(
-                    /\d|\(|\)/g,
-                    ""
-                  ),
-                })
-              }
+
+          return fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/cl/order/payment/v1/create-authorization`,
+            {
+              headers: {
+                Accept: "application/json",
+              },
+              method: "POST",
+              body: JSON.stringify(requestBody),
             }
-          })
-          .catch((error) => {
-            logMetrics("order_completion_failed")
-            if (error) setIsLoading(false)
-            setCardErrorMessage({
-              isSuccess: false,
-              message: "Unable to process the payment, please try again",
+          )
+            .then((response) => response.json())
+            .then((result) => {
+              if (result?.success) {
+                const res = result?.data?.payment_source_token
+                logData("onCreate-authorization", requestBody, result?.success)
+                return res
+              } else {
+                logMetrics("order_completion_failed")
+                logData("onCreate-authorization", requestBody, result)
+                setIsLoading(false)
+                if (Number(card.cvv) === 0) {
+                  setCardErrorMessage({
+                    isSuccess: false,
+                    message: "Please enter a valid cvc.",
+                  })
+                } else {
+                  setCardErrorMessage({
+                    isSuccess: false,
+                    message: result?.data?.error?.message?.replace(
+                      /\d|\(|\)/g,
+                      ""
+                    ),
+                  })
+                }
+              }
             })
-            logData("onCreate-authorization", requestBody, error)
-          })
-          .finally(() => {
-            setIsLoading(false)
-          })
+            .catch((error) => {
+              logMetrics("order_completion_failed")
+              if (error) setIsLoading(false)
+              setCardErrorMessage({
+                isSuccess: false,
+                message: "Unable to process the payment, please try again",
+              })
+              logData("onCreate-authorization", requestBody, error)
+            })
+            .finally(() => {
+              setIsLoading(false)
+            })
+        }
+      } catch (e) {
+        console.log(e)
       }
     }
   }
@@ -254,7 +289,7 @@ export const ExternalPaymentCard = ({
           message = "Please enter at least 14 digits."
         }
         setErrorMessage({
-          message: message,
+          message,
           isValid: validationResult.isValid,
         })
       } else {
@@ -295,7 +330,7 @@ export const ExternalPaymentCard = ({
         message = "Please enter at least 14 digits."
       }
       setErrorMessage({
-        message: message,
+        message,
         isValid: validationResult.isValid,
       })
     } else {
@@ -335,8 +370,8 @@ export const ExternalPaymentCard = ({
         }
 
         setcvverrorMessage({
-          message: message,
-          isValid: isValid,
+          message,
+          isValid,
         })
       } else {
         setcvverrorMessage({
@@ -372,8 +407,8 @@ export const ExternalPaymentCard = ({
 
       setcvvOnBlurShowError(true)
       setcvverrorMessage({
-        message: message,
-        isValid: isValid,
+        message,
+        isValid,
       })
     } else {
       setcvverrorMessage({
@@ -419,8 +454,8 @@ export const ExternalPaymentCard = ({
           isValid = false
         }
         setexpireDateerrorMessage({
-          message: message,
-          isValid: isValid,
+          message,
+          isValid,
         })
       } else {
         setexpireDateerrorMessage({
@@ -467,8 +502,8 @@ export const ExternalPaymentCard = ({
 
     setExpiredateBlurShowError(true)
     setexpireDateerrorMessage({
-      message: message,
-      isValid: isValid,
+      message,
+      isValid,
     })
   }
 
@@ -505,12 +540,12 @@ export const ExternalPaymentCard = ({
         )}
 
         <div className="w-full">
-          <label className="relative w-full flex flex-col">
-            <span className="leading-5 text-xs text-gray-500  mb-3">
+          <label className="relative flex flex-col w-full">
+            <span className="mb-3 text-xs text-gray-500 leading-5">
               {"Card number" + " *"}
             </span>
             <input
-              className="rounded-md peer pl-12 pr-2 py-2 input-border placeholder-gray-300"
+              className="py-2 pl-12 pr-2 placeholder-gray-300 rounded-md peer input-border"
               type="text"
               name="cardNumber"
               placeholder="xxxx-xxxx-xxxx-xxxx"
@@ -521,7 +556,7 @@ export const ExternalPaymentCard = ({
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="absolute bottom-0 left-0 -mb-0.5 transform translate-x-1/2 -translate-y-1/2 text-black peer-placeholder-shown:text-gray-300 h-6 w-6"
+              className="absolute bottom-0 left-0 w-6 h-6 text-black -mb-0.5 transform translate-x-1/2 -translate-y-1/2 peer-placeholder-shown:text-gray-300"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -542,17 +577,17 @@ export const ExternalPaymentCard = ({
           </div>
         )}
 
-        <div className="flex gap-5 pt-5 pb-5">
+        <div className="flex pt-5 pb-5 gap-5">
           <div>
             <div>
-              <label className="relative flex-1 flex flex-col">
-                <span className="text-xs text-gray-500 leading-5 mb-3">
+              <label className="relative flex flex-col flex-1">
+                <span className="mb-3 text-xs text-gray-500 leading-5">
                   {" Expiry date" + " *"}
                 </span>
                 <input
                   type="text"
                   name="expireDate"
-                  className="rounded-md peer pl-12 pr-2 py-2 input-border placeholder-gray-300"
+                  className="py-2 pl-12 pr-2 placeholder-gray-300 rounded-md peer input-border"
                   value={formatExpirationDate(card?.expireDate)}
                   onChange={onSelectExpireDateCardDetails}
                   onBlur={(event) => onBlurSelectExpireDateCardDetails(event)}
@@ -562,7 +597,7 @@ export const ExternalPaymentCard = ({
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="absolute bottom-0 left-0 -mb-0.5 transform translate-x-1/2 -translate-y-1/2 text-black peer-placeholder-shown:text-gray-300 h-6 w-6"
+                  className="absolute bottom-0 left-0 w-6 h-6 text-black -mb-0.5 transform translate-x-1/2 -translate-y-1/2 peer-placeholder-shown:text-gray-300"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -584,13 +619,13 @@ export const ExternalPaymentCard = ({
           </div>
           <div>
             <div>
-              <label className="relative flex-1 flex flex-col">
-                <span className="flex items-center gap-3 mb-3 text-xs text-gray-500 leading-5">
+              <label className="relative flex flex-col flex-1">
+                <span className="flex items-center mb-3 text-xs text-gray-500 gap-3 leading-5">
                   {"CVC/CVV" + " *"}
                   <span className="relative group">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
+                      className="w-4 h-4"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -605,7 +640,7 @@ export const ExternalPaymentCard = ({
                   </span>
                 </span>
                 <input
-                  className="rounded-md peer pl-12 pr-2 py-2 border-2 input-border  placeholder-gray-200"
+                  className="py-2 pl-12 pr-2 placeholder-gray-200 border-2 rounded-md peer input-border"
                   type="text"
                   value={card?.cvv}
                   name="cvv"
@@ -617,7 +652,7 @@ export const ExternalPaymentCard = ({
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="absolute bottom-0 left-0 -mb-0.5 transform translate-x-1/2 -translate-y-1/2 text-black peer-placeholder-shown:text-gray-300 h-6 w-6"
+                  className="absolute bottom-0 left-0 w-6 h-6 text-black -mb-0.5 transform translate-x-1/2 -translate-y-1/2 peer-placeholder-shown:text-gray-300"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -638,17 +673,17 @@ export const ExternalPaymentCard = ({
             )}
           </div>
         </div>
-        <div className="flex gap-5 pt-5 pb-5 w-full">
+        <div className="flex w-full pt-5 pb-5 gap-5">
           <div>
             <div>
-              <label className="relative flex-1 flex flex-col">
-                <span className="text-xs leading-5 text-gray-500 mb-3">
+              <label className="relative flex flex-col flex-1">
+                <span className="mb-3 text-xs text-gray-500 leading-5">
                   {"First name"}
                 </span>
                 <input
                   type="text"
                   name="firstname"
-                  className="rounded-md peer pl-5 pr-2 py-2 input-border placeholder-gray-300"
+                  className="py-2 pl-5 pr-2 placeholder-gray-300 rounded-md peer input-border"
                   value={card?.firstname}
                   onChange={(event) => onSelectCardNames(event)}
                   placeholder="First name"
@@ -659,12 +694,12 @@ export const ExternalPaymentCard = ({
           </div>
           <div>
             <div>
-              <label className="relative flex-1 flex flex-col">
-                <span className="flex items-center gap-3 mb-3 text-xs leading-5 text-gray-500">
+              <label className="relative flex flex-col flex-1">
+                <span className="flex items-center mb-3 text-xs text-gray-500 gap-3 leading-5">
                   {"Last name"}
                 </span>
                 <input
-                  className="rounded-md peer pl-5 pr-2 py-2 border-2 input-border  placeholder-gray-200"
+                  className="py-2 pl-5 pr-2 placeholder-gray-200 border-2 rounded-md peer input-border"
                   type="text"
                   value={card?.lastname}
                   name="lastname"

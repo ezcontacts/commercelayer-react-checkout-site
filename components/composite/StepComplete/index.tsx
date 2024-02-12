@@ -2,7 +2,7 @@ import PaymentSource from "@ezcontacts/react-components/payment_source/PaymentSo
 import PaymentSourceBrandIcon from "@ezcontacts/react-components/payment_source/PaymentSourceBrandIcon"
 import PaymentSourceBrandName from "@ezcontacts/react-components/payment_source/PaymentSourceBrandName"
 import PaymentSourceDetail from "@ezcontacts/react-components/payment_source/PaymentSourceDetail"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useTranslation, Trans } from "react-i18next"
 
 import { OrderSummary } from "components/composite/OrderSummary"
@@ -39,6 +39,7 @@ import {
 import { SupportMessage } from "./SupportMessage"
 import { goContinueShopping } from "components/utils/common"
 import { saveUserActivitylogData } from "utils/useCustomLogData"
+import OrderProcessLoading from "components/utils/orderProcessLoading"
 
 interface Props {
   logoUrl?: string
@@ -56,11 +57,10 @@ export const StepComplete: React.FC<Props> = ({
   orderNumber,
 }) => {
   const { t } = useTranslation()
-
   const ctx = useContext(AppContext)
 
   if (!ctx) return null
-
+ // const productOrderId = localStorage?.getItem("productOrderId") || orderNumber
   const handleClick = () => {
     let requestBody = {
       requested_method: "Continue click",
@@ -94,7 +94,7 @@ export const StepComplete: React.FC<Props> = ({
             >
               <Trans
                 i18nKey={"stepComplete.description"}
-                values={{ orderNumber: orderNumber }}
+                values={{ orderNumber }}
                 components={{
                   WrapperOrderId: <strong className="text-black" />,
                 }}
@@ -151,6 +151,7 @@ export const StepComplete: React.FC<Props> = ({
                         countryCode={ctx.billingAddress?.country_code}
                         phone={ctx.billingAddress?.phone}
                         addressType="billing"
+                        id={ctx.billingAddress?.id}
                       />
                     </RecapBox>
                   </div>
@@ -172,6 +173,7 @@ export const StepComplete: React.FC<Props> = ({
                             countryCode={ctx.shippingAddress?.country_code}
                             phone={ctx.shippingAddress?.phone}
                             addressType="shipping"
+                            id={ctx.shippingAddress?.id}
                           />
                         </RecapBox>
                       </div>
