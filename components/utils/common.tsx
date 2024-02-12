@@ -7,7 +7,6 @@ export const ContinueShopping = () => {
     <div
       onClick={goContinueShopping}
       className="flex items-center justify-center cursor-pointer button-primary space-x-1 "
-      className="flex items-center cursor-pointer space-x-1"
     >
       <div>
         <svg
