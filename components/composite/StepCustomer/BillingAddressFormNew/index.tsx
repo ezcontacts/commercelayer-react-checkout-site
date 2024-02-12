@@ -1,5 +1,5 @@
 import { Address } from "@commercelayer/sdk"
-import { useContext } from "react"
+import { useContext, KeyboardEvent } from "react"
 import styled from "styled-components"
 import tw from "twin.macro"
 
@@ -23,6 +23,10 @@ export const BillingAddressFormNew: React.FC<Props> = ({
   }
 
   const { requiresBillingInfo } = appCtx
+
+  const handleKeyboardEvent = (e: KeyboardEvent<HTMLInputElement>) =>
+    ["e", "E", "=", "ArrowUp", "ArrowDown"].includes(e.key) &&
+    e.preventDefault()
 
   return (
     <Wrapper>
@@ -63,6 +67,7 @@ export const BillingAddressFormNew: React.FC<Props> = ({
           resource="billing_address"
           type="text"
           value={billingAddress?.city || ""}
+          regex_pattern="^[a-zA-Z]+(?:\s[a-zA-Z]+)?$"
         />
         <AddressInputGroup
           required={true}
@@ -85,16 +90,22 @@ export const BillingAddressFormNew: React.FC<Props> = ({
           required={true}
           fieldName="billing_address_zip_code"
           resource="billing_address"
-          type="number"
+          type="text"
           value={billingAddress?.zip_code || ""}
+          regex_pattern="^\d{5}(-?\d{4})?$"
+          KeyDown={handleKeyboardEvent}
+          title="Please enter valid 5-digit or 9-digit Zip Code"
         />
       </Grid>
       <AddressInputGroup
         required={true}
         fieldName="billing_address_phone"
         resource="billing_address"
-        type="number"
+        type="text"
         value={billingAddress?.phone || ""}
+        regex_pattern="^\s*(?:\+?(\d{1,3}))?[- (]*(\d{3})[- )]*(\d{3})[- ]*(\d{4})(?: *[x\/#]{1}(\d+))?\s*$"
+        KeyDown={handleKeyboardEvent}
+        title="Please Fill Valid Phone Number"
       />
       {requiresBillingInfo && (
         <AddressInputGroup

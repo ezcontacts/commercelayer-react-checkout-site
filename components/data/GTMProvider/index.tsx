@@ -19,6 +19,7 @@ export const GTMContext = createContext<GTMProviderData | null>(null)
 interface GTMProviderProps {
   children: React.ReactNode
   gtmId: NullableType<string>
+  transaction_id?: NullableType<number>
 }
 
 export const GTMProvider: React.FC<GTMProviderProps> = ({

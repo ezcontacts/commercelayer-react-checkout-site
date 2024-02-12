@@ -156,6 +156,13 @@ export const StepCustomer: React.FC<Props> = () => {
 
     setIsLocalLoader(false)
   }
+  const save_billing_address_id = localStorage.getItem('save_billing_address_id');
+  useEffect(() => {
+      const element = document.getElementById(`billing_${save_billing_address_id}`);
+      if (element) {
+        element.click(); 
+      } 
+  }, [accordionCtx.isActive])
 
   return (
     <StepContainer

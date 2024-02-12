@@ -57,7 +57,16 @@ const Checkout: React.FC<Props> = ({
   privacyUrl,
 }) => {
   const [paymentType, setPaymentType] = useState("")
-  const ctx = useContext(AppContext)
+  const ctx = useContext(AppContext) as any
+
+  const customerName = ctx?.["order"]?.["customer"]?.["metadata"]?.[
+    "name_first"
+  ]
+    ? ctx?.["order"]?.["customer"]?.["metadata"]?.["name_first"] +
+      " " +
+      ctx?.["order"]?.["customer"]?.["metadata"]?.["name_last"]
+    : ""
+
   const { logEvent } = useAmplitude()
   const { query } = useRouter()
 
@@ -117,7 +126,7 @@ const Checkout: React.FC<Props> = ({
     //     })
     //     .catch((error) => console.error("Error fetching user IP:", error))
     // }
-    let requestBody = {
+    const requestBody = {
       requested_method: "View Checkout",
       cl_token: ctx?.accessToken,
       requested_data: { "orderId-": ctx?.orderId },
@@ -171,6 +180,7 @@ const Checkout: React.FC<Props> = ({
         supportEmail={supportEmail}
         supportPhone={supportPhone}
         orderNumber={orderNumber}
+        customerName={customerName}
       />
     )
   }
@@ -178,127 +188,135 @@ const Checkout: React.FC<Props> = ({
   const renderSteps = () => {
     return (
       <CustomerContainer isGuest={ctx.isGuest}>
+        <div className="site-header">
+          <div className="site-container">
+            <Logo
+              logoUrl={logoUrl}
+              companyName={companyName}
+              className="hidden md:block"
+            />
+          </div>
+        </div>
         <Ezbanner />
-        <LayoutDefault
-          aside={
-            <Sidebar className="sidebar-border-right">
-              <Logo
-                logoUrl={logoUrl}
-                companyName={companyName}
-                className="hidden md:block"
-              />
-              <SummaryWrapper>
-                <OrderSummary appCtx={ctx} />
-              </SummaryWrapper>
-              {/* <Footer /> */}
-            </Sidebar>
-          }
-          main={
-            <div>
-              <Logo
-                logoUrl={logoUrl}
-                companyName={companyName}
-                className="block md:hidden"
-              />
+        <div className="site-container">
+          <LayoutDefault
+            aside={
+              <Sidebar className="sidebar-border-right left-content">
+                <SummaryWrapper>
+                  <OrderSummary appCtx={ctx} />
+                </SummaryWrapper>
+                {/* <Footer /> */}
+              </Sidebar>
+            }
+            main={
+              <div>
+                <Logo
+                  logoUrl={logoUrl}
+                  companyName={companyName}
+                  className="block md:hidden"
+                />
 
-              <MainHeader orderNumber={orderNumber} />
+                <MainHeader orderNumber={orderNumber} />
 
-              <StepNav
-                steps={steps}
-                activeStep={activeStep}
-                onStepChange={setActiveStep}
-                lastActivable={lastActivableStep}
-              />
-              <Accordion>
-                <AccordionProvider
-                  activeStep={activeStep}
-                  lastActivableStep={lastActivableStep}
-                  setActiveStep={setActiveStep}
-                  step="Customer"
+                <StepNav
                   steps={steps}
-                  isStepDone={ctx.hasShippingAddress && ctx.hasBillingAddress}
-                >
-                  <AccordionItem
-                    index={1}
-                    header={
-                      <StepHeaderCustomer step={getStepNumber("Customer")} />
-                    }
+                  activeStep={activeStep}
+                  onStepChange={setActiveStep}
+                  lastActivable={lastActivableStep}
+                />
+                <Accordion>
+                  <AccordionProvider
+                    activeStep={activeStep}
+                    lastActivableStep={lastActivableStep}
+                    setActiveStep={setActiveStep}
+                    step="Customer"
+                    steps={steps}
+                    isStepDone={ctx.hasShippingAddress && ctx.hasBillingAddress}
                   >
-                    <StepCustomer className="mb-6" step={1} />
-                  </AccordionItem>
-                </AccordionProvider>
-                <>
-                  {ctx.isShipmentRequired && (
-                    <AccordionProvider
-                      activeStep={activeStep}
-                      lastActivableStep={lastActivableStep}
-                      setActiveStep={setActiveStep}
-                      step="Shipping"
-                      steps={steps}
-                      isStepRequired={ctx.isShipmentRequired}
-                      isStepDone={ctx.hasShippingMethod}
+                    <AccordionItem
+                      index={1}
+                      header={
+                        <StepHeaderCustomer step={getStepNumber("Customer")} />
+                      }
                     >
-                      <AccordionItem
-                        index={2}
-                        header={
-                          <StepHeaderShipping
-                            step={getStepNumber("Shipping")}
-                          />
-                        }
+                      <StepCustomer className="mb-6" step={1} />
+                    </AccordionItem>
+                  </AccordionProvider>
+                  <>
+                    {ctx.isShipmentRequired && (
+                      <AccordionProvider
+                        activeStep={activeStep}
+                        lastActivableStep={lastActivableStep}
+                        setActiveStep={setActiveStep}
+                        step="Shipping"
+                        steps={steps}
+                        isStepRequired={ctx.isShipmentRequired}
+                        isStepDone={ctx.hasShippingMethod}
                       >
-                        <StepShipping className="mb-6" step={2} />
-                      </AccordionItem>
-                    </AccordionProvider>
-                  )}
-                </>
-                <AccordionProvider
-                  activeStep={activeStep}
-                  lastActivableStep={lastActivableStep}
-                  setActiveStep={setActiveStep}
-                  step="Payment"
-                  steps={steps}
-                  isStepRequired={ctx.isPaymentRequired}
-                  isStepDone={ctx.hasPaymentMethod}
-                >
-                  <PaymentContainer>
-                    <PlaceOrderContainer
-                      options={{
-                        paypalPayerId,
-                        checkoutCom: { session_id: checkoutComSession },
-                        adyen: {
-                          redirectResult,
-                        },
-                      }}
-                    >
-                      <AccordionItem
-                        index={3}
-                        header={
-                          <StepHeaderPayment step={getStepNumber("Payment")} />
-                        }
+                        <AccordionItem
+                          index={2}
+                          header={
+                            <StepHeaderShipping
+                              step={getStepNumber("Shipping")}
+                            />
+                          }
+                        >
+                          <StepShipping className="mb-6" step={2} />
+                        </AccordionItem>
+                      </AccordionProvider>
+                    )}
+                  </>
+                  <AccordionProvider
+                    activeStep={activeStep}
+                    lastActivableStep={lastActivableStep}
+                    setActiveStep={setActiveStep}
+                    step="Payment"
+                    steps={steps}
+                    isStepRequired={ctx.isPaymentRequired}
+                    isStepDone={ctx.hasPaymentMethod}
+                  >
+                    <PaymentContainer>
+                      <PlaceOrderContainer
+                        options={{
+                          paypalPayerId,
+                          checkoutCom: { session_id: checkoutComSession },
+                          adyen: {
+                            redirectResult,
+                          },
+                        }}
                       >
-                        <div className="mb-6">
-                          <StepPayment onSelectPayment={onSelectPayment} />
-                        </div>
-                        {paymentType !== "External Payment" ? (
-                          <StepPlaceOrder
-                            isActive={
-                              activeStep === "Payment" ||
-                              activeStep === "Complete"
-                            }
-                            termsUrl={termsUrl}
-                            privacyUrl={privacyUrl}
-                          />
-                        ) : (
-                          <div />
-                        )}
-                      </AccordionItem>
-                    </PlaceOrderContainer>
-                  </PaymentContainer>
-                </AccordionProvider>
-              </Accordion>
-            </div>
-          }
-        />
+                        <AccordionItem
+                          index={3}
+                          header={
+                            <StepHeaderPayment
+                              step={getStepNumber("Payment")}
+                            />
+                          }
+                        >
+                          <div className="payment-methods-list">
+                            <StepPayment onSelectPayment={onSelectPayment} />
+                          </div>
+                          {paymentType !== "External Payment" ? (
+                            <StepPlaceOrder
+                              isActive={
+                                activeStep === "Payment" ||
+                                activeStep === "Complete"
+                              }
+                              termsUrl={termsUrl}
+                              privacyUrl={privacyUrl}
+                            />
+                          ) : (
+                            <div />
+                          )}
+                        </AccordionItem>
+                      </PlaceOrderContainer>
+                    </PaymentContainer>
+                  </AccordionProvider>
+                </Accordion>
+              </div>
+            }
+          />
+        </div>
       </CustomerContainer>
     )
   }

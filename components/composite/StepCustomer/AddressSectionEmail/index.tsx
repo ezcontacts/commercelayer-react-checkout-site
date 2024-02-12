@@ -60,6 +60,7 @@ export const AddressSectionEmail: React.FC<Props> = ({
               // @ts-ignore
               onBlur={saveEmail}
               value={emailAddress ?? ""}
+              pattern="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
             />
             <StyledErrors
               data-testid="customer_email_error"

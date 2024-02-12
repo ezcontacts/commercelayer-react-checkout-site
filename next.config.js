@@ -29,6 +29,9 @@ let nextConfig = {
     ]
   },
   generateBuildId: () => nextBuildId({ dir: __dirname }),
+  images: {
+    domains: ['cdn-assets.affirm.com'],
+  },
 }
 
 if (shouldAnalyzeBundles) {

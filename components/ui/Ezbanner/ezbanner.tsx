@@ -34,9 +34,10 @@ export const Ezbanner: React.FC = () => {
 
   return (
     <>
+    <div className="site-container">
       {showBanner && (
         <div
-          className="flex  justify-between items-center  text-white px-4 py-3 mb-4 banner-background"
+          className="flex items-center justify-between px-4 py-3 mb-4 text-white banner-background"
           role="alert"
         >
           <div>
@@ -67,6 +68,7 @@ export const Ezbanner: React.FC = () => {
           </div>
         </div>
       )}
+    </div>
     </>
   )
 }

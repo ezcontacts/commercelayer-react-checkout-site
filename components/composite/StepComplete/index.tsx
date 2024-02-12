@@ -2,7 +2,7 @@ import PaymentSource from "@ezcontacts/react-components/payment_source/PaymentSo
 import PaymentSourceBrandIcon from "@ezcontacts/react-components/payment_source/PaymentSourceBrandIcon"
 import PaymentSourceBrandName from "@ezcontacts/react-components/payment_source/PaymentSourceBrandName"
 import PaymentSourceDetail from "@ezcontacts/react-components/payment_source/PaymentSourceDetail"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useTranslation, Trans } from "react-i18next"
 
 import { OrderSummary } from "components/composite/OrderSummary"
@@ -39,6 +39,7 @@ import {
 import { SupportMessage } from "./SupportMessage"
 import { goContinueShopping } from "components/utils/common"
 import { saveUserActivitylogData } from "utils/useCustomLogData"
+import OrderProcessLoading from "components/utils/orderProcessLoading"
 
 interface Props {
   logoUrl?: string
@@ -46,6 +47,7 @@ interface Props {
   supportEmail?: string
   supportPhone?: string
   orderNumber: number
+  customerName?: string
 }
 
 export const StepComplete: React.FC<Props> = ({
@@ -54,13 +56,13 @@ export const StepComplete: React.FC<Props> = ({
   supportEmail,
   supportPhone,
   orderNumber,
+  customerName,
 }) => {
   const { t } = useTranslation()
-
   const ctx = useContext(AppContext)
-
   if (!ctx) return null
 
+  const productOrderId = localStorage?.getItem("productOrderId") || orderNumber
   const handleClick = () => {
     let requestBody = {
       requested_method: "Continue click",
@@ -94,7 +96,7 @@ export const StepComplete: React.FC<Props> = ({
             >
               <Trans
                 i18nKey={"stepComplete.description"}
-                values={{ orderNumber: orderNumber }}
+                values={{ orderNumber: productOrderId }}
                 components={{
                   WrapperOrderId: <strong className="text-black" />,
                 }}
@@ -129,9 +131,19 @@ export const StepComplete: React.FC<Props> = ({
             </RecapSummary>
             <RecapCustomer>
               <RecapTitle>{t("stepComplete.customer_title")}</RecapTitle>
+              {customerName && (
+                <RecapCol>
+                  <div className="pt-4">
+                    <RecapItemTitle>{"User name:"}</RecapItemTitle>
+                    <RecapItem>{customerName}</RecapItem>
+                  </div>
+                </RecapCol>
+              )}
               <RecapCol>
-                <RecapItemTitle>{t("stepComplete.email")}</RecapItemTitle>
-                <RecapItem>{ctx.emailAddress}</RecapItem>
+                <div className="pt-4">
+                  <RecapItemTitle>{t("stepComplete.email")}</RecapItemTitle>
+                  <RecapItem>{ctx.emailAddress}</RecapItem>
+                </div>
               </RecapCol>
               <RecapCol>
                 <AddressContainer className="lg:!grid-cols-1 xl:!grid-cols-2">
@@ -151,6 +163,7 @@ export const StepComplete: React.FC<Props> = ({
                         countryCode={ctx.billingAddress?.country_code}
                         phone={ctx.billingAddress?.phone}
                         addressType="billing"
+                        id={ctx.billingAddress?.id}
                       />
                     </RecapBox>
                   </div>
@@ -172,6 +185,7 @@ export const StepComplete: React.FC<Props> = ({
                             countryCode={ctx.shippingAddress?.country_code}
                             phone={ctx.shippingAddress?.phone}
                             addressType="shipping"
+                            id={ctx.shippingAddress?.id}
                           />
                         </RecapBox>
                       </div>
