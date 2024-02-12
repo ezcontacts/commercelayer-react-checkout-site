@@ -448,3 +448,5 @@ select#shipping_address_country_code option:not([value="US"]) {
     border:0;
   }
 }
+
+/* Product details on checkout page fixes */
