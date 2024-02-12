@@ -545,7 +545,7 @@ export const ExternalPaymentCard = ({
   return (
     <>
       {/* <Loader isLoading={isLoading} /> */}
-      <div className="flex flex-wrap w-full p-5">
+      <div className="flex flex-wrap w-full">
         {!apiCardErrorMessage.isSuccess && (
           <div className="w-full pb-2 text-red-400">
             {apiCardErrorMessage?.message}
@@ -565,7 +565,7 @@ export const ExternalPaymentCard = ({
               value={card?.cardNumber}
               onChange={(event) => onChangeCreditCardNumber(event)}
               onBlur={(event) => onBlurCreditCardNumber(event)}
-              style={{ width: "414px" }}
+              // style={{ width: "414px" }}
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -590,7 +590,7 @@ export const ExternalPaymentCard = ({
           </div>
         )}
 
-        <div className="flex pt-5 pb-5 gap-5">
+        <div className="flex pt-5 gap-5">
           <div>
             <div>
               <label className="relative flex flex-col flex-1">
@@ -606,7 +606,7 @@ export const ExternalPaymentCard = ({
                   onBlur={(event) => onBlurSelectExpireDateCardDetails(event)}
                   maxLength={5}
                   placeholder="MM/YY"
-                  style={{ width: "200px" }}
+                  // style={{ width: "200px" }}
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -661,7 +661,7 @@ export const ExternalPaymentCard = ({
                   onChange={(event) => onSelectCVVCardDetails(event)}
                   onKeyDown={(event) => onKeyCardKeyDown(event)}
                   onBlur={(event) => onBlurCVVCardDetails(event)}
-                  style={{ width: "200px" }}
+                  // style={{ width: "200px" }}
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -687,7 +687,7 @@ export const ExternalPaymentCard = ({
           </div>
         </div>
         <div className="flex w-full pt-5 pb-5 gap-5">
-          <div>
+          <div className="flex-1">
             <div>
               <label className="relative flex flex-col flex-1">
                 <span className="mb-3 text-xs text-gray-500 leading-5">
@@ -700,12 +700,12 @@ export const ExternalPaymentCard = ({
                   value={card?.firstname}
                   onChange={(event) => onSelectCardNames(event)}
                   placeholder="First name"
-                  style={{ width: "200px" }}
+                  // style={{ width: "200px" }}
                 />
               </label>
             </div>
           </div>
-          <div>
+          <div className="flex-1">
             <div>
               <label className="relative flex flex-col flex-1">
                 <span className="flex items-center mb-3 text-xs text-gray-500 gap-3 leading-5">
@@ -718,7 +718,7 @@ export const ExternalPaymentCard = ({
                   name="lastname"
                   placeholder="Last name"
                   onChange={(event) => onSelectCardNames(event)}
-                  style={{ width: "200px" }}
+                  // style={{ width: "200px" }}
                 />
               </label>
             </div>
@@ -728,7 +728,7 @@ export const ExternalPaymentCard = ({
 
       <Button
         data-testid="save-payment-button"
-        className="btn-background"
+        className="btn-background max-width-200"
         disabled={
           !expireDateerrorMessage.isValid ||
           !cardNumberErrorMessage.isValid ||
