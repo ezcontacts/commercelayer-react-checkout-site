@@ -33,8 +33,8 @@ class AppDocument extends Document {
           {/* <!-- Start affirm Script --> */}
            <script dangerouslySetInnerHTML={{ __html: `
             var _affirm_config = {
-            public_api_key: "${process.env.NEXT_PUBLIC_AFFIRM_API_KEY}",
-            script: "${process.env.NEXT_PUBLIC_AFFIRM_SCRIPT_URL}",
+            public_api_key: "6QYJT9XJBQ8E1QU8",
+            script: "https://cdn1-sandbox.affirm.com/js/v2/affirm.js",
             locale: "en_US",
             country_code: "USA",
             };

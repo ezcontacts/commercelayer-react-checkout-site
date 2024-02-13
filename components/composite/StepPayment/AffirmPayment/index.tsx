@@ -60,12 +60,12 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
         unit_price: item.unit_amount_cents,
         qty: item.quantity,
         item_image_url: item.image_url,
-        item_url:`${process.env.NEXT_PUBLIC_AFFIRM_CHECKOUT_OBJECT_ITEM_URL + item.metadata.product_url}`
+        item_url:'https://odoo.ezcontacts.com'+item.metadata.product_url
     }));
     const checkoutObject = {
         merchant: {
-            user_confirmation_url:`${process.env.NEXT_PUBLIC_AFFIRM_CHECKOUT_BASE_URL}/affirm/confirm`,
-            user_cancel_url: `${process.env.NEXT_PUBLIC_AFFIRM_CHECKOUT_BASE_URL}/affirm/cancel`,
+            user_confirmation_url: "https://stage.checkout.ezcontacts.com/affirm/confirm",
+            user_cancel_url: "https://stage.checkout.ezcontacts.com/affirm/cancel",
             user_confirmation_url_action: "POST",
             use_vcn: true,
             name: "EZ Contacts"
