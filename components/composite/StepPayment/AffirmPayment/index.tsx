@@ -35,19 +35,10 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
       isSuccess: true,
       message: "",
     })
-    // const [reloadWindow, setreloadWindow] = useState(false);
-    // useEffect(() => {
-    //     if (reloadWindow) {
-    //     window.addEventListener('beforeunload', function(event) {
-    //         event.preventDefault();
-    //         event.returnValue = 'Your changes will be lost, are you sure you want to leave this page?';
-    //     });
-    //     }
-    // }, [reloadWindow]);
-    // Function to reload the window
-    // function reloadPage() {
-    //     window.location.reload();
-    // }
+    const beforeUnloadHandler = (event:any) => {
+      event.preventDefault();
+      event.returnValue = 'Your changes will be lost, are you sure you want to leave this page?';
+    };
     const disableReload = () => {
         // Add event listener for keydown event
         window.addEventListener('keydown', function(event) {
@@ -61,6 +52,7 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
     const handleClick = () => {
     disableReload();
     setIsLoadingAffirm(true);
+    window.addEventListener('beforeunload', beforeUnloadHandler);
     const itemsArray = ctx.order.line_items.filter((item: { sku_code: string; }) => item.sku_code !== null);
     const newArrayWithDefinedKeys = itemsArray.map((item:any) => ({
         display_name:item.metadata.skuDisplayName,
@@ -144,6 +136,7 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
             saveUserActivitylogData(requestBody)
           }
         const getData = (order: Order) => {
+            disableReload();
             if (card_checkout.number !== "" && card_checkout.expiration !== "" && card_checkout.cvv !== "") {
               try {
                 if (ctx?.orderId) {
@@ -274,6 +267,7 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
                         })
                         .then((response) => response.json())
                         .then((result) => {
+                           window.removeEventListener('beforeunload', beforeUnloadHandler);
                             console.log(Date.now(), "outTime")
                             localStorage.removeItem("productOrderId")
                             const res = result?.data?.order_id
@@ -283,6 +277,7 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
                             window.location.reload();
                         })
                         .catch((error) => {
+                            window.removeEventListener('beforeunload', beforeUnloadHandler);
                             console.log(Date.now(), "error")
                             console.error("Error:", error)
                             window.location.reload();
@@ -313,11 +308,12 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
         error: function(error_response: any) {
           console.log(error_response);
           setIsLoadingAffirm(false);
-          console.log(reloadWindow);
+          window.removeEventListener('beforeunload', beforeUnloadHandler);
         },
         onValidationError: function(checkout_validation_error: any) {
             console.log(checkout_validation_error);
             setIsLoadingAffirm(false);
+            window.removeEventListener('beforeunload', beforeUnloadHandler);
         },
       checkout_data: checkoutObject
    });

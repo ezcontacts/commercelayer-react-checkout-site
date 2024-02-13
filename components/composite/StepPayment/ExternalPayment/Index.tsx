@@ -72,11 +72,28 @@ export const ExternalPaymentCard = ({
     saveUserActivitylogData(requestBody)
   }
 
+  const beforeUnloadHandler = (event:any) => {
+    event.preventDefault();
+    event.returnValue = 'Your changes will be lost, are you sure you want to leave this page?';
+  };
+  const disableReload = () => {
+      // Add event listener for keydown event
+      window.addEventListener('keydown', function(event) {
+          // Check if the pressed key is F5 (keyCode 116) or Ctrl+R (keyCode 82 with Ctrl key down)
+          if ((event.keyCode === 116) || (event.ctrlKey && event.keyCode === 82)) {
+              // Prevent the default behavior of the keydown event
+              event.preventDefault();
+          }
+      });
+  }
+
   const handlePlaceOrder = async (event: any) => {
     event.preventDefault()
     onSelectPlaceOrder()
     clearServerMessage()
     setIsLoading(true)
+    disableReload();
+    window.addEventListener('beforeunload', beforeUnloadHandler);
 
     const order = await getOrderFromRef()
     if (order) {
@@ -142,6 +159,7 @@ export const ExternalPaymentCard = ({
                     return response.json()
                   })
                   .then((result) => {
+                    window.removeEventListener('beforeunload', beforeUnloadHandler);
                     console.log(Date.now(), "outTime")
                     localStorage.removeItem("productOrderId")
                     const res = result?.data?.order_id
@@ -151,6 +169,7 @@ export const ExternalPaymentCard = ({
                     window.location.reload()
                   })
                   .catch((error) => {
+                    window.removeEventListener('beforeunload', beforeUnloadHandler);
                     console.log(Date.now(), "error")
                     console.error("Error:", error)
                     window.location.reload()
