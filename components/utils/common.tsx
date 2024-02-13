@@ -6,7 +6,7 @@ export const ContinueShopping = () => {
   return (
     <div
       onClick={goContinueShopping}
-      className="flex items-center space-x-1 cursor-pointer"
+      className="flex items-center cursor-pointer space-x-1"
     >
       <div>
         <svg
@@ -26,7 +26,7 @@ export const ContinueShopping = () => {
           />
         </svg>
       </div>
-      <div className="font-normal text-sm leading-5 text-gray-400 cursor-pointer hover:text-gray-700">
+      <div className="text-sm font-normal text-gray-400 cursor-pointer leading-5 hover:text-gray-700">
         {"Continue shopping"}
       </div>
     </div>

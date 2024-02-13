@@ -240,6 +240,55 @@ export const ExternalPaymentCard = ({
             } else {
               setIsLoading(false)
             }
+            return response.json()
+          })
+          .then((result) => {
+            console.log("orderresponse" + result)
+            if (result?.errors?.length !== 0) {
+              logMetrics("order_completion_success")
+              logData(
+                "handlePlaceOrder-success-response",
+                { "orderId-": ctx.orderId },
+                result
+              )
+              console.log(Date.now(), "InTime")
+              if (ctx?.orderId) {
+                const requestBody = {
+                  cl_order_id: ctx?.orderId,
+                  visitor_id: visitorId ? visitorId : "",
+                }
+                fetch(`${process.env.NEXT_PUBLIC_API_URL}/cl/order/reserve`, {
+                  headers: {
+                    Accept: "application/json",
+                  },
+                  method: "POST",
+                  body: JSON.stringify(requestBody),
+                })
+                  .then((response) => {
+                    console.log("reserve response.status" + response.status) // Will show you the status
+                    if (!response.ok) {
+                      throw new Error("HTTP status " + response.status)
+                    }
+                    return response.json()
+                  })
+                  .then((result) => {
+                    console.log(Date.now(), "outTime")
+                    localStorage.removeItem("productOrderId")
+                    const res = result?.data?.order_id
+                    if (res) {
+                      localStorage.setItem("productOrderId", res)
+                    }
+                    window.location.reload()
+                  })
+                  .catch((error) => {
+                    console.log(Date.now(), "error")
+                    console.error("Error:", error)
+                    window.location.reload()
+                  })
+              }
+            } else {
+              setIsLoading(false)
+            }
           })
           .catch((error) => {
             if (error) setIsLoading(false)
@@ -344,7 +393,7 @@ export const ExternalPaymentCard = ({
               logData("onCreate-authorization", requestBody, error)
             })
             .finally(() => {
-              setIsLoading(false)
+              // setIsLoading(false)
             })
         }
       } catch (e) {
@@ -627,7 +676,7 @@ export const ExternalPaymentCard = ({
   return (
     <>
       {/* <Loader isLoading={isLoading} /> */}
-      <div className="flex flex-wrap w-full p-5">
+      <div className="flex flex-wrap w-full">
         {!apiCardErrorMessage.isSuccess && (
           <div className="w-full pb-2 text-red-400">
             {apiCardErrorMessage?.message}
@@ -647,7 +696,7 @@ export const ExternalPaymentCard = ({
               value={card?.cardNumber}
               onChange={(event) => onChangeCreditCardNumber(event)}
               onBlur={(event) => onBlurCreditCardNumber(event)}
-              style={{ width: "414px" }}
+              // style={{ width: "414px" }}
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -672,7 +721,7 @@ export const ExternalPaymentCard = ({
           </div>
         )}
 
-        <div className="flex pt-5 pb-5 gap-5">
+        <div className="flex pt-5 gap-5">
           <div>
             <div>
               <label className="relative flex flex-col flex-1">
@@ -688,7 +737,7 @@ export const ExternalPaymentCard = ({
                   onBlur={(event) => onBlurSelectExpireDateCardDetails(event)}
                   maxLength={5}
                   placeholder="MM/YY"
-                  style={{ width: "200px" }}
+                  // style={{ width: "200px" }}
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -743,7 +792,7 @@ export const ExternalPaymentCard = ({
                   onChange={(event) => onSelectCVVCardDetails(event)}
                   onKeyDown={(event) => onKeyCardKeyDown(event)}
                   onBlur={(event) => onBlurCVVCardDetails(event)}
-                  style={{ width: "200px" }}
+                  // style={{ width: "200px" }}
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -769,7 +818,7 @@ export const ExternalPaymentCard = ({
           </div>
         </div>
         <div className="flex w-full pt-5 pb-5 gap-5">
-          <div>
+          <div className="flex-1">
             <div>
               <label className="relative flex flex-col flex-1">
                 <span className="mb-3 text-xs text-gray-500 leading-5">
@@ -782,12 +831,12 @@ export const ExternalPaymentCard = ({
                   value={card?.firstname}
                   onChange={(event) => onSelectCardNames(event)}
                   placeholder="First name"
-                  style={{ width: "200px" }}
+                  // style={{ width: "200px" }}
                 />
               </label>
             </div>
           </div>
-          <div>
+          <div className="flex-1">
             <div>
               <label className="relative flex flex-col flex-1">
                 <span className="flex items-center mb-3 text-xs text-gray-500 gap-3 leading-5">
@@ -800,7 +849,7 @@ export const ExternalPaymentCard = ({
                   name="lastname"
                   placeholder="Last name"
                   onChange={(event) => onSelectCardNames(event)}
-                  style={{ width: "200px" }}
+                  // style={{ width: "200px" }}
                 />
               </label>
             </div>
@@ -810,7 +859,7 @@ export const ExternalPaymentCard = ({
 
       <Button
         data-testid="save-payment-button"
-        className="btn-background"
+        className="btn-background max-width-200"
         disabled={
           !expireDateerrorMessage.isValid ||
           !cardNumberErrorMessage.isValid ||
