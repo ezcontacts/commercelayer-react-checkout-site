@@ -1,4 +1,4 @@
-import React, { useState , useContext} from 'react';
+import React, { useState , useContext, useEffect} from 'react';
 import Image from 'next/image';
 import loader from 'public/img/loader.svg'
 import affirmLogo from 'public/img/60x296-white.svg'
@@ -35,8 +35,24 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
       isSuccess: true,
       message: "",
     })
+    const beforeUnloadHandler = (event:any) => {
+      event.preventDefault();
+      event.returnValue = 'Your changes will be lost, are you sure you want to leave this page?';
+    };
+    const disableReload = () => {
+        // Add event listener for keydown event
+        window.addEventListener('keydown', function(event) {
+            // Check if the pressed key is F5 (keyCode 116) or Ctrl+R (keyCode 82 with Ctrl key down)
+            if ((event.keyCode === 116) || (event.ctrlKey && event.keyCode === 82)) {
+                // Prevent the default behavior of the keydown event
+                event.preventDefault();
+            }
+        });
+    }
     const handleClick = () => {
+    disableReload();
     setIsLoadingAffirm(true);
+    window.addEventListener('beforeunload', beforeUnloadHandler);
     const itemsArray = ctx.order.line_items.filter((item: { sku_code: string; }) => item.sku_code !== null);
     const newArrayWithDefinedKeys = itemsArray.map((item:any) => ({
         display_name:item.metadata.skuDisplayName,
@@ -44,12 +60,12 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
         unit_price: item.unit_amount_cents,
         qty: item.quantity,
         item_image_url: item.image_url,
-        item_url:'https://odoo.ezcontacts.com'+item.metadata.product_url
+        item_url:`${process.env.NEXT_PUBLIC_AFFIRM_CHECKOUT_OBJECT_ITEM_URL + item.metadata.product_url}`
     }));
     const checkoutObject = {
         merchant: {
-            user_confirmation_url: "https://stage.checkout.ezcontacts.com/affirm/confirm",
-            user_cancel_url: "https://stage.checkout.ezcontacts.com/affirm/cancel",
+            user_confirmation_url:`${process.env.NEXT_PUBLIC_AFFIRM_CHECKOUT_BASE_URL}/affirm/confirm`,
+            user_cancel_url: `${process.env.NEXT_PUBLIC_AFFIRM_CHECKOUT_BASE_URL}/affirm/cancel`,
             user_confirmation_url_action: "POST",
             use_vcn: true,
             name: "EZ Contacts"
@@ -102,6 +118,7 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
     // @ts-ignore
       affirm.checkout.open_vcn({
         success: async function(card_checkout: any) {
+            disableReload();
            console.log(card_checkout);
            setIsLoadingAffirm(false);
            const externalPaymentTrigger:any = document.querySelector('.chekout-wrapper .right-content .payment[data-testid=external_payments]');
@@ -249,18 +266,20 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
                         })
                         .then((response) => response.json())
                         .then((result) => {
+                           window.removeEventListener('beforeunload', beforeUnloadHandler);
                             console.log(Date.now(), "outTime")
                             localStorage.removeItem("productOrderId")
                             const res = result?.data?.order_id
                             if (res) {
                             localStorage.setItem("productOrderId", res)
                             }
-                            window.location.reload()
+                            window.location.reload();
                         })
                         .catch((error) => {
+                            window.removeEventListener('beforeunload', beforeUnloadHandler);
                             console.log(Date.now(), "error")
                             console.error("Error:", error)
-                            window.location.reload()
+                            window.location.reload();
                         })
                     }
                     }
@@ -288,10 +307,12 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
         error: function(error_response: any) {
           console.log(error_response);
           setIsLoadingAffirm(false);
+          window.removeEventListener('beforeunload', beforeUnloadHandler);
         },
         onValidationError: function(checkout_validation_error: any) {
             console.log(checkout_validation_error);
             setIsLoadingAffirm(false);
+            window.removeEventListener('beforeunload', beforeUnloadHandler);
         },
       checkout_data: checkoutObject
    });
