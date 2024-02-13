@@ -167,7 +167,7 @@ export const CheckoutCustomerAddresses: React.FC<Props> = ({
       "false"
     )
   }
-  
+
   const save_billing_address_id = localStorage.getItem('save_billing_address_id');
   useEffect(() => {
       setTimeout(() => {
@@ -337,7 +337,7 @@ export const CheckoutCustomerAddresses: React.FC<Props> = ({
           </>
         )}
         <AddressSectionSaveForm>
-          <ButtonWrapper className="btn-background-address">
+          <ButtonWrapper className="mb-6 btn-background-address">
             <StyledSaveAddressesButton
               disabled={isLocalLoader}
               label={
