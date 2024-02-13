@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app"
 import "../styles/globals.css"
+import "../styles/ReviewBanner.css"
 // eslint-disable-next-line import/order
 import { appWithTranslation } from "next-i18next"
 
