@@ -19,6 +19,7 @@ import { CheckoutPayment } from "./CheckoutPayment"
 import { PaymentSkeleton } from "./PaymentSkeleton"
 import useAmplitude from "utils/getAmplitude"
 import useLogMetricsData from "utils/logClMetrics"
+import { triggerOptimizelyEvent } from "components/data/service"
 
 export type THandleClick = (params: {
   payment?: PaymentMethodType | Record<string, any>
@@ -130,20 +131,25 @@ export const StepPayment: React.FC<PaymentHeaderProps> = ({
   const { isGuest, isPaymentRequired, setPayment } = appCtx
 
   const selectPayment: THandleClick = async ({ payment, paymentSource }) => {
-    console.log("proceed_to_payment", "proceed_to_payment")
-    logMetrics("proceed_to_payment")
-    if (paymentSource?.payment_methods?.paymentMethods?.length > 1) {
-      setHasMultiplePaymentMethods(true)
-    }
-    setPayment({ payment: payment as PaymentMethodType })
+    var urlString = window?.location?.href
+    var url = new URL(urlString)
+    var queryParams = url?.searchParams
+    var visitorId = queryParams?.get("ezref")
+    let response = await triggerOptimizelyEvent(visitorId, "proceed_to_payment")
+    if (response) {
+      if (paymentSource?.payment_methods?.paymentMethods?.length > 1) {
+        setHasMultiplePaymentMethods(true)
+      }
+      setPayment({ payment: payment as PaymentMethodType })
 
-    onSelectPayment(payment?.name)
-    logEvent("cl_checkout_step3_continue_click", {
-      buttonName: "Submit",
-      properties: {
-        userId: "manju45kk@gmail.com",
-      },
-    })
+      onSelectPayment(payment?.name)
+      logEvent("cl_checkout_step3_continue_click", {
+        buttonName: "Submit",
+        properties: {
+          userId: "manju45kk@gmail.com",
+        },
+      })
+    }
   }
 
   const autoSelectCallback = async () => {

@@ -7,6 +7,7 @@ import { number as validate, cvv as cvvNumber } from "card-validator"
 import LoaderComponent from "components/utils/Loader"
 import { saveUserActivitylogData } from "utils/useCustomLogData"
 import useLogMetricsData from "utils/logClMetrics"
+import { triggerOptimizelyEvent } from "components/data/service"
 
 export const ExternalPaymentCard = ({
   paymentToken,
@@ -106,60 +107,43 @@ export const ExternalPaymentCard = ({
           }
         )
           .then((response) => response.json())
-          .then((result) => {
+          .then(async (result) => {
             if (result) {
-              logMetrics("order_completion_success")
-              logData(
-                "handlePlaceOrder-success-response",
-                { "orderId-": ctx.orderId },
-                result
+              // logMetrics("order_completion_success")
+              let response = await triggerOptimizelyEvent(
+                visitorId,
+                "order_completion_success"
               )
-              window.location.reload()
-              // Next release
-              // console.log(Date.now(), "InTime")
-              // if (ctx?.orderId) {
-              //   const requestBody = {
-              //     cl_order_id: ctx?.orderId,
-              //     visitor_id: visitorId ? visitorId : "",
-              //   }
-              //   fetch(`${process.env.NEXT_PUBLIC_API_URL}/cl/order/reserve`, {
-              //     headers: {
-              //       Accept: "application/json",
-              //     },
-              //     method: "POST",
-              //     body: JSON.stringify(requestBody),
-              //   })
-              //     .then((response) => response.json())
-              //     .then((result) => {
-              //       console.log(Date.now(), "outTime")
-              //       localStorage.removeItem("productOrderId")
-              //       const res = result?.data?.order_id
-              //       if (res) {
-              //         localStorage.setItem("productOrderId", res)
-              //       }
-              //       window.location.reload()
-              //     })
-              //     .catch((error) => {
-              //       console.log(Date.now(), "error")
-              //       console.error("Error:", error)
-              //       window.location.reload()
-              //     })
-              // }
+              if (response) {
+                logData(
+                  "handlePlaceOrder-success-response",
+                  { "orderId-": ctx.orderId },
+                  result
+                )
+                window.location.reload()
+              }
             }
           })
-          .catch((error) => {
+          .catch(async (error) => {
             if (error) setIsLoading(false)
-            logMetrics("order_completion_failed")
-            logData(
-              "handlePlaceOrder-error-response",
-              { "orderId-": ctx.orderId },
-              error
+            // logMetrics("order_completion_failed")
+            let response = await triggerOptimizelyEvent(
+              visitorId,
+              "order_completion_failed"
             )
-            setCardErrorMessage({
-              isSuccess: false,
-              message: "Unable to process the payment, please try again",
-            })
+            if (response) {
+              logData(
+                "handlePlaceOrder-error-response",
+                { "orderId-": ctx.orderId },
+                error
+              )
+              setCardErrorMessage({
+                isSuccess: false,
+                message: "Unable to process the payment, please try again",
+              })
+            }
           })
+
           .finally(() => {
             setIsLoading(false)
           })
