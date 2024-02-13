@@ -151,7 +151,9 @@ export const CouponOrGiftCard: React.FC<Props> = ({
                     label={t("general.apply")}
                     // className={`w-auto -ml-px relative inline-flex items-center space-x-2 px-8 py-3 text-xs font-extrabold text-contrast bg-primary border border-transparent rounded-r-md hover:opacity-80 focus:outline-none`}
                     className={`font-normal text-xs leading-5 uppercase text-red-500 ${
-                      couponCodeValue === "" ? "opacity-50" : ""
+                      couponCodeValue.trim() === ""
+                        ? "opacity-50 pointer-events-none"
+                        : ""
                     }`}
                   />
                 </div>

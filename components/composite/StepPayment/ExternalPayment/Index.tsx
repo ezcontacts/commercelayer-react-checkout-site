@@ -7,6 +7,7 @@ import { number as validate, cvv as cvvNumber } from "card-validator"
 import LoaderComponent from "components/utils/Loader"
 import { saveUserActivitylogData } from "utils/useCustomLogData"
 import useLogMetricsData from "utils/logClMetrics"
+import { triggerOptimizelyEvent } from "components/data/service"
 
 export const ExternalPaymentCard = ({
   paymentToken,
@@ -72,6 +73,84 @@ export const ExternalPaymentCard = ({
     saveUserActivitylogData(requestBody)
   }
 
+  // const handlePlaceOrder = async (event: any) => {
+  //   event.preventDefault()
+  //   onSelectPlaceOrder()
+  //   clearServerMessage()
+  //   setIsLoading(true)
+
+  //   const order = await getOrderFromRef()
+  //   if (order) {
+  //     const response = await getData(order)
+
+  //     if (response) {
+  //       const body = JSON.stringify({
+  //         data: {
+  //           type: "orders",
+  //           id: ctx.orderId,
+  //           attributes: {
+  //             _place: true,
+  //           },
+  //         },
+  //       })
+
+  //       fetch(
+  //         `${process.env.NEXT_PUBLIC_CL_URL_PATH}/api/orders/${ctx.orderId}`,
+  //         {
+  //           method: "PATCH",
+  //           headers: {
+  //             Accept: "application/vnd.api+json",
+  //             Authorization: `Bearer ${ctx.accessToken}`,
+  //             "Content-Type": "application/vnd.api+json",
+  //           },
+  //           body,
+  //         }
+  //       )
+  //         .then((response) => response.json())
+  //         .then(async (result) => {
+  //           if (result) {
+  //             // logMetrics("order_completion_success")
+  //             let response = await triggerOptimizelyEvent(
+  //               visitorId,
+  //               "order_completion_success"
+  //             )
+  //             if (response) {
+  //               logData(
+  //                 "handlePlaceOrder-success-response",
+  //                 { "orderId-": ctx.orderId },
+  //                 result
+  //               )
+  //               window.location.reload()
+  //             }
+  //           }
+  //         })
+  //         .catch(async (error) => {
+  //           if (error) setIsLoading(false)
+  //           // logMetrics("order_completion_failed")
+  //           let response = await triggerOptimizelyEvent(
+  //             visitorId,
+  //             "order_completion_failed"
+  //           )
+  //           if (response) {
+  //             logData(
+  //               "handlePlaceOrder-error-response",
+  //               { "orderId-": ctx.orderId },
+  //               error
+  //             )
+  //             setCardErrorMessage({
+  //               isSuccess: false,
+  //               message: "Unable to process the payment, please try again",
+  //             })
+  //           }
+  //         })
+
+  //         .finally(() => {
+  //           setIsLoading(false)
+  //         })
+  //     }
+  //   }
+  // }
+
   const handlePlaceOrder = async (event: any) => {
     event.preventDefault()
     onSelectPlaceOrder()
@@ -108,7 +187,58 @@ export const ExternalPaymentCard = ({
           .then((response) => {
             console.log("order response.status" + response.status) // Will show you the status
             if (response.status !== 200 || !response.ok) {
+              triggerOptimizelyEvent(visitorId, "order_completion_failed")
               throw new Error("HTTP status " + response.status)
+            }
+            return response.json()
+          })
+          .then((result) => {
+            console.log("orderresponse" + result)
+            if (result?.errors?.length !== 0) {
+              // logMetrics("order_completion_success")
+              triggerOptimizelyEvent(visitorId, "order_completion_success")
+              logData(
+                "handlePlaceOrder-success-response",
+                { "orderId-": ctx.orderId },
+                result
+              )
+              console.log(Date.now(), "InTime")
+              if (ctx?.orderId) {
+                const requestBody = {
+                  cl_order_id: ctx?.orderId,
+                  visitor_id: visitorId ? visitorId : "",
+                }
+                fetch(`${process.env.NEXT_PUBLIC_API_URL}/cl/order/reserve`, {
+                  headers: {
+                    Accept: "application/json",
+                  },
+                  method: "POST",
+                  body: JSON.stringify(requestBody),
+                })
+                  .then((response) => {
+                    console.log("reserve response.status" + response.status) // Will show you the status
+                    if (!response.ok) {
+                      throw new Error("HTTP status " + response.status)
+                    }
+                    return response.json()
+                  })
+                  .then((result) => {
+                    console.log(Date.now(), "outTime")
+                    localStorage.removeItem("productOrderId")
+                    const res = result?.data?.order_id
+                    if (res) {
+                      localStorage.setItem("productOrderId", res)
+                    }
+                    window.location.reload()
+                  })
+                  .catch((error) => {
+                    console.log(Date.now(), "error")
+                    console.error("Error:", error)
+                    window.location.reload()
+                  })
+              }
+            } else {
+              setIsLoading(false)
             }
             return response.json()
           })
@@ -162,7 +292,8 @@ export const ExternalPaymentCard = ({
           })
           .catch((error) => {
             if (error) setIsLoading(false)
-            logMetrics("order_completion_failed")
+            // logMetrics("order_completion_failed")
+            triggerOptimizelyEvent(visitorId, "order_completion_failed")
             logData(
               "handlePlaceOrder-error-response",
               { "orderId-": ctx.orderId },
