@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react"
 
 import { AppContext } from "components/data/AppProvider"
+import { triggerOptimizelyEvent } from "components/data/service"
 
 interface UseActiveStep {
   activeStep: SingleStepEnum
@@ -26,6 +27,10 @@ export function checkIfCannotGoNext(
 }
 
 export const useActiveStep = (): UseActiveStep => {
+  var urlString = window?.location?.href
+  var url = new URL(urlString)
+  var queryParams = url?.searchParams
+  var visitorId = queryParams?.get("ezref")
   const [activeStep, setActiveStep] = useState<SingleStepEnum>("Customer")
   const [lastActivableStep, setLastActivableStep] =
     useState<SingleStepEnum>("Customer")
@@ -71,6 +76,8 @@ export const useActiveStep = (): UseActiveStep => {
         setActiveStep("Complete")
         setLastActivableStep("Complete")
       } else if (canSelectPayment) {
+        console.log("proceed_to_payment")
+        triggerOptimizelyEvent(visitorId, "proceed_to_payment")
         setActiveStep("Payment")
         setLastActivableStep("Payment")
       } else if (canSelectShippingMethod) {
