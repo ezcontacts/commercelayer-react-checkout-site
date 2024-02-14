@@ -24,7 +24,6 @@ import { triggerOptimizelyEvent } from "components/data/service"
 
 import AffirmPayment from "./AffirmPayment"
 
-
 export type THandleClick = (params: {
   payment?: PaymentMethodType | Record<string, any>
   paymentSource?: Record<string, any>
@@ -135,25 +134,18 @@ export const StepPayment: React.FC<PaymentHeaderProps> = ({
   const { isGuest, isPaymentRequired, setPayment } = appCtx
 
   const selectPayment: THandleClick = async ({ payment, paymentSource }) => {
-    var urlString = window?.location?.href
-    var url = new URL(urlString)
-    var queryParams = url?.searchParams
-    var visitorId = queryParams?.get("ezref")
-    let response = await triggerOptimizelyEvent(visitorId, "proceed_to_payment")
-    if (response) {
-      if (paymentSource?.payment_methods?.paymentMethods?.length > 1) {
-        setHasMultiplePaymentMethods(true)
-      }
-      setPayment({ payment: payment as PaymentMethodType })
-
-      onSelectPayment(payment?.name)
-      logEvent("cl_checkout_step3_continue_click", {
-        buttonName: "Submit",
-        properties: {
-          userId: "manju45kk@gmail.com",
-        },
-      })
+    if (paymentSource?.payment_methods?.paymentMethods?.length > 1) {
+      setHasMultiplePaymentMethods(true)
     }
+    setPayment({ payment: payment as PaymentMethodType })
+
+    onSelectPayment(payment?.name)
+    logEvent("cl_checkout_step3_continue_click", {
+      buttonName: "Submit",
+      properties: {
+        userId: "manju45kk@gmail.com",
+      },
+    })
   }
 
   const autoSelectCallback = async () => {
@@ -171,9 +163,9 @@ export const StepPayment: React.FC<PaymentHeaderProps> = ({
         <>
           {accordionCtx.isActive && (
             <div>
-              {appCtx.order.total_amount_with_taxes_float >= 50 &&
-                <AffirmPayment/>
-              }
+              {appCtx.order.total_amount_with_taxes_float >= 50 && (
+                <AffirmPayment />
+              )}
               {isPaymentRequired ? (
                 isGuest ? (
                   <CheckoutPayment

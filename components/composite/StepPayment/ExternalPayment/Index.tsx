@@ -332,7 +332,8 @@ export const ExternalPaymentCard = ({
                 logData("onCreate-authorization", requestBody, result?.success)
                 return res
               } else {
-                logMetrics("order_completion_failed")
+                // logMetrics("order_completion_failed")
+                triggerOptimizelyEvent(visitorId, "order_completion_failed")
                 logData("onCreate-authorization", requestBody, result)
                 setIsLoading(false)
                 if (Number(card.cvv) === 0) {
@@ -352,7 +353,8 @@ export const ExternalPaymentCard = ({
               }
             })
             .catch((error) => {
-              logMetrics("order_completion_failed")
+              // logMetrics("order_completion_failed")
+              triggerOptimizelyEvent(visitorId, "order_completion_failed")
               if (error) setIsLoading(false)
               setCardErrorMessage({
                 isSuccess: false,

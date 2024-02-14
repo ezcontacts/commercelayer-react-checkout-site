@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react"
 
 import { AppContext } from "components/data/AppProvider"
+import { triggerOptimizelyEvent } from "components/data/service"
 
 interface UseActiveStep {
   activeStep: SingleStepEnum
