@@ -7,9 +7,10 @@ import { Order } from "@commercelayer/sdk"
 import LoaderComponent from "components/utils/Loader"
 import { saveUserActivitylogData } from "utils/useCustomLogData"
 import useLogMetricsData from "utils/logClMetrics"
+import { triggerOptimizelyEvent } from "components/data/service"
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface AffirmPaymentProps {
-
+ 
 }
 // Define the functional component using TypeScript (TSX)
 const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
@@ -241,61 +242,79 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
                     body,
                 }
                 )
-                .then((response) => response.json())
+                .then((response) => {
+                  console.log("order response.status" + response.status) // Will show you the status
+                  if (response.status !== 200 || !response.ok) {
+                    triggerOptimizelyEvent(visitorId, "order_completion_failed")
+                    throw new Error("HTTP status " + response.status)
+                  }
+                  return response.json()
+                })
                 .then((result) => {
-                    if (result) {
-                    logMetrics("order_completion_success")
+                  console.log("orderresponse" + result)
+                  if (result?.errors?.length !== 0) {
+                    // logMetrics("order_completion_success")
+                    triggerOptimizelyEvent(visitorId, "order_completion_success")
                     logData(
-                        "handlePlaceOrder-success-response",
-                        { "orderId-": ctx.orderId },
-                        result
+                      "handlePlaceOrder-success-response",
+                      { "orderId-": ctx.orderId },
+                      result
                     )
                     console.log(Date.now(), "InTime")
                     if (ctx?.orderId) {
-                        const requestBody = {
+                      const requestBody = {
                         cl_order_id: ctx?.orderId,
                         visitor_id: visitorId ? visitorId : "",
                         checkout_token:card_checkout.checkout_token ? card_checkout.checkout_token : "",
-                        }
-                        fetch(`${process.env.NEXT_PUBLIC_API_URL}/cl/order/reserve`, {
+                      }
+                      fetch(`${process.env.NEXT_PUBLIC_API_URL}/cl/order/reserve`, {
                         headers: {
-                            Accept: "application/json",
+                          Accept: "application/json",
                         },
                         method: "POST",
                         body: JSON.stringify(requestBody),
+                      })
+                        .then((response) => {
+                          console.log("reserve response.status" + response.status) // Will show you the status
+                          if (!response.ok) {
+                            throw new Error("HTTP status " + response.status)
+                          }
+                          return response.json()
                         })
-                        .then((response) => response.json())
                         .then((result) => {
-                           window.removeEventListener('beforeunload', beforeUnloadHandler);
-                            console.log(Date.now(), "outTime")
-                            localStorage.removeItem("productOrderId")
-                            const res = result?.data?.order_id
-                            if (res) {
+                          window.removeEventListener('beforeunload', beforeUnloadHandler);
+                          console.log(Date.now(), "outTime")
+                          localStorage.removeItem("productOrderId")
+                          const res = result?.data?.order_id
+                          if (res) {
                             localStorage.setItem("productOrderId", res)
-                            }
-                            window.location.reload();
+                          }
+                          window.location.reload()
                         })
                         .catch((error) => {
-                            window.removeEventListener('beforeunload', beforeUnloadHandler);
-                            console.log(Date.now(), "error")
-                            console.error("Error:", error)
-                            window.location.reload();
+                          window.removeEventListener('beforeunload', beforeUnloadHandler);
+                          console.log(Date.now(), "error")
+                          console.error("Error:", error)
+                          window.location.reload()
                         })
                     }
-                    }
+                  } else {
+                    setIsLoading(false)
+                  }
                 })
                 .catch((error) => {
-                    if (error) setIsLoading(false)
-                    logMetrics("order_completion_failed")
-                    logData(
+                  if (error) setIsLoading(false)
+                  // logMetrics("order_completion_failed")
+                  triggerOptimizelyEvent(visitorId, "order_completion_failed")
+                  logData(
                     "handlePlaceOrder-error-response",
                     { "orderId-": ctx.orderId },
                     error
-                    )
-                    setCardErrorMessage({
+                  )
+                  setCardErrorMessage({
                     isSuccess: false,
                     message: "Unable to process the payment, please try again",
-                    })
+                  })
                 })
                 .finally(() => {
                     // setIsLoading(false)
