@@ -240,55 +240,6 @@ export const ExternalPaymentCard = ({
             } else {
               setIsLoading(false)
             }
-            return response.json()
-          })
-          .then((result) => {
-            console.log("orderresponse" + result)
-            if (result?.errors?.length !== 0) {
-              logMetrics("order_completion_success")
-              logData(
-                "handlePlaceOrder-success-response",
-                { "orderId-": ctx.orderId },
-                result
-              )
-              console.log(Date.now(), "InTime")
-              if (ctx?.orderId) {
-                const requestBody = {
-                  cl_order_id: ctx?.orderId,
-                  visitor_id: visitorId ? visitorId : "",
-                }
-                fetch(`${process.env.NEXT_PUBLIC_API_URL}/cl/order/reserve`, {
-                  headers: {
-                    Accept: "application/json",
-                  },
-                  method: "POST",
-                  body: JSON.stringify(requestBody),
-                })
-                  .then((response) => {
-                    console.log("reserve response.status" + response.status) // Will show you the status
-                    if (!response.ok) {
-                      throw new Error("HTTP status " + response.status)
-                    }
-                    return response.json()
-                  })
-                  .then((result) => {
-                    console.log(Date.now(), "outTime")
-                    localStorage.removeItem("productOrderId")
-                    const res = result?.data?.order_id
-                    if (res) {
-                      localStorage.setItem("productOrderId", res)
-                    }
-                    window.location.reload()
-                  })
-                  .catch((error) => {
-                    console.log(Date.now(), "error")
-                    console.error("Error:", error)
-                    window.location.reload()
-                  })
-              }
-            } else {
-              setIsLoading(false)
-            }
           })
           .catch((error) => {
             if (error) setIsLoading(false)
