@@ -113,14 +113,14 @@ const AffirmPayment: React.FC<AffirmPaymentProps> = () => {
         currency: "USD",
     };
 
-    console.log(checkoutObject);
+    // console.log(checkoutObject);
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
       affirm.checkout.open_vcn({
         success: async function(card_checkout: any) {
             disableReload();
-           console.log(card_checkout);
+           // console.log(card_checkout);
            setIsLoadingAffirm(false);
            const externalPaymentTrigger:any = document.querySelector('.chekout-wrapper .right-content .payment[data-testid=external_payments]');
             if (externalPaymentTrigger) {
