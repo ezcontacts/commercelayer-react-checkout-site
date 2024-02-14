@@ -50,6 +50,7 @@ import {
 
 import useAmplitude from "utils/getAmplitude"
 import { saveUserActivitylogData } from "utils/useCustomLogData"
+import { triggerOptimizelyEvent } from "components/data/service"
 
 interface Props {
   className?: string
@@ -103,6 +104,10 @@ export const StepHeaderShipping: React.FC<HeaderProps> = ({ step }) => {
 const ShippingLineItems: TypeAccepted[] = LINE_ITEMS_SHIPPABLE
 
 export const StepShipping: React.FC<Props> = () => {
+  var urlString = window?.location?.href
+  var url = new URL(urlString)
+  var queryParams = url?.searchParams
+  var visitorId = queryParams?.get("ezref")
   const { logEvent } = useAmplitude()
 
   useEffect(() => {
@@ -172,6 +177,8 @@ export const StepShipping: React.FC<Props> = () => {
       order: params.order,
     })
     setIsLocalLoader(false)
+    console.log("proceed_to_payment")
+    triggerOptimizelyEvent(visitorId, "proceed_to_payment")
     let requestBody = {
       requested_method: "cl_checkout_step2_continue_click",
       cl_token: appCtx?.accessToken,
