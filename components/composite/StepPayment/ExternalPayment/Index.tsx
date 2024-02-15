@@ -261,6 +261,7 @@ export const ExternalPaymentCard = ({
           .catch((error) => {
             if (error) setIsLoading(false)
             // logMetrics("order_completion_failed")
+            window.removeEventListener('beforeunload', beforeUnloadHandler);
             triggerOptimizelyEvent(visitorId, "order_completion_failed")
             logData(
               "handlePlaceOrder-error-response",
@@ -332,6 +333,7 @@ export const ExternalPaymentCard = ({
                 logData("onCreate-authorization", requestBody, result?.success)
                 return res
               } else {
+                window.removeEventListener('beforeunload', beforeUnloadHandler);
                 // logMetrics("order_completion_failed")
                 triggerOptimizelyEvent(visitorId, "order_completion_failed")
                 logData("onCreate-authorization", requestBody, result)
@@ -353,6 +355,7 @@ export const ExternalPaymentCard = ({
               }
             })
             .catch((error) => {
+              window.removeEventListener('beforeunload', beforeUnloadHandler);
               // logMetrics("order_completion_failed")
               triggerOptimizelyEvent(visitorId, "order_completion_failed")
               if (error) setIsLoading(false)
